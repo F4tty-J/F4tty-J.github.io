@@ -1,0 +1,658 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="F4tty">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="CobaltStrike表面特征消除、HTTP流量特征消除、Shellcode特征消除">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CobaltStrike二开学习记录(一)">
+<meta property="og:url" content="http://example.com/posts/ac2ce454/index.html">
+<meta property="og:site_name" content="F4tty">
+<meta property="og:description" content="CobaltStrike表面特征消除、HTTP流量特征消除、Shellcode特征消除">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/posts/ac2ce454/image-20220902100035824.png">
+<meta property="og:image" content="http://example.com/posts/ac2ce454/image-20220902100527025.png">
+<meta property="og:image" content="http://example.com/posts/ac2ce454/image-20220902100458859.png">
+<meta property="og:image" content="http://example.com/posts/ac2ce454/image-20220902152720742.png">
+<meta property="og:image" content="http://example.com/posts/ac2ce454/image-20220902152858456.png">
+<meta property="og:image" content="http://example.com/posts/ac2ce454/image-20220902153858763.png">
+<meta property="og:image" content="http://example.com/posts/ac2ce454/image-20220902154139189.png">
+<meta property="og:image" content="http://example.com/posts/ac2ce454/image-20220902192553334.png">
+<meta property="og:image" content="http://example.com/posts/ac2ce454/image-20220902200423883.png">
+<meta property="og:image" content="http://example.com/posts/ac2ce454/image-20220902213022132.png">
+<meta property="article:published_time" content="2022-09-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-02T15:28:47.412Z">
+<meta property="article:author" content="F4tty">
+<meta property="article:tag" content="CobaltStrike">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://example.com/posts/ac2ce454/image-20220902100035824.png">
+  
+  
+  
+  <title>CobaltStrike二开学习记录(一) - F4tty</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>F4tty’Note</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CobaltStrike二开学习记录(一)"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-02 00:00" pubdate>
+          2022年9月2日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">CobaltStrike二开学习记录(一)</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="CobaltStrike二开学习记录-一"><a href="#CobaltStrike二开学习记录-一" class="headerlink" title="CobaltStrike二开学习记录(一)"></a>CobaltStrike二开学习记录(一)</h1><h2 id="环境搭建-CS反编译及导入IDEA编译"><a href="#环境搭建-CS反编译及导入IDEA编译" class="headerlink" title="环境搭建-CS反编译及导入IDEA编译"></a>环境搭建-CS反编译及导入IDEA编译</h2><blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="https://github.com/zer0yu/Awesome-CobaltStrike">https://github.com/zer0yu/Awesome-CobaltStrike</a></p>
+</blockquote>
+<p>环境：IDEA JDK8&amp;11 </p>
+<h3 id="1、反编译Jar包"><a href="#1、反编译Jar包" class="headerlink" title="1、反编译Jar包"></a>1、反编译Jar包</h3><p>利用IDEA自带反编译–不要用jd-gui</p>
+<p>反编译：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">java -cp IDEA_HOME/plugins/java-decompiler/lib/java-decompiler.jar  org.jetbrains.java.decompiler.main.decompiler.ConsoleDecompiler -dgs=true &lt;src.jar&gt; &lt;dest dir&gt;<br></code></pre></td></tr></table></figure>
+
+<p>具体命令：coba文件夹需要自己创建</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">&quot;D:\JDK11\bin\java.exe&quot; -cp &quot;D:\IntelliJ IDEA\plugins\java-decompiler\lib\java-decompiler.jar&quot; org.jetbrains.java.decompiler.main.decompiler.ConsoleDecompiler -dgs=true cobaltstrike.jar coba<br></code></pre></td></tr></table></figure>
+
+<h3 id="2、新建Java项目"><a href="#2、新建Java项目" class="headerlink" title="2、新建Java项目"></a>2、新建Java项目</h3><p>完成后会在coba目录下生成一个cobaltstrike.jar文件<br>直接用解压缩文件进行解压<br>IDEA新建项目–项目目录下新建文件夹lib把原始的cobaltstrike.jar复制过去–再新建文件夹decompiled_src把刚才解压出来的文件放到该目录<br>项目配置:<br>第一步:文件–项目结构–模块–依赖–把lib目录下的cobaltstrike.jar添加进去–勾选然后确定<br>第二步:添加具有依赖项的模块–aggresss</p>
+<p><img src="/posts/ac2ce454/image-20220902100035824.png" srcset="/img/loading.gif" lazyload alt="image-20220902100035824"></p>
+<p><img src="/posts/ac2ce454/image-20220902100527025.png" srcset="/img/loading.gif" lazyload alt="image-20220902100527025"></p>
+<p><img src="/posts/ac2ce454/image-20220902100458859.png" srcset="/img/loading.gif" lazyload alt="image-20220902100458859"></p>
+<h3 id="3、修改代码–测试"><a href="#3、修改代码–测试" class="headerlink" title="3、修改代码–测试"></a>3、修改代码–测试</h3><p>测试:将\decompiled_src\aggressor\Aggressor.java复制到\src\aggressor\Aggressor.java然后修改代码<br><img src="/posts/ac2ce454/image-20220902152720742.png" srcset="/img/loading.gif" lazyload alt="image-20220902152720742"></p>
+<p>插入代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">JOptionPane.showMessageDialog(<span class="hljs-literal">null</span>,<span class="hljs-string">&quot;test&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<h3 id="4、打包编译"><a href="#4、打包编译" class="headerlink" title="4、打包编译"></a>4、打包编译</h3><p>编译代码:构建–构建工件–构建<br>构建完成生成\out\artifacts\CS_jar\CS.jar</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">java </span>-<span class="hljs-keyword">jar </span>CS.<span class="hljs-keyword">jar</span><br></code></pre></td></tr></table></figure>
+
+<p>成功弹窗<br><img src="/posts/ac2ce454/image-20220902152858456.png" srcset="/img/loading.gif" lazyload alt="image-20220902152858456"></p>
+<p>测试完成可以把src下的aggressor文件夹删掉了</p>
+<h2 id="表面配置-对端口密码证书做特征消除"><a href="#表面配置-对端口密码证书做特征消除" class="headerlink" title="表面配置-对端口密码证书做特征消除"></a>表面配置-对端口密码证书做特征消除</h2><p>简单说下，较为简单，主要是源码的特征流量</p>
+<ul>
+<li><p>证书修改:cobaltstrike.beacon_keys和cobaltstrike.store不要使用默认的文件，删除</p>
+</li>
+<li><p>profile文件要换新的，启动服务端时记得加载，或直接把jar包里面的默认配置给改了</p>
+</li>
+<li><p>端口修改:开在公网的teamserver不要使用默认端口</p>
+</li>
+</ul>
+<h2 id="逆向源码-对http-x2F-s上线流量做特征消除"><a href="#逆向源码-对http-x2F-s上线流量做特征消除" class="headerlink" title="逆向源码-对http&#x2F;s上线流量做特征消除"></a>逆向源码-对http&#x2F;s上线流量做特征消除</h2><p>CS生成一个http32位木马视图中开启web日志运行木马观察日志<br><img src="/posts/ac2ce454/image-20220902153858763.png" srcset="/img/loading.gif" lazyload alt="image-20220902153858763"><br>发现访问了地址&#x2F;a7vN&#x2F; 再生成一个木马进行上线发现又变成了&#x2F;7lxA&#x2F;<br><img src="/posts/ac2ce454/image-20220902154139189.png" srcset="/img/loading.gif" lazyload alt="image-20220902154139189"><br>该目录是根据一个checksum8算法来进行实现代码如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">EchoTest</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">long</span> <span class="hljs-title function_">checksum8</span><span class="hljs-params">(String text)</span> &#123;<br>        <span class="hljs-keyword">if</span> (text.length() &lt; <span class="hljs-number">4</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-number">0L</span>;<br>        &#125;<br>        text = text.replace(<span class="hljs-string">&quot;/&quot;</span>, <span class="hljs-string">&quot;&quot;</span>);<br>        <span class="hljs-type">long</span> <span class="hljs-variable">sum</span> <span class="hljs-operator">=</span> <span class="hljs-number">0L</span>;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">x</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; x &lt; text.length(); x++) &#123;<br>            sum += text.charAt(x);<br>        &#125;<br><br>        <span class="hljs-keyword">return</span> sum % <span class="hljs-number">256</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> Exception &#123;<br>        System.out.println(checksum8(<span class="hljs-string">&quot;a7vN&quot;</span>));	<span class="hljs-comment">//替换为访问的地址eg：a7vN</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>两次访问的地址通过代码运行的结果均为:92<br>可以得出结论:只要是符合「checksum8」算法技术出来的文件都可以请求到<br>这里理一下思路:cs采用http上线,在未修改的cs上面后面的http请求url为4位字符串同样算法checksum8得到为92或93可以判定为cs连接器<br>想要消除特征可以通过修改该数字来达到<br>checksum8函数位置:\decompiled_src\cloudstrike\WebServer.java</p>
+<p><img src="/posts/ac2ce454/image-20220902192553334.png" srcset="/img/loading.gif" lazyload alt="image-20220902192553334"><br>可以看到32位为92 64位数为93<br>接下来进行特征消除<br>按照上文的修改方法把\decompiled_src\cloudstrike\WebServer.java复制到\src\cloudstrike\WebServer.java<br>把访问的地址改为固定值比如64位改为为tests对应的数字为51 32位数改为test对应的数字为192<br>修改代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isStager</span><span class="hljs-params">(String uri)</span> &#123;<br>   <span class="hljs-keyword">return</span> checksum8(uri) == <span class="hljs-number">192L</span>;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">isStagerX64</span><span class="hljs-params">(String uri)</span> &#123;<br>   <span class="hljs-keyword">return</span> checksum8(uri) == <span class="hljs-number">51L</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>还需要修改判定代码\decompiled_src\common\CommonUtils.java复制到\src\common\CommonUtils.java<br>修改MSFURI和MSFURI_X64两个函数 将两个函数的返回值直接写死</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">MSFURI</span><span class="hljs-params">(<span class="hljs-type">int</span> var0)</span> &#123;<br>   String[] var1 = toArray(<span class="hljs-string">&quot;a, b, c, d, e, f, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9&quot;</span>);<br><br>   StringBuffer var2;<br>   <span class="hljs-keyword">do</span> &#123;<br>      var2 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuffer</span>(var0 + <span class="hljs-number">1</span>);<br>      var2.append(<span class="hljs-string">&quot;/&quot;</span>);<br><br>      <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">var3</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; var3 &lt; var0; ++var3) &#123;<br>         var2.append(pick(var1));<br>      &#125;<br>   &#125; <span class="hljs-keyword">while</span>(checksum8(var2.toString()) != <span class="hljs-number">92L</span>);<br><br>   <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;test&quot;</span>;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> String <span class="hljs-title function_">MSFURI_X64</span><span class="hljs-params">()</span> &#123;<br>   String[] var0 = toArray(<span class="hljs-string">&quot;a, b, c, d, e, f, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9&quot;</span>);<br><br>   String var1;<br>   <span class="hljs-keyword">do</span> &#123;<br>      var1 = <span class="hljs-string">&quot;/&quot;</span> + pick(var0) + pick(var0) + pick(var0) + pick(var0);<br>   &#125; <span class="hljs-keyword">while</span>(checksum8(var1) != <span class="hljs-number">93L</span>);<br><br>   <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;tests&quot;</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接下来按照上文构建代码<br>产生三个报错<br><img src="/posts/ac2ce454/image-20220902200423883.png" srcset="/img/loading.gif" lazyload alt="image-20220902200423883"><br>第一个报错–删掉int len$;<br>第二个报错–删掉String[]<br>第三个报错–删掉WebService service;<br>重新构建<br>将构建好的jar替换掉原包<br>或者<br>把修改的两个文件重新编译下:CommonUtils.java WebServer.java 构建–重新编译<br>把原包cobaltstrike.jar用解压缩文件打开两个文件编译好的class文件替换掉原有的class文件<br>两种方法那个可以成功就用那个 重点:客户端和服务端都要替换<br><img src="/posts/ac2ce454/image-20220902213022132.png" srcset="/img/loading.gif" lazyload alt="image-20220902213022132"><br>地址成功修改为了test</p>
+<h2 id="逆向源码-对http-x2F-s生成Payload做特征消除"><a href="#逆向源码-对http-x2F-s生成Payload做特征消除" class="headerlink" title="逆向源码-对http&#x2F;s生成Payload做特征消除"></a>逆向源码-对http&#x2F;s生成Payload做特征消除</h2><p>payload生成方式:<br>32位:BeaconHTTPStagerX86-&gt;GenericHTTPStagerX86-&gt;resources&#x2F;httpstager.bin<br>64位:BeaconHTTPStagerX86-&gt;GenericHTTPStagerX64-&gt;resources&#x2F;httpstager64.bin<br>思路:<br>用x86资源bin替换x64的，实现x64生成与x86一致 直接把httpstager.bin文件复制出来重命名为httpstager64.bin然后替换原来的httpstager64.bin<br>注意这里仅替换还不行因为资源文件改变读取方法也要改变还要更改代码GenericHTTPStagerX64.java代码改为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">GenericHTTPStagerX86</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">GenericHTTPStager</span> &#123;<br>   <span class="hljs-keyword">public</span> <span class="hljs-title function_">GenericHTTPStagerX86</span><span class="hljs-params">(ScListener var1)</span> &#123;<br>      <span class="hljs-built_in">super</span>(var1);<br>   &#125;<br>   <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getExitOffset</span><span class="hljs-params">()</span> &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">708</span>;<br>   &#125;<br>   <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getPortOffset</span><span class="hljs-params">()</span> &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">191</span>;<br>   &#125;<br>   <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getSkipOffset</span><span class="hljs-params">()</span> &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">736</span>;<br>   &#125;<br>   <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getFlagsOffset</span><span class="hljs-params">()</span> &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-number">211</span>;<br>   &#125;<br>   <span class="hljs-keyword">public</span> String <span class="hljs-title function_">arch</span><span class="hljs-params">()</span> &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;x64&quot;</span>;<br>   &#125;<br>   <span class="hljs-keyword">public</span> String <span class="hljs-title function_">getStagerFile</span><span class="hljs-params">()</span> &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;resources/httpstager64.bin&quot;</span>;<br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>修改完成后重新编译方法与上文相同<br>大体思路:1、替换1n生即免杀  2、更改源码生成机制即晚杀</p>
+<h2 id="逆向源码-对Powershell生成Payload做特征消除"><a href="#逆向源码-对Powershell生成Payload做特征消除" class="headerlink" title="逆向源码-对Powershell生成Payload做特征消除"></a>逆向源码-对Powershell生成Payload做特征消除</h2><p>CS生成的powershell shellcode都是通过模板生成免杀效果几乎为0<br>通过修改模板消除特征同时提高免杀效果<br>\decompiled_src\resources\template.x86.ps1即为32位shellcode模板文件可以看到shellcode通过<code>%%DATA%%</code>进行传递而<code>%%DATA%%</code>在\decompiled_src\common\ResourceUtils.java中的<code>_buildPowerShellNoHint</code>函数生成<br>到这里shellcode的生成逻辑也就知道了<br>可以通过修改生成逻辑–比如修改_buildPowerShellNoHint中的加密方式 </p>
+<p>这需要很强的开发功底如果开发能力不强可以直接将免杀shellcode替换掉template.x86.ps1达到生成即免杀</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CobaltStrike/">#CobaltStrike</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CobaltStrike二开学习记录(一)</div>
+      <div>http://example.com/posts/ac2ce454/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>F4tty</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年9月2日</div>
+        </div>
+      
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/posts/facab1e5/" title="DLL劫持与Syscall免杀初尝试">
+                        <span class="hidden-mobile">DLL劫持与Syscall免杀初尝试</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      冀ICP备2022001660号
+    </a>
+  </span>
+  
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
