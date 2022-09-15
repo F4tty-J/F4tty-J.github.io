@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      CTFShow Web入门_爆破 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">CTFShow Web入门_爆破</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-03-20 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/ctfshow/" title="ctfshow">
+                    <b>#</b> ctfshow
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/ctf/" title="ctf">
+                    #ctf
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h2 id="Web21"><a href="#Web21" class="headerlink" title="Web21"></a>Web21</h2><p>随便输入抓包</p>
+<p><img src="/posts/7ba9ac12/image-20220319165145359.png" alt="image-20220319165145359"></p>
+<p>发现Base64加密</p>
+<p><img src="/posts/7ba9ac12/image-20220319165235902.png" alt="image-20220319165235902"></p>
+<p>账号和密码用:隔开</p>
+<p>使用BP构造payload爆破</p>
+<p><img src="/posts/7ba9ac12/image-20220319190509094.png" alt="image-20220319190509094"></p>
+<p>下载官方提供的字典 把后缀名改为.zip即可打开</p>
+<p><img src="/posts/7ba9ac12/image-20220319165739427.png" alt="image-20220319165739427"></p>
+<p>使用Custom iterator模式</p>
+<p><img src="/posts/7ba9ac12/image-20220319190606258.png" alt="image-20220319190606258"></p>
+<p>第一部分</p>
+<p><img src="/posts/7ba9ac12/image-20220319190709183.png" alt="image-20220319190709183"></p>
+<p>第二部分</p>
+<p><img src="/posts/7ba9ac12/image-20220319190752812.png" alt="image-20220319190752812"></p>
+<p>第三部分使用字典</p>
+<p><img src="/posts/7ba9ac12/image-20220319190821533.png" alt="image-20220319190821533"></p>
+<p>添加base64加密</p>
+<p><img src="/posts/7ba9ac12/image-20220319190843326.png" alt="image-20220319190843326"></p>
+<p><img src="/posts/7ba9ac12/image-20220319170555561.png" alt="image-20220319170555561"></p>
+<p>关闭url编码</p>
+<p><img src="/posts/7ba9ac12/image-20220319190859899.png" alt="image-20220319190859899"></p>
+<p>爆破完按length排序查看最小的回包</p>
+<p><img src="/posts/7ba9ac12/image-20220319215305817.png" alt="image-20220319215305817"></p>
+<p><img src="/posts/7ba9ac12/image-20220319200822331.png" alt="image-20220319200822331"></p>
+<h2 id="Web22"><a href="#Web22" class="headerlink" title="Web22"></a>Web22</h2><p>子域名爆破，爆破ctf.show</p>
+<p><img src="/posts/7ba9ac12/image-20220321152412725.png" alt="image-20220321152412725"></p>
+<p>最终在vip.ctf.show的源码发现了flag</p>
+<p><img src="/posts/7ba9ac12/image-20220321152516231.png" alt="image-20220321152516231"></p>
+<h2 id="Web23"><a href="#Web23" class="headerlink" title="Web23"></a>Web23</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;flag.php&#x27;</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;token&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$token</span> = <span class="title function_ invoke__">md5</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;token&#x27;</span>]);</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>)===<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>) &amp;&amp; <span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>) ===<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">17</span>,<span class="number">1</span>))&#123;</span><br><span class="line">        <span class="keyword">if</span>((<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>))+<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">14</span>,<span class="number">1</span>))+<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">17</span>,<span class="number">1</span>))/<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">1</span>,<span class="number">1</span>)===<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">substr</span>(<span class="variable">$token</span>, <span class="number">31</span>,<span class="number">1</span>)))&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>这片代码主要的就是后面这两个if判断 我们需要构造一个符合条件的token</p>
+<p>第一个条件:md5加密后的token第2，15，18位相等</p>
+<p>第二个条件：第2，15，位与 18位&#x2F;2位的值 相加等于第32位</p>
+<p>使用python脚本爆破</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line">dic = <span class="string">&#x27;0123456789qazwsxedcrfvtgbyhnujmikolp&#x27;</span></span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> dic:</span><br><span class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> dic:</span><br><span class="line">        t = <span class="built_in">str</span>(a) + <span class="built_in">str</span>(b)</span><br><span class="line">        md5 = hashlib.md5(t.encode(<span class="string">&#x27;utf-8&#x27;</span>)).hexdigest()</span><br><span class="line">        <span class="keyword">if</span> md5[<span class="number">1</span>:<span class="number">2</span>] == md5[<span class="number">14</span>:<span class="number">15</span>] <span class="keyword">and</span> md5[<span class="number">14</span>:<span class="number">15</span>] == md5[<span class="number">17</span>:<span class="number">18</span>]:</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">int</span>(md5[<span class="number">1</span>:<span class="number">2</span>]) + <span class="built_in">int</span>(md5[<span class="number">14</span>:<span class="number">15</span>]) + <span class="built_in">int</span>(md5[<span class="number">17</span>:<span class="number">18</span>]) / <span class="built_in">int</span>(md5[<span class="number">1</span>:<span class="number">2</span>]) == <span class="built_in">int</span>(md5[<span class="number">31</span>:<span class="number">32</span>]):</span><br><span class="line">                <span class="built_in">print</span>(t)</span><br></pre></td></tr></table></figure>
+
+<p>得出结果是 3j</p>
+<p><img src="/posts/7ba9ac12/image-20220321155828841.png" alt="image-20220321155828841"></p>
+<p>拿到flag</p>
+<h2 id="Web24"><a href="#Web24" class="headerlink" title="Web24"></a>Web24</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;r&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$r</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;r&#x27;</span>];</span><br><span class="line">    <span class="title function_ invoke__">mt_srand</span>(<span class="number">372619038</span>);</span><br><span class="line">    <span class="keyword">if</span>(<span class="title function_ invoke__">intval</span>(<span class="variable">$r</span>)===<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">mt_rand</span>()))&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">system</span>(<span class="string">&#x27;cat /proc/version&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>my_srand()函数</p>
+<blockquote>
+<p>mt_srand() 播种 Mersenne Twister 随机数生成器。<br>mt_srand(seed)<br>seed 必需。用seed来给随机数发生器播种</p>
+<p>mt_scrand(seed)这个函数的意思，是通过分发seed种子，然后种子有了后，靠mt_rand()生成随机 数。 提示：从 PHP 4.2.0 开始，随机数生成器自动播种，因此没有必要使用该函数 因此不需要播种，并且如果设置了 seed参数 生成的随机数就是伪随机数，意思就是每次生成的随机数 是一样的</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">mt_srand</span>(<span class="number">372619038</span>);</span><br><span class="line"><span class="keyword">echo</span>(<span class="title function_ invoke__">mt_rand</span>());</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>得到运行结果</p>
+<p><img src="/posts/7ba9ac12/image-20220321163809287.png" alt="image-20220321163809287"></p>
+<p>这里有个问题：不同的php版本得到的结果可能不一样 我使用的php版本得到的结果是 999695185但是在菜鸟在线运行工具中的得到的结果是上图 ，这道题的答案也是上图</p>
+<p>已get方式通过r传参</p>
+<p>得到flag</p>
+<p><img src="/posts/7ba9ac12/image-20220321164027209.png" alt="image-20220321164027209"></p>
+<h2 id="Web25"><a href="#Web25" class="headerlink" title="Web25"></a>Web25</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">error_reporting</span>(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">include</span>(<span class="string">&quot;flag.php&quot;</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;r&#x27;</span>]))&#123;</span><br><span class="line">    <span class="variable">$r</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;r&#x27;</span>];</span><br><span class="line">    <span class="title function_ invoke__">mt_srand</span>(<span class="title function_ invoke__">hexdec</span>(<span class="title function_ invoke__">substr</span>(<span class="title function_ invoke__">md5</span>(<span class="variable">$flag</span>), <span class="number">0</span>,<span class="number">8</span>)));</span><br><span class="line">    <span class="variable">$rand</span> = <span class="title function_ invoke__">intval</span>(<span class="variable">$r</span>)-<span class="title function_ invoke__">intval</span>(<span class="title function_ invoke__">mt_rand</span>());</span><br><span class="line">    <span class="keyword">if</span>((!<span class="variable">$rand</span>))&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="variable">$_COOKIE</span>[<span class="string">&#x27;token&#x27;</span>]==(<span class="title function_ invoke__">mt_rand</span>()+<span class="title function_ invoke__">mt_rand</span>()))&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="variable">$flag</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="variable">$rand</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="title function_ invoke__">highlight_file</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="title function_ invoke__">system</span>(<span class="string">&#x27;cat /proc/version&#x27;</span>);</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.openwall.com/php_mt_seed/">https://www.openwall.com/php_mt_seed/</a> </p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zaqzzz/p/9997855.html">https://www.cnblogs.com/zaqzzz/p/9997855.html</a></p>
+<p>mt_srand(seed)这个函数的意思，是通过分发seed种子，然后种子有了后，靠mt_rand()生成随机 数。 在之前自己还以为需要暴力破解cookie,最后师傅们给我介绍了一个脚本，专门用来跑mt_srand()种子和 mt_rand()随机数的 这里自己解释一下为什么每一次的mt_rand()+mt_rand()不是第一次的随机数相加？？ 因为生成的随机数可以说是一个线性变换（实际上非常复杂）的每一次的确定的但是每一次是不一样的，所以不能 进行第一次*2就得到mt_rand()+mt_rand() 使用说只要我们得到种子就可以在本地进行获得自己想要的值 </p>
+<p>解题：通过随机数来寻找种子 我们让 ?r&#x3D;0 得到随机数。这里我得到的是 183607393 每一次不一样(因为flag值在变化) 然后下载 php_mt_seed4.0 我们在linux下面使用 gcc进行编译 gcc php_mt_seed.c -o php_mt_seed 之后运行脚本添加随机数 .&#x2F;php_mt_seed 183607393</p>
+</blockquote>
+<p>这道题先把flag的进行md5加密并取前8位然后进行16进制转10进制最后得到的值作为种子来生成随机数</p>
+<p>通过cookie得到的token要等于两个随机数相加 （这个两个随机数并不相同）</p>
+<p>同时我们可以通过?r&#x3D;0传参得到生成的随机数 因为如果r为零则回执行else语句输出随机数的负数</p>
+<p><img src="/posts/7ba9ac12/image-20220322090313211.png" alt="image-20220322090313211"></p>
+<p>这里我得到的随机数是585666240</p>
+<p>接下来使用脚本得到可能的seed值</p>
+<p>放到linux下编译</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd php_mt_seed-4.0 </span><br><span class="line">gcc php_mt_seed.c -o php_mt_seed</span><br><span class="line">/php_mt_seed 737212628</span><br></pre></td></tr></table></figure>
+
+<p>接下来是漫长的等待</p>
+<p><img src="/posts/7ba9ac12/image-20220322095150965.png" alt="image-20220322095150965"></p>
+<p>通过响应头发现php的版本为7.3.11</p>
+<p><img src="/posts/7ba9ac12/image-20220321231926792.png" alt="image-20220321231926792"></p>
+<p>得到</p>
+<p>接下来计算下两个随机数相加</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="title function_ invoke__">mt_srand</span>(<span class="number">3842734643</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">mt_rand</span>().<span class="string">&quot;&lt;br/&gt;&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">mt_rand</span>()+<span class="title function_ invoke__">mt_rand</span>().<span class="string">&quot;&lt;br/&gt;&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>得到:</p>
+<p>585666240<br>1350320544</p>
+<p>接下来传参</p>
+<p>通过get 传参?r&#x3D;585666240</p>
+<p>抓包修改cookie  token&#x3D;1350320544</p>
+<p>得到flag</p>
+<p><img src="/posts/7ba9ac12/image-20220322095242899.png" alt="image-20220322095242899"></p>
+<h2 id="Web26"><a href="#Web26" class="headerlink" title="Web26"></a>Web26</h2><p><img src="/posts/7ba9ac12/image-20220322143458709.png" alt="image-20220322143458709"></p>
+<p>右键查看源代码发现javascript代码</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">check</span>(<span class="params"></span>)&#123;</span><br><span class="line">	$.<span class="title function_">ajax</span>(&#123;</span><br><span class="line">	<span class="attr">url</span>:<span class="string">&#x27;checkdb.php&#x27;</span>,</span><br><span class="line">	<span class="attr">type</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">	<span class="attr">dataType</span>:<span class="string">&#x27;json&#x27;</span>,</span><br><span class="line">	<span class="attr">data</span>:&#123;</span><br><span class="line">		<span class="string">&#x27;a&#x27;</span>:$(<span class="string">&#x27;#a&#x27;</span>).<span class="title function_">val</span>(),</span><br><span class="line">		<span class="string">&#x27;p&#x27;</span>:$(<span class="string">&#x27;#p&#x27;</span>).<span class="title function_">val</span>(),</span><br><span class="line">		<span class="string">&#x27;d&#x27;</span>:$(<span class="string">&#x27;#d&#x27;</span>).<span class="title function_">val</span>(),</span><br><span class="line">		<span class="string">&#x27;u&#x27;</span>:$(<span class="string">&#x27;#u&#x27;</span>).<span class="title function_">val</span>(),</span><br><span class="line">		<span class="string">&#x27;pass&#x27;</span>:$(<span class="string">&#x27;#pass&#x27;</span>).<span class="title function_">val</span>()</span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="attr">success</span>:<span class="keyword">function</span>(<span class="params">data</span>)&#123;</span><br><span class="line">			<span class="title function_">alert</span>(data[<span class="string">&#x27;msg&#x27;</span>]);</span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="attr">error</span>:<span class="keyword">function</span>(<span class="params">data</span>)&#123;</span><br><span class="line">			<span class="title function_">alert</span>(data[<span class="string">&#x27;msg&#x27;</span>]);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用post提交返回一个json</p>
+<p><img src="/posts/7ba9ac12/image-20220322144328975.png" alt="image-20220322144328975"></p>
+<p>接下来对pass进行爆破</p>
+<p><img src="/posts/7ba9ac12/image-20220322145311919.png" alt="image-20220322145311919"></p>
+<p>密码为7758521</p>
+<p>查看返回包</p>
+<p><img src="/posts/7ba9ac12/image-20220322145407656.png" alt="image-20220322145407656"></p>
+<p>得到flag</p>
+<h2 id="Web27"><a href="#Web27" class="headerlink" title="Web27"></a>Web27</h2><p><img src="/posts/7ba9ac12/image-20220322150028820.png" alt="image-20220322150028820"></p>
+<p>点击录取名单 得到一个表格</p>
+<p><img src="/posts/7ba9ac12/image-20220322150556267.png" alt="image-20220322150556267"></p>
+<p>可以看出来身份证哪里缺少了生日部分</p>
+<p>点击进入学籍管理系统</p>
+<p><img src="/posts/7ba9ac12/image-20220322150920971.png" alt="image-20220322150920971"></p>
+<p>姓名 我们有了 身份证号缺少生日部分</p>
+<p>抓包爆破 这里我用火狐抓的包有问题，换到chrome就好了</p>
+<p><img src="/posts/7ba9ac12/image-20220322151658846.png" alt="image-20220322151658846"></p>
+<p><img src="/posts/7ba9ac12/image-20220322151959622.png" alt="image-20220322151959622"></p>
+<p><img src="/posts/7ba9ac12/image-20220322152050729.png" alt="image-20220322152050729"></p>
+<p>得到出生日期 看回包</p>
+<p>还以为是flag 没想到是unicode编码</p>
+<p><img src="/posts/7ba9ac12/image-20220322152154775.png" alt="image-20220322152154775"></p>
+<p><img src="/posts/7ba9ac12/image-20220322152401867.png" alt="image-20220322152401867"></p>
+<p>登录 教务系统</p>
+<p>拿到flag</p>
+<p><img src="/posts/7ba9ac12/image-20220322152542559.png" alt="image-20220322152542559"></p>
+<h2 id="Web28"><a href="#Web28" class="headerlink" title="Web28"></a>Web28</h2><p>where is flag?</p>
+<p><img src="/posts/7ba9ac12/image-20220322153030411.png" alt="image-20220322153030411"></p>
+<p><img src="/posts/7ba9ac12/image-20220322153115359.png" alt="image-20220322153115359"></p>
+<p>看到url 的目录有点奇怪</p>
+<p>继续抓包爆破</p>
+<p><img src="/posts/7ba9ac12/image-20220322161517660.png" alt="image-20220322161517660"></p>
+<p>第一，二位置配置一样</p>
+<p><img src="/posts/7ba9ac12/image-20220322153553364.png" alt="image-20220322153553364"></p>
+<p><img src="/posts/7ba9ac12/image-20220322161457124.png" alt="image-20220322161457124"></p>
+<p>查看回包</p>
+<p><img src="/posts/7ba9ac12/image-20220322161547231.png" alt="image-20220322161547231"></p>
+<p>拿到flag</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/a805ee79/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-03-20 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/ctfshow/" title="ctfshow">
+                        <b>#</b> ctfshow
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/ctf/" title="ctf">
+                        #ctf
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/posts/999021e8/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Web21"><span class="toc-text">Web21</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web22"><span class="toc-text">Web22</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web23"><span class="toc-text">Web23</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web24"><span class="toc-text">Web24</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web25"><span class="toc-text">Web25</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web26"><span class="toc-text">Web26</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web27"><span class="toc-text">Web27</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web28"><span class="toc-text">Web28</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + CTFShow%20Web%E5%85%A5%E9%97%A8_%E7%88%86%E7%A0%B4 + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F7ba9ac12%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/7ba9ac12/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
