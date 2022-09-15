@@ -11,8 +11,8 @@
   
   <title>
     
-      CVE-2022-0847 Linux内核提权漏洞复现 
-      
+      标签 
+       : 内网安全
       
       |
     
@@ -110,185 +110,30 @@
 
 
       <div class="flex-container">
-        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
-<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+        <!-- 标签详情页，展示某个标签下的文章列表，url形式：https://yoursite/tags/某个标签/ -->
 
-
-  <!-- LaTex Display -->
-
+<div class="container tag-details">
+  <div class="content-title">
+    <h2>
+      <span>内网安全</span>
+    </h2>
+  </div>
   
-    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
-  
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      }
-    }
-  </script>
-
-
-
-
-
-  <!-- clipboard -->
-
-  
-    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
-  
-  
-<script src="/js/codeCopy.js"></script>
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
-  <div class="container post-details" id="post-details">
-    <div class="post-content">
-      <div class="post-title">CVE-2022-0847 Linux内核提权漏洞复现</div>
-      <div class="post-attach">
-        <span class="post-pubtime">
-          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
-          2022-03-10 00:00:00
-        </span>
-        
-              <span class="post-categories">
-                <i class="iconfont icon-bookmark" title="分类"></i>
-                
-                <span class="span--category">
-                  <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" title="漏洞复现">
-                    <b>#</b> 漏洞复现
-                  </a>
-                </span>
-                
-              </span>
-          
-              <span class="post-tags">
-                <i class="iconfont icon-tags mr-10" title="标签"></i>
-                
-                <span class="span--tag mr-8">
-                  <a href="/tags/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" title="漏洞复现">
-                    #漏洞复现
-                  </a>
-                </span>
-                
-              </span>
-          
+    <div class="post-list">
+      <div class="post-item" title="内网基础-防火墙规则&组策略">
+        <span class="time-m-d">2022-09-15</span>
+        <a href="/posts/a5e10218/">
+          <span>内网基础-防火墙规则&组策略</span>
+        </a>
       </div>
-      <div class="markdown-body">
-        <h1 id="CVE-2022-0847Linux内核提权漏洞复现"><a href="#CVE-2022-0847Linux内核提权漏洞复现" class="headerlink" title="CVE-2022-0847Linux内核提权漏洞复现"></a>CVE-2022-0847Linux内核提权漏洞复现</h1><blockquote>
-<p>漏洞影响版本：5.8 &lt;&#x3D; Linux kernel &lt; 5.16.11&#x2F;5.15.25&#x2F;5.10.102</p>
-<p>POC:<a target="_blank" rel="noopener" href="https://haxx.in/files/dirtypipez.c">https://haxx.in/files/dirtypipez.c</a></p>
-</blockquote>
-<blockquote>
-<p>漏洞原理：<a target="_blank" rel="noopener" href="https://dirtypipe.cm4all.com/">https://dirtypipe.cm4all.com</a></p>
-</blockquote>
-<h2 id="复现环境"><a href="#复现环境" class="headerlink" title="复现环境"></a>复现环境</h2><p>Linux RedTeam 5.15.0-kali3-amd64 #1 SMP Debian 5.15.15-2kali1 (2022-01-31) x86_64 GNU&#x2F;Linux</p>
-<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><p><a target="_blank" rel="noopener" href="https://github.com/Arinerron/CVE-2022-0847-DirtyPipe-Exploit">Arinerron&#x2F;CVE-2022-0847-DirtyPipe-Exploit: A root exploit for CVE-2022-0847 (Dirty Pipe) (github.com)</a></p>
-<p>使用方法:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./compile.sh</span><br><span class="line">./exploit  </span><br></pre></td></tr></table></figure>
-
-<p>执行成功后root密码变为aaron使用命令su输入密码即可进入root命令行</p>
-<p>部分执行完成后直接进入shell</p>
-<p><img src="/posts/77a28503/yDazi35C1ZqLEXF-16590095805203.png" alt="yDazi35C1ZqLEXF"></p>
-<p>恢复密码命令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv /tmp/passwd.bak /etc/passwd</span><br></pre></td></tr></table></figure>
-
-
-      </div>
-      
-        <div class="prev-or-next">
-          <div class="post-foot-next">
-            
-              <a href="/posts/cb677a8d/" target="_self">
-                <i class="iconfont icon-chevronleft"></i>
-                <span>上一页</span>
-              </a>
-            
-          </div>
-          <div class="post-attach">
-            <span class="post-pubtime">
-              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
-              2022-03-10 00:00:00
-            </span>
-            
-                  <span class="post-categories">
-                    <i class="iconfont icon-bookmark" title="分类"></i>
-                    
-                    <span class="span--category">
-                      <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" title="漏洞复现">
-                        <b>#</b> 漏洞复现
-                      </a>
-                    </span>
-                    
-                  </span>
-              
-                  <span class="post-tags">
-                    <i class="iconfont icon-tags mr-10" title="标签"></i>
-                    
-                    <span class="span--tag mr-8">
-                      <a href="/tags/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" title="漏洞复现">
-                        #漏洞复现
-                      </a>
-                    </span>
-                    
-                  </span>
-              
-          </div>
-          <div class="post-foot-prev">
-            
-              <a href="/posts/225ec2c9/" target="_self">
-                <span>下一页</span>
-                <i class="iconfont icon-chevronright"></i>
-              </a>
-            
-          </div>
-        </div>
-      
     </div>
-    
-  <div id="btn-catalog" class="btn-catalog">
-    <i class="iconfont icon-catalog"></i>
-  </div>
-  <div class="post-catalog hidden" id="catalog">
-    <div class="title">目录</div>
-    <div class="catalog-content">
-      
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CVE-2022-0847Linux%E5%86%85%E6%A0%B8%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0"><span class="toc-text">CVE-2022-0847Linux内核提权漏洞复现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0%E7%8E%AF%E5%A2%83"><span class="toc-text">复现环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EXP"><span class="toc-text">EXP</span></a></li></ol></li></ol>
-      
-    </div>
-  </div>
-
   
-<script src="/js/catalog.js"></script>
-
-
-
-
+  <nav class="post-navigation">
     
-      <div class="comments-container">
-        
-
-
-
-
-
-
-
-      </div>
+    <span class="page-num">1 / 1</span>
     
-  </div>
-
+  </nav>
+</div>
 
         
 <div class="footer">
@@ -543,24 +388,6 @@
 
 
         
-  
-    <div class="share-icon tools-bar-item">
-      <a href="javascript: void(0)" id="share-icon">
-        <i class="iconfont iconshare"></i>
-      </a>
-      <div class="share-content hidden">
-        
-          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + CVE-2022-0847%20Linux%E5%86%85%E6%A0%B8%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0 + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F77a28503%2F + '" target="_blank" title="Twitter">
-            <i class="iconfont icon-twitter"></i>
-          </a>
-        
-        
-          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/77a28503/" target="_blank" title="Facebook">
-            <i class="iconfont icon-facebooksquare"></i>
-          </a>
-        
-      </div>
-    </div>
   
   
 <script src="/js/shares.js"></script>
