@@ -11,7 +11,7 @@
   
   <title>
     
-      内网横向移动(一)IPC 
+      内网横向移动(一)-IPC 
       
       
       |
@@ -155,7 +155,7 @@
   <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
   <div class="container post-details" id="post-details">
     <div class="post-content">
-      <div class="post-title">内网横向移动(一)IPC</div>
+      <div class="post-title">内网横向移动(一)-IPC</div>
       <div class="post-attach">
         <span class="post-pubtime">
           <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
@@ -186,7 +186,7 @@
           
       </div>
       <div class="markdown-body">
-        <h1 id="内网横向移动-一-IPCIPC"><a href="#内网横向移动-一-IPCIPC" class="headerlink" title="内网横向移动(一)IPCIPC"></a>内网横向移动(一)IPCIPC</h1><h2 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h2><p><img src="/posts/2dc66d79/bfl2kYExirJ2o8jENtd6_g.png" alt="img"><br><img src="/posts/2dc66d79/image-20220927161548820.png" alt="image-20220927161548820"><br>只有webserver出网，我们已经拿到webserver的shell，尝试对其他内网主机进行横向移动</p>
+        <h1 id="内网横向移动-一-IPC"><a href="#内网横向移动-一-IPC" class="headerlink" title="内网横向移动(一)-IPC"></a>内网横向移动(一)-IPC</h1><h2 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h2><p><img src="/posts/2dc66d79/bfl2kYExirJ2o8jENtd6_g.png" alt="img"><br><img src="/posts/2dc66d79/image-20220927161548820.png" alt="image-20220927161548820"><br>只有webserver出网，我们已经拿到webserver的shell，尝试对其他内网主机进行横向移动</p>
 <h2 id="域信息收集"><a href="#域信息收集" class="headerlink" title="域信息收集"></a>域信息收集</h2><p>需要收集:目标 用户 凭据 网络<br>查看该主机是否为域环境 (cs命令行下需要在前面加shell)</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net time /domain</span><br></pre></td></tr></table></figure>
 
@@ -317,7 +317,7 @@
     <div class="title">目录</div>
     <div class="catalog-content">
       
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E4%B8%80-IPCIPC"><span class="toc-text">内网横向移动(一)IPCIPC</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="toc-text">环境介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-text">域信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-IPC"><span class="toc-text">域横向移动-IPC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFipc"><span class="toc-text">什么是ipc?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E7%89%88-at-amp-schtasks"><span class="toc-text">命令版-at&amp;schtasks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E7%89%88-CS-amp-LSTARS"><span class="toc-text">插件版-CS&amp;LSTARS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%97%E4%BB%B6%E7%89%88-Impacket-atexec"><span class="toc-text">套件版-Impacket-atexec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E7%89%88-Socks-amp-Py-amp-atexec"><span class="toc-text">代理版-Socks&amp;Py&amp;atexec</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E4%B8%80-IPC"><span class="toc-text">内网横向移动(一)-IPC</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="toc-text">环境介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86"><span class="toc-text">域信息收集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%9F%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-IPC"><span class="toc-text">域横向移动-IPC</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFipc"><span class="toc-text">什么是ipc?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E7%89%88-at-amp-schtasks"><span class="toc-text">命令版-at&amp;schtasks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E4%BB%B6%E7%89%88-CS-amp-LSTARS"><span class="toc-text">插件版-CS&amp;LSTARS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A5%97%E4%BB%B6%E7%89%88-Impacket-atexec"><span class="toc-text">套件版-Impacket-atexec</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E7%89%88-Socks-amp-Py-amp-atexec"><span class="toc-text">代理版-Socks&amp;Py&amp;atexec</span></a></li></ol></li></ol></li></ol>
       
     </div>
   </div>
@@ -603,7 +603,7 @@
       </a>
       <div class="share-content hidden">
         
-          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E4%B8%80)IPC + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F2dc66d79%2F + '" target="_blank" title="Twitter">
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E4%B8%80)-IPC + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F2dc66d79%2F + '" target="_blank" title="Twitter">
             <i class="iconfont icon-twitter"></i>
           </a>
         

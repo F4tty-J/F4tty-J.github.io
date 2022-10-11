@@ -11,7 +11,7 @@
   
   <title>
     
-      内网横向移动(四)SPN&amp;WinRM&amp;WinRS&amp;RDP 
+      内网横向移动(四)-SPN&amp;WinRM&amp;WinRS&amp;RDP 
       
       
       |
@@ -155,7 +155,7 @@
   <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
   <div class="container post-details" id="post-details">
     <div class="post-content">
-      <div class="post-title">内网横向移动(四)SPN&WinRM&WinRS&RDP</div>
+      <div class="post-title">内网横向移动(四)-SPN&WinRM&WinRS&RDP</div>
       <div class="post-attach">
         <span class="post-pubtime">
           <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
@@ -186,7 +186,7 @@
           
       </div>
       <div class="markdown-body">
-        <h1 id="内网横向移动-四-SPN-amp-WinRM-amp-WinRS-amp-RDP"><a href="#内网横向移动-四-SPN-amp-WinRM-amp-WinRS-amp-RDP" class="headerlink" title="内网横向移动(四)SPN&amp;WinRM&amp;WinRS&amp;RDP"></a>内网横向移动(四)SPN&amp;WinRM&amp;WinRS&amp;RDP</h1><h2 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h2><p><img src="/posts/5d21afd3/1664842686241-01c42a95-96c4-463f-b7eb-955a1db85cb5.png" alt="image.png"><br>已拿到webserver权限并且提权,进行信息搜集<br><img src="/posts/5d21afd3/1664843782716-fbcd5243-8654-481a-ab20-9eadd0bc0b15.png" alt="image.png"></p>
+        <h1 id="内网横向移动-四-SPN-amp-WinRM-amp-WinRS-amp-RDP"><a href="#内网横向移动-四-SPN-amp-WinRM-amp-WinRS-amp-RDP" class="headerlink" title="内网横向移动(四)-SPN&amp;WinRM&amp;WinRS&amp;RDP"></a>内网横向移动(四)-SPN&amp;WinRM&amp;WinRS&amp;RDP</h1><h2 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h2><p><img src="/posts/5d21afd3/1664842686241-01c42a95-96c4-463f-b7eb-955a1db85cb5.png" alt="image.png"><br>已拿到webserver权限并且提权,进行信息搜集<br><img src="/posts/5d21afd3/1664843782716-fbcd5243-8654-481a-ab20-9eadd0bc0b15.png" alt="image.png"></p>
 <h2 id="WinRM-amp-WinRS-明文-amp-NTLM"><a href="#WinRM-amp-WinRS-明文-amp-NTLM" class="headerlink" title="WinRM&amp;WinRS-明文&amp;NTLM"></a>WinRM&amp;WinRS-明文&amp;NTLM</h2><p>WinRM代表Windows远程管理，是一种允许管理员远程执行系统管理任务的服务。<br>默认情况下支持Kerberos和NTLM身份验证以及基本身份验证。<br><strong>移动条件：双方都启用的Winrm rs的服务！</strong><br>使用此服务需要管理员级别凭据。<br>Windows 2008 以上版本默认自动状态，Windows Vista&#x2F;win7上必须手动启动；<br>Windows 2012之后的版本默认允许远程任意主机来管理。<br>攻击机开启：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">winrm quickconfig -q</span><br><span class="line">winrm set winrm/config/Client @&#123;TrustedHosts=&quot;*&quot;&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="/posts/5d21afd3/1664846514743-d8935823-2c11-49e7-bc6a-e870c15333ff.png" alt="image.png"><br>1.探针可用：<br>cs 内置端口扫描5985</p>
@@ -282,7 +282,7 @@
     <div class="title">目录</div>
     <div class="catalog-content">
       
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E5%9B%9B-SPN-amp-WinRM-amp-WinRS-amp-RDP"><span class="toc-text">内网横向移动(四)SPN&amp;WinRM&amp;WinRS&amp;RDP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="toc-text">环境介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WinRM-amp-WinRS-%E6%98%8E%E6%96%87-amp-NTLM"><span class="toc-text">WinRM&amp;WinRS-明文&amp;NTLM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RDP-%E6%98%8E%E6%96%87-amp-NTLM"><span class="toc-text">RDP-明文&amp;NTLM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spn-amp-Kerberos-%E8%AF%B7%E6%B1%82-amp-%E7%A0%B4%E8%A7%A3-amp-%E9%87%8D%E5%86%99"><span class="toc-text">Spn&amp;Kerberos-请求&amp;破解&amp;重写</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E5%9B%9B-SPN-amp-WinRM-amp-WinRS-amp-RDP"><span class="toc-text">内网横向移动(四)-SPN&amp;WinRM&amp;WinRS&amp;RDP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="toc-text">环境介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WinRM-amp-WinRS-%E6%98%8E%E6%96%87-amp-NTLM"><span class="toc-text">WinRM&amp;WinRS-明文&amp;NTLM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RDP-%E6%98%8E%E6%96%87-amp-NTLM"><span class="toc-text">RDP-明文&amp;NTLM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spn-amp-Kerberos-%E8%AF%B7%E6%B1%82-amp-%E7%A0%B4%E8%A7%A3-amp-%E9%87%8D%E5%86%99"><span class="toc-text">Spn&amp;Kerberos-请求&amp;破解&amp;重写</span></a></li></ol></li></ol>
       
     </div>
   </div>
@@ -568,7 +568,7 @@
       </a>
       <div class="share-content hidden">
         
-          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E5%9B%9B)SPN%26WinRM%26WinRS%26RDP + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F5d21afd3%2F + '" target="_blank" title="Twitter">
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E5%9B%9B)-SPN%26WinRM%26WinRS%26RDP + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F5d21afd3%2F + '" target="_blank" title="Twitter">
             <i class="iconfont icon-twitter"></i>
           </a>
         

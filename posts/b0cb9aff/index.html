@@ -11,7 +11,7 @@
   
   <title>
     
-      内网横向移动(三)PTH&amp;PTT&amp;PTK 
+      内网横向移动(三)-PTH&amp;PTT&amp;PTK 
       
       
       |
@@ -155,7 +155,7 @@
   <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
   <div class="container post-details" id="post-details">
     <div class="post-content">
-      <div class="post-title">内网横向移动(三)PTH&PTT&PTK</div>
+      <div class="post-title">内网横向移动(三)-PTH&PTT&PTK</div>
       <div class="post-attach">
         <span class="post-pubtime">
           <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
@@ -186,7 +186,7 @@
           
       </div>
       <div class="markdown-body">
-        <h1 id="内网横向移动-三-PTH-amp-PTT-amp-PTK"><a href="#内网横向移动-三-PTH-amp-PTT-amp-PTK" class="headerlink" title="内网横向移动(三)PTH&amp;PTT&amp;PTK"></a>内网横向移动(三)PTH&amp;PTT&amp;PTK</h1><h2 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h2><p><img src="/posts/b0cb9aff/1664590631667-13a73e03-1b19-4318-9d84-be23d45b95b1.png" alt="bfl2kYExirJ2o8jENtd6_g.png"><br><img src="/posts/b0cb9aff/1664590640844-ae091338-93fe-4eaf-8cbe-5fcf543e2f61.png" alt="image-20221001092803141.png"><br>已经拿下webserver并且已提权<br>信息搜集已完成<br><img src="/posts/b0cb9aff/1664590644692-a7aff714-0d37-4cad-b0a6-a37cc6229d2f.png" alt="image-20221001101059993.png"><br><img src="/posts/b0cb9aff/1664590650240-4dc5af18-52c7-46af-92cc-1bb8d6a14a33.png" alt="image-20221001101117535.png"></p>
+        <h1 id="内网横向移动-三-PTH-amp-PTT-amp-PTK"><a href="#内网横向移动-三-PTH-amp-PTT-amp-PTK" class="headerlink" title="内网横向移动(三)-PTH&amp;PTT&amp;PTK"></a>内网横向移动(三)-PTH&amp;PTT&amp;PTK</h1><h2 id="环境介绍"><a href="#环境介绍" class="headerlink" title="环境介绍"></a>环境介绍</h2><p><img src="/posts/b0cb9aff/1664590631667-13a73e03-1b19-4318-9d84-be23d45b95b1.png" alt="bfl2kYExirJ2o8jENtd6_g.png"><br><img src="/posts/b0cb9aff/1664590640844-ae091338-93fe-4eaf-8cbe-5fcf543e2f61.png" alt="image-20221001092803141.png"><br>已经拿下webserver并且已提权<br>信息搜集已完成<br><img src="/posts/b0cb9aff/1664590644692-a7aff714-0d37-4cad-b0a6-a37cc6229d2f.png" alt="image-20221001101059993.png"><br><img src="/posts/b0cb9aff/1664590650240-4dc5af18-52c7-46af-92cc-1bb8d6a14a33.png" alt="image-20221001101117535.png"></p>
 <h2 id="简单了解PTH-amp-PTK-amp-PTT"><a href="#简单了解PTH-amp-PTK-amp-PTT" class="headerlink" title="简单了解PTH&amp;PTK&amp;PTT"></a>简单了解PTH&amp;PTK&amp;PTT</h2><p>pass the hash（哈希传递攻击，简称PTH）	利用的lm或ntlm的值进行的渗透测试（NTLM认证攻击）<br>pass the ticket（票据传递攻击，简称PTK）  利用的ekeys aes256进行的渗透测试（NTLM认证攻击）<br>pass the key（密钥传递攻击，简称PTT）	 利用的票据凭证TGT进行渗透测试（Kerberos认证攻击）</p>
 <h2 id="PTH-Mimikatz-amp-NTLM"><a href="#PTH-Mimikatz-amp-NTLM" class="headerlink" title="PTH-Mimikatz&amp;NTLM"></a>PTH-Mimikatz&amp;NTLM</h2><p>PTH &#x3D; Pass The Hash，通过密码散列值 (通常是NTLM Hash)来进行攻击。<br>在域环境中，用户登录计算机时使用的域账号，计算机会用相同本地管理员账号和密码。<br>因此，如果计算机的本地管理员账号和密码也是相同的，攻击者就可以使用哈希传递的方法登录到内网主机的其他计算机。另外注意在Window Server 2012 R2之前使用到的密码散列值是LM Hash，在2012 R2及其版本之后使用到的密码散列值是NTLM Hash。也就是如果对Window Server 2012 R2之前的版本进行渗透需要使用的是LM Hash<br><img src="/posts/b0cb9aff/1664590660969-02a98b3d-dceb-43d6-80aa-f0ed9812771b.png" alt="image-20221001095803479.png"></p>
 <h3 id="1、Mimikatz"><a href="#1、Mimikatz" class="headerlink" title="1、Mimikatz"></a>1、Mimikatz</h3><p>利用</p>
@@ -315,7 +315,7 @@
     <div class="title">目录</div>
     <div class="catalog-content">
       
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E4%B8%89-PTH-amp-PTT-amp-PTK"><span class="toc-text">内网横向移动(三)PTH&amp;PTT&amp;PTK</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="toc-text">环境介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3PTH-amp-PTK-amp-PTT"><span class="toc-text">简单了解PTH&amp;PTK&amp;PTT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTH-Mimikatz-amp-NTLM"><span class="toc-text">PTH-Mimikatz&amp;NTLM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Mimikatz"><span class="toc-text">1、Mimikatz</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81impacket-at-amp-ps-amp-wmi-amp-smb"><span class="toc-text">2、impacket-at&amp;ps&amp;wmi&amp;smb</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTK-Mimikatz-amp-AES256"><span class="toc-text">PTK-Mimikatz&amp;AES256</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTT-%E6%BC%8F%E6%B4%9E-amp-Kekeo-amp-Ticket"><span class="toc-text">PTT-漏洞&amp;Kekeo&amp;Ticket</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81MS14068-webadmin%E6%9D%83%E9%99%90"><span class="toc-text">1、MS14068(webadmin权限)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81kekeo-%E9%AB%98%E6%9D%83%E9%99%90%EF%BC%8C%E9%9C%80NTLM"><span class="toc-text">2、kekeo(高权限，需NTLM)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81mimikatz-%E9%AB%98%E6%9D%83%E9%99%90-%E9%9C%80Ticket"><span class="toc-text">3、mimikatz(高权限,需Ticket)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTH-Proxychains-amp-CrackMapExec"><span class="toc-text">PTH-Proxychains&amp;CrackMapExec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E4%B8%89-PTH-amp-PTT-amp-PTK"><span class="toc-text">内网横向移动(三)-PTH&amp;PTT&amp;PTK</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E4%BB%8B%E7%BB%8D"><span class="toc-text">环境介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3PTH-amp-PTK-amp-PTT"><span class="toc-text">简单了解PTH&amp;PTK&amp;PTT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTH-Mimikatz-amp-NTLM"><span class="toc-text">PTH-Mimikatz&amp;NTLM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Mimikatz"><span class="toc-text">1、Mimikatz</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81impacket-at-amp-ps-amp-wmi-amp-smb"><span class="toc-text">2、impacket-at&amp;ps&amp;wmi&amp;smb</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTK-Mimikatz-amp-AES256"><span class="toc-text">PTK-Mimikatz&amp;AES256</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTT-%E6%BC%8F%E6%B4%9E-amp-Kekeo-amp-Ticket"><span class="toc-text">PTT-漏洞&amp;Kekeo&amp;Ticket</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81MS14068-webadmin%E6%9D%83%E9%99%90"><span class="toc-text">1、MS14068(webadmin权限)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81kekeo-%E9%AB%98%E6%9D%83%E9%99%90%EF%BC%8C%E9%9C%80NTLM"><span class="toc-text">2、kekeo(高权限，需NTLM)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81mimikatz-%E9%AB%98%E6%9D%83%E9%99%90-%E9%9C%80Ticket"><span class="toc-text">3、mimikatz(高权限,需Ticket)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PTH-Proxychains-amp-CrackMapExec"><span class="toc-text">PTH-Proxychains&amp;CrackMapExec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-text">总结</span></a></li></ol></li></ol>
       
     </div>
   </div>
@@ -601,7 +601,7 @@
       </a>
       <div class="share-content hidden">
         
-          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E4%B8%89)PTH%26PTT%26PTK + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Fb0cb9aff%2F + '" target="_blank" title="Twitter">
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E4%B8%89)-PTH%26PTT%26PTK + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Fb0cb9aff%2F + '" target="_blank" title="Twitter">
             <i class="iconfont icon-twitter"></i>
           </a>
         

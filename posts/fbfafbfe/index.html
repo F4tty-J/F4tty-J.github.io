@@ -11,7 +11,7 @@
   
   <title>
     
-      内网横向移动(五)Exchange 
+      内网横向移动(五)-Exchange 
       
       
       |
@@ -155,7 +155,7 @@
   <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
   <div class="container post-details" id="post-details">
     <div class="post-content">
-      <div class="post-title">内网横向移动(五)Exchange</div>
+      <div class="post-title">内网横向移动(五)-Exchange</div>
       <div class="post-attach">
         <span class="post-pubtime">
           <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
@@ -186,7 +186,7 @@
           
       </div>
       <div class="markdown-body">
-        <h1 id="内网横向移动-五-Exchange"><a href="#内网横向移动-五-Exchange" class="headerlink" title="内网横向移动(五)Exchange"></a>内网横向移动(五)Exchange</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>Exchange Server 是微软公司的一套电子邮件服务组件，是个消息与协作系统。 简单而言，Exchange server可以被用来构架应用于企业、学校的邮件系统。Exchange是收费邮箱，但是国内微软并不直接出售Exchange邮箱，而是将Exchange、Lync、Sharepoint三款产品包装成Office365出售。Exchange server还是一个协作平台。在此基础上可以开发工作流，知识管理系统，Web系统或者是其他消息系统。<br><img src="/posts/fbfafbfe/1665051313257-eba6298f-816c-4399-ae9d-8b6adf879dea.png" alt="image.png"><br>老样子拿到一台主机权限并且提权<br><img src="/posts/fbfafbfe/1665110083114-1d28f9ab-ea04-4e82-9a04-2dd6cee47b6d.png" alt="image.png"></p>
+        <h1 id="内网横向移动-五-Exchange"><a href="#内网横向移动-五-Exchange" class="headerlink" title="内网横向移动(五)-Exchange"></a>内网横向移动(五)-Exchange</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>Exchange Server 是微软公司的一套电子邮件服务组件，是个消息与协作系统。 简单而言，Exchange server可以被用来构架应用于企业、学校的邮件系统。Exchange是收费邮箱，但是国内微软并不直接出售Exchange邮箱，而是将Exchange、Lync、Sharepoint三款产品包装成Office365出售。Exchange server还是一个协作平台。在此基础上可以开发工作流，知识管理系统，Web系统或者是其他消息系统。<br><img src="/posts/fbfafbfe/1665051313257-eba6298f-816c-4399-ae9d-8b6adf879dea.png" alt="image.png"><br>老样子拿到一台主机权限并且提权<br><img src="/posts/fbfafbfe/1665110083114-1d28f9ab-ea04-4e82-9a04-2dd6cee47b6d.png" alt="image.png"></p>
 <h2 id="Exchange探针"><a href="#Exchange探针" class="headerlink" title="Exchange探针"></a>Exchange探针</h2><h3 id="1、端口扫描"><a href="#1、端口扫描" class="headerlink" title="1、端口扫描"></a>1、端口扫描</h3><p>exchange会对外暴露接口如OWA,ECP等，会暴露在80端口，而且25&#x2F;587&#x2F;2525等端口上会有SMTP服务，所以可以通过一些端口特征来定位exchange。<br><img src="/posts/fbfafbfe/1665110205173-0e658ae5-f225-4c9b-aa92-cee048584c59.png" alt="image.png"><br><img src="/posts/fbfafbfe/1665110279057-8eb3f440-9c11-4e8f-9882-c8e6872ab37c.png" alt="image.png"></p>
 <h3 id="2、SPN扫描"><a href="#2、SPN扫描" class="headerlink" title="2、SPN扫描"></a>2、SPN扫描</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell setspn -T 0day.org -q */*</span><br></pre></td></tr></table></figure>
 
@@ -243,6 +243,11 @@
           </div>
           <div class="post-foot-prev">
             
+              <a href="/posts/661c6a19/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -255,7 +260,7 @@
     <div class="title">目录</div>
     <div class="catalog-content">
       
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E4%BA%94-Exchange"><span class="toc-text">内网横向移动(五)Exchange</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exchange%E6%8E%A2%E9%92%88"><span class="toc-text">Exchange探针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-text">1、端口扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81SPN%E6%89%AB%E6%8F%8F"><span class="toc-text">2、SPN扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%84%9A%E6%9C%AC%E6%8E%A2%E9%92%88"><span class="toc-text">3、脚本探针</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exchange%E7%88%86%E7%A0%B4"><span class="toc-text">Exchange爆破</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Burp-Proxifier"><span class="toc-text">1、Burp+Proxifier</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%A1%B9%E7%9B%AE"><span class="toc-text">2、项目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exchange%E6%BC%8F%E6%B4%9E"><span class="toc-text">Exchange漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2020-17144"><span class="toc-text">CVE-2020-17144</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2020-0688"><span class="toc-text">CVE-2020-0688</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E4%BA%94-Exchange"><span class="toc-text">内网横向移动(五)-Exchange</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exchange%E6%8E%A2%E9%92%88"><span class="toc-text">Exchange探针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%AB%AF%E5%8F%A3%E6%89%AB%E6%8F%8F"><span class="toc-text">1、端口扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81SPN%E6%89%AB%E6%8F%8F"><span class="toc-text">2、SPN扫描</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E8%84%9A%E6%9C%AC%E6%8E%A2%E9%92%88"><span class="toc-text">3、脚本探针</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exchange%E7%88%86%E7%A0%B4"><span class="toc-text">Exchange爆破</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81Burp-Proxifier"><span class="toc-text">1、Burp+Proxifier</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E9%A1%B9%E7%9B%AE"><span class="toc-text">2、项目</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exchange%E6%BC%8F%E6%B4%9E"><span class="toc-text">Exchange漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2020-17144"><span class="toc-text">CVE-2020-17144</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CVE-2020-0688"><span class="toc-text">CVE-2020-0688</span></a></li></ol></li></ol></li></ol>
       
     </div>
   </div>
@@ -541,7 +546,7 @@
       </a>
       <div class="share-content hidden">
         
-          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E4%BA%94)Exchange + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Ffbfafbfe%2F + '" target="_blank" title="Twitter">
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E4%BA%94)-Exchange + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Ffbfafbfe%2F + '" target="_blank" title="Twitter">
             <i class="iconfont icon-twitter"></i>
           </a>
         
